@@ -1,0 +1,208 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    padding: 20px;
+    font-family: sans-serif;
+    color: #444;
+}
+
+h1 {
+    text-transform: uppercase;
+    font-weight: 700;
+    color: rgb(50, 48, 48);
+    text-align: center;
+    font-size: 20px;
+}
+
+input,
+select,
+button {
+    line-height: 35px;
+    min-height: 40px;
+    width: auto;
+    border-radius: 8px;
+    outline: transparent;
+    padding: 0 12px 0 12px;
+}
+
+.heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0 20px 0;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.heading-class {
+    display: flex;
+    flex-direction: row;
+}
+
+.heading-class-item {
+    font-weight: 700;
+    font-size: 18px;
+    margin: 0;
+    border-radius: 8px;
+    padding: 8px;
+    background-color: #ffcc00;
+}
+
+.heading-class-desciption {
+    font-weight: 700;
+    font-size: 18px;
+    margin: 0;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+/* ADD SCORE */
+
+.heading-lesson {
+    display: flex;
+    flex-direction: row;
+    font-size: 18px;
+}
+
+.heading-lesson-title {
+    margin: auto;
+    margin-right: 10px;
+}
+.heading-class-input,
+.heading-lesson-input {
+    width: 70px;
+    text-align: center;
+    font-weight: 700;
+    border: solid 2px #ffcc00;
+}
+
+.heading-class-input {
+    width: 100px;
+}
+
+.rank-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.rank-item-title {
+    margin-top: 10px;
+    margin-right: 8px;
+}
+
+.rank-item-name {
+    margin-left: 20px;
+    margin-top: -16px;
+    /* font-style: italic; */
+    line-height: 40px;
+}
+
+.rank-item-name__max {
+    color: green;
+    animation: blink-animation 1.5s ease-out infinite;
+}
+
+.rank-item-name__min {
+    color: red;
+    animation: blink-animation 1.5s ease-out infinite 0.5s;
+}
+
+.rank-item-name__no-test {
+    color: #bc9700;
+    animation: blink-animation 1.5s ease-out infinite 1s;
+}
+
+@keyframes blink-animation {
+    to {
+        opacity: 1; /* Hiển thị rõ ràng */
+    }
+    from {
+        opacity: 0.5; /* Mờ dần và biến mất */
+    }
+}
+
+.add-item-title {
+    min-width: 100px;
+    margin-bottom: 4px;
+}
+
+.add-item-input {
+    width: 100%;
+    margin-bottom: 20px;
+    border: solid 1px goldenrod;
+    border-radius: 8px;
+    padding: 2px 14px 2px 14px;
+    align-items: center;
+    outline: none;
+    text-transform: capitalize;
+}
+
+.btn {
+    width: 100%;
+}
+
+.input-disable {
+    width: auto;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.score-input,
+.error-input {
+    width: 80px;
+    border: solid 1px goldenrod;
+}
+
+.input-stt {
+    width: 35px;
+}
+
+.table-light {
+    --bs-table-color: #880808;
+}
+
+table > :not(caption) > * > * {
+    padding: 0.5rem 0.5rem;
+    color: var(
+        --bs-table-color-state,
+        var(--bs-table-color-type, var(--bs-table-color))
+    );
+    background-color: var(--bs-table-bg);
+    border-bottom-width: var(--bs-border-width);
+    box-shadow: inset 10px 10px 10px 9999px
+        var(
+            --bs-table-bg-state,
+            var(--bs-table-bg-type, var(--bs-table-accent-bg))
+        );
+}
+
+.manager-btn {
+    display: inline-block;
+    background-color: bisque;
+    text-align: center;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 8px;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    margin-top: 14px;
+    animation: blink-animation 1.5s ease-out infinite;
+}
+
+a {
+    color: #000000; /* Thay đổi màu mặc định của liên kết */
+    text-decoration: none; /* Xóa gạch dưới nếu không cần */
+}
+
+a:hover {
+    color: #ff0000; /* Màu khi di chuột qua */
+}
+
+a:focus {
+    outline: none; /* Loại bỏ viền khi liên kết nhận focus */
+}
