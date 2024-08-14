@@ -182,18 +182,18 @@ document.addEventListener("DOMContentLoaded", function (e) {
             });
     }
 
-    // Hàm xử lý khi thay đổi bài học
-    handleChangeLesson = function (value) {
-        const data = {
-            classname: "N5 - 08",
-            lesson: value,
-        };
-        renderHtml(data);
-    };
-
     // Hàm khởi chạy ứng dụng
     function app() {
         getScoreApi(); // Gọi API để lấy dữ liệu và render HTML
     }
     app(); // Chạy ứng dụng
 });
+
+// Hàm xử lý khi thay đổi bài học
+handleChangeLesson = function (value) {
+    const data = {
+        classname: "N5 - 08",
+        lesson: value,
+    };
+    renderHtml(data);
+};
