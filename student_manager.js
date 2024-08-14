@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    name: capitalizeFirstLetter(name),
+                    name: name,
                     classname,
                 }),
             })
@@ -142,10 +142,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (
             confirm(
-                `Bạn có chắc chắn muốn xóa học sinh ${name} khỏi lớp ${classname}?`
+                `Bạn có chắc chắn muốn xóa học sinh ${capitalizeFirstLetter(
+                    name
+                )} khỏi lớp ${classname}?`
             )
         ) {
-            deleteStudent(name, classname);
+            deleteStudent(capitalizeFirstLetter(name), classname);
         }
     });
 
@@ -155,8 +157,13 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Hàm viết hoa chữ cái đầu tiên của tên
-    function capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+
+    function capitalizeFirstLetter(name) {
+        return name
+            .toLowerCase() // Chuyển toàn bộ chuỗi về chữ thường
+            .split(" ") // Tách chuỗi thành mảng các từ
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Viết hoa chữ cái đầu tiên của mỗi từ
+            .join(" "); // Nối các từ lại thành chuỗi
     }
 
     // Tải danh sách học sinh khi trang được tải lần đầu

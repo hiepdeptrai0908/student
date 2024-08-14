@@ -43,7 +43,12 @@ document.addEventListener("DOMContentLoaded", function () {
     // Hàm gọi API để lấy bài học lớn nhất
     async function getScoreApi() {
         try {
-            const response = await fetch(apiGetMaxLesson);
+            const response = await fetch(
+                apiGetMaxLesson + `/${classnameValue}`,
+                {
+                    method: "GET",
+                }
+            );
             const datas = await response.json();
             lessonValue = datas;
             lessonSelectElement.value = lessonValue;

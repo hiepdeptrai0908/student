@@ -195,7 +195,7 @@ button {
 .created-at {
     text-align: center;
     font-weight: 600;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
 #score-created-at {
@@ -231,6 +231,7 @@ td {
 }
 
 th,
+td:nth-child(3),
 td:first-child,
 td:last-child {
     text-align: center; /* Căn giữa theo chiều ngang cho cột đầu tiên và cột cuối cùng */
@@ -256,7 +257,8 @@ a {
 }
 
 a:hover {
-    color: #ff0000; /* Màu khi di chuột qua */
+    opacity: 0.7; /* Màu khi di chuột qua */
+    transition: all 0.3s ease-in-out;
 }
 
 a:focus {
