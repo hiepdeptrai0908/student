@@ -34,38 +34,53 @@ button {
     width: auto;
     border-radius: 8px;
     outline: transparent;
-    padding: 0 12px 0 12px;
+    padding: 0 12px;
+}
+
+button {
+    text-transform: uppercase;
 }
 
 .heading {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 20px 0 20px 0;
+    margin: 20px 0;
     font-weight: 700;
     font-size: 15px;
+    background-color: #666;
+    padding: 20px;
 }
 
 .heading-class {
     display: flex;
     flex-direction: row;
+    align-items: center; /* Thêm để căn chỉnh giữa */
 }
 
 .heading-class-item {
     font-weight: 700;
-    font-size: 18px;
+    font-size: 20px;
     margin: 0;
     border-radius: 8px;
     padding: 8px;
-    background-color: #ffcc00;
+    width: 100px; /* Đặt kích thước giống như của ô select bài học */
+    text-align: center; /* Căn giữa chữ */
+    border: transparent;
 }
 
 .heading-class-desciption {
-    font-weight: 700;
-    font-size: 18px;
+    font-weight: 600;
+    font-size: 16px;
+    font-style: italic;
+    text-transform: uppercase;
     margin: 0;
     border-radius: 8px;
     padding: 8px;
+    color: #ffcc00;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+        sans-serif;
 }
 
 /* ADD SCORE */
@@ -74,22 +89,24 @@ button {
     display: flex;
     flex-direction: row;
     font-size: 18px;
+    align-items: center; /* Thêm để căn chỉnh giữa */
 }
 
 .heading-lesson-title {
     margin: auto;
     margin-right: 10px;
-}
-.heading-class-input,
-.heading-lesson-input {
-    width: 70px;
-    text-align: center;
-    font-weight: 700;
-    border: solid 2px #ffcc00;
+    color: #fff;
 }
 
-.heading-class-input {
-    width: 100px;
+.heading-lesson-input {
+    width: 80px; /* Kích thước giống như của ô input lớp học */
+    text-align: center;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 35px;
+    min-height: 40px;
+    padding: 11px;
+    border: transparent;
 }
 
 .rank-item {
@@ -105,31 +122,36 @@ button {
 .rank-item-name {
     margin-left: 20px;
     margin-top: -16px;
-    /* font-style: italic; */
     line-height: 40px;
 }
 
 .rank-item-name__max {
     color: green;
-    animation: blink-animation 1.5s ease-out infinite;
+    animation: blink-animation 1.3s ease-out infinite;
 }
 
 .rank-item-name__min {
     color: red;
-    animation: blink-animation 1.5s ease-out infinite 0.5s;
+    animation: blink-animation 1.3s ease-out infinite 0.3s;
 }
 
 .rank-item-name__no-test {
     color: #bc9700;
-    animation: blink-animation 1.5s ease-out infinite 1s;
+    animation: blink-animation 1.3s ease-out infinite 0.9s;
 }
 
 @keyframes blink-animation {
-    to {
-        opacity: 1; /* Hiển thị rõ ràng */
+    0% {
+        opacity: 0.8; /* Bắt đầu mờ dần */
+        transform: scale(1); /* Tạo hiệu ứng phồng nhẹ */
     }
-    from {
-        opacity: 0.5; /* Mờ dần và biến mất */
+    50% {
+        opacity: 1; /* Hiển thị rõ ràng hơn */
+        transform: scale(1.01); /* Phồng nhẹ để tạo cảm giác nhấp nháy */
+    }
+    100% {
+        opacity: 0.8; /* Kết thúc mờ dần */
+        transform: scale(1); /* Trở về kích thước ban đầu */
     }
 }
 
@@ -143,7 +165,7 @@ button {
     margin-bottom: 20px;
     border: solid 1px goldenrod;
     border-radius: 8px;
-    padding: 2px 14px 2px 14px;
+    padding: 2px 14px;
     align-items: center;
     outline: none;
     text-transform: capitalize;
@@ -170,6 +192,18 @@ button {
     width: 35px;
 }
 
+.created-at {
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+#score-created-at {
+    font-weight: 500;
+    color: #333;
+    font-style: italic;
+}
+
 .table-light {
     --bs-table-color: #880808;
 }
@@ -189,6 +223,19 @@ table > :not(caption) > * > * {
         );
 }
 
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    vertical-align: middle; /* Căn giữa theo chiều dọc */
+}
+
+th,
+td:first-child,
+td:last-child {
+    text-align: center; /* Căn giữa theo chiều ngang cho cột đầu tiên và cột cuối cùng */
+}
+
 .manager-btn {
     display: inline-block;
     background-color: bisque;
@@ -200,7 +247,7 @@ table > :not(caption) > * > * {
     padding: 10px;
     margin-bottom: 10px;
     margin-top: 14px;
-    animation: blink-animation 1.5s ease-out infinite;
+    border-style: dashed;
 }
 
 a {

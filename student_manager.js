@@ -2,7 +2,6 @@ import url from "./url.js";
 
 document.addEventListener("DOMContentLoaded", function () {
     // Định nghĩa các API endpoint
-
     const apiGetAllStudents = url + "students";
     const apiInsertStudent = url + "student";
     const apiUpdateScore = url + "score";
@@ -66,13 +65,13 @@ document.addEventListener("DOMContentLoaded", function () {
     // Hàm cập nhật điểm học sinh
     async function updateScore(name, classname, lesson, score) {
         try {
-            const response = await fetch(apiUpdateScore, {
+            await fetch(apiUpdateScore, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    classname: classname,
+                    classname,
                     name,
                     lesson,
                     score,
@@ -91,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Hàm xóa học sinh
     async function deleteStudent(name, classname) {
         try {
-            const response = await fetch(apiDeleteStudent, {
+            await fetch(apiDeleteStudent, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -126,10 +125,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const name = studentSelect.value;
         const lesson = document.getElementById("lesson").value;
         const score = document.getElementById("new-score").value;
-        if (name) {
-            updateScore(name, lassname, lesson, score);
+        const classname = document.getElementById("classname-update").value;
+
+        if (name && lesson && score) {
+            updateScore(name, classname, lesson, score);
         } else {
-            alert("Vui lòng chọn học sinh.");
+            alert("Vui lòng điền đầy đủ thông tin.");
         }
     });
 
@@ -138,31 +139,26 @@ document.addEventListener("DOMContentLoaded", function () {
         e.preventDefault();
         const name = document.getElementById("delete-name").value;
         const classname = document.getElementById("delete-classname").value;
-        deleteStudent(name, classname);
+
+        if (
+            confirm(
+                `Bạn có chắc chắn muốn xóa học sinh ${name} khỏi lớp ${classname}?`
+            )
+        ) {
+            deleteStudent(name, classname);
+        }
     });
 
-    // Cập nhật danh sách học sinh khi lớp học thay đổi
-    classnameInput.addEventListener("change", function () {
-        const classname = classnameInput.value;
-        loadStudents(classname);
+    // Xử lý sự kiện khi thay đổi tên lớp trong form cập nhật điểm
+    classnameInput.addEventListener("input", function () {
+        loadStudents();
     });
 
+    // Hàm viết hoa chữ cái đầu tiên của tên
     function capitalizeFirstLetter(string) {
-        // Tách chuỗi thành mảng các từ
-        return (
-            string
-                .split(" ")
-                // Chuyển đổi từng từ thành chữ hoa chữ cái đầu tiên
-                .map(
-                    (word) =>
-                        word.charAt(0).toUpperCase() +
-                        word.slice(1).toLowerCase()
-                )
-                // Gộp các từ lại thành chuỗi
-                .join(" ")
-        );
+        return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
     }
 
-    // Tải danh sách học sinh khi trang được tải
+    // Tải danh sách học sinh khi trang được tải lần đầu
     loadStudents();
 });
