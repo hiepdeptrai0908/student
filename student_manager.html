@@ -4,6 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Quản Lý Học Sinh</title>
+        <link rel="icon" href="favicon.png" type="image/png" />
         <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
             rel="stylesheet"
@@ -26,10 +27,10 @@
     <body>
         <h1>Quản Lý Học Sinh</h1>
         <hr />
-
         <!-- Form thêm học sinh -->
         <form id="add-student-form">
             <h2>Thêm Học Sinh Mới</h2>
+
             <div class="add-item">
                 <label class="add-item-title" for="classname">Tên Lớp:</label>
                 <input
@@ -42,8 +43,9 @@
                     required
                 />
             </div>
+
             <div>
-                <label class="add-item-title" for="name">Họ và Tên:</label>
+                <label class="add-item-title" for="name">Họ & Tên:</label>
                 <input
                     class="add-item-input"
                     type="text"
@@ -53,6 +55,7 @@
                     required
                 />
             </div>
+
             <button id="add-btn" class="btn btn-success" type="submit">
                 Thêm
             </button>
@@ -62,9 +65,25 @@
         <!-- Form sửa điểm -->
         <form id="update-score-form">
             <h2>Sửa Điểm Học Sinh</h2>
+
+            <div class="add-item">
+                <label class="add-item-title" for="classname-update"
+                    >Tên Lớp:</label
+                >
+                <input
+                    class="add-item-input"
+                    type="text"
+                    id="classname-update"
+                    name="classname"
+                    value="N5 - 08"
+                    autocomplete="off"
+                    required
+                />
+            </div>
+
             <div>
                 <label class="add-item-title" for="student-select"
-                    >Tên Học Sinh:</label
+                    >Họ & Tên:</label
                 >
                 <select
                     class="add-item-input"
@@ -76,11 +95,12 @@
                     <!-- Options will be added dynamically here -->
                 </select>
             </div>
+
             <div class="add-item">
                 <label class="add-item-title" for="lesson">Bài:</label>
                 <input
                     class="add-item-input"
-                    type="text"
+                    type="number"
                     id="lesson"
                     name="lesson"
                     value=""
@@ -104,11 +124,46 @@
                 Cập Nhật Điểm
             </button>
         </form>
+        <hr />
+        <!-- Form xóa học sinh -->
+        <form id="delete-student-form">
+            <h2>Xóa Học Sinh</h2>
+            <div class="add-item">
+                <label class="add-item-title" for="delete-classname"
+                    >Tên Lớp:</label
+                >
+                <input
+                    class="add-item-input"
+                    type="text"
+                    id="delete-classname"
+                    name="delete-classname"
+                    value="N5 - 08"
+                    autocomplete="off"
+                    required
+                />
+            </div>
+            <div class="add-item">
+                <label class="add-item-title" for="delete-name"
+                    >Họ & Tên:</label
+                >
+                <input
+                    class="add-item-input"
+                    type="text"
+                    id="delete-name"
+                    name="delete-name"
+                    autocomplete="off"
+                    required
+                />
+            </div>
 
+            <button id="delete-btn" class="btn btn-danger" type="submit">
+                Xóa
+            </button>
+        </form>
         <div>
             <a href="admin.html" class="manager-btn">về trang ADMIN </a>
         </div>
 
-        <script src="student_manager.js"></script>
+        <script type="module" src="student_manager.js"></script>
     </body>
 </html>

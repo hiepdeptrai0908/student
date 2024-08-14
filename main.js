@@ -1,19 +1,14 @@
+import url from "./url.js";
+
 document.addEventListener("DOMContentLoaded", function (e) {
     // Lấy các phần tử DOM cần sử dụng
     const studentCountElement = document.getElementById("student-count");
     const lessonSelectElement = document.getElementById("lesson-select");
-    const maxScoreNameElement = document.getElementById("max-score-name");
-    const minScoreNameElement = document.getElementById("min-score-name");
-    const noTestCountElement = document.getElementById("no-test-count");
-    const studentTableElement = document.getElementById("student-table");
 
     // Định nghĩa các API endpoint
 
-    // const apiGetScore = "http://localhost:8888/api/score-lesson";
-    // const apiGetMaxLesson = "http://localhost:8888/api/max-lesson";
-    const apiGetScore = "https://staff-333-api.herokuapp.com/api/score-lesson";
-    const apiGetMaxLesson =
-        "https://staff-333-api.herokuapp.com/api/max-lesson";
+    const apiGetScore = url + "score-lesson";
+    const apiGetMaxLesson = url + "max-lesson";
 
     let lessonValue = lessonSelectElement.value;
 
@@ -137,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
                 // Duyệt qua dữ liệu và thêm span cho các điểm số khác nhau
                 datas.map((data, index) => {
                     // TOP SCORE
-                    if (data.score == maxScore) {
+                    if ((data.score == maxScore) & (data.score != 0)) {
                         // Tạo thẻ span mới
                         const newSpan = document.createElement("span");
                         newSpan.textContent = `・❤️ ${data.name} (${data.score} đ)`;

@@ -1,23 +1,25 @@
+import url from "./url.js";
+
 document.addEventListener("DOMContentLoaded", function () {
     // Định nghĩa các API endpoint
 
-    const apiGetAllStudents =
-        "https://staff-333-api.herokuapp.com/api/students";
-    const apiInsertStudent = "https://staff-333-api.herokuapp.com/api/student";
-    const apiUpdateScore = "https://staff-333-api.herokuapp.com/api/score";
-
-    // const apiGetAllStudents = "http://localhost:8888/api/students";
-    // const apiInsertStudent = "http://localhost:8888/api/student";
-    // const apiUpdateScore = "http://localhost:8888/api/score";
+    const apiGetAllStudents = url + "students";
+    const apiInsertStudent = url + "student";
+    const apiUpdateScore = url + "score";
+    const apiDeleteStudent = url + "student";
 
     const addStudentForm = document.getElementById("add-student-form");
     const updateScoreForm = document.getElementById("update-score-form");
+    const deleteStudentForm = document.getElementById("delete-student-form");
     const studentSelect = document.getElementById("student-select");
+    const classnameInput = document.getElementById("classname-update");
 
     // Hàm tải danh sách học sinh từ API
-    async function loadStudents() {
+    async function loadStudents(classname = classnameInput.value) {
         try {
-            const response = await fetch(apiGetAllStudents);
+            const response = await fetch(apiGetAllStudents + `/${classname}`, {
+                method: "GET",
+            });
             const students = await response.json();
 
             // Xóa tất cả các tùy chọn hiện tại
@@ -62,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Hàm cập nhật điểm học sinh
-    async function updateScore(name, lesson, score) {
+    async function updateScore(name, classname, lesson, score) {
         try {
             const response = await fetch(apiUpdateScore, {
                 method: "PUT",
@@ -70,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    classname: "N5 - 08",
+                    classname: classname,
                     name,
                     lesson,
                     score,
@@ -83,6 +85,30 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
         } catch (error) {
             console.error("Lỗi khi cập nhật điểm:", error);
+        }
+    }
+
+    // Hàm xóa học sinh
+    async function deleteStudent(name, classname) {
+        try {
+            const response = await fetch(apiDeleteStudent, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    name: capitalizeFirstLetter(name),
+                    classname,
+                }),
+            })
+                .then((response) => response.text())
+                .then((message) => {
+                    alert(message);
+                    loadStudents(); // Tải lại danh sách học sinh sau khi xóa
+                    deleteStudentForm.reset();
+                });
+        } catch (error) {
+            console.error("Lỗi khi xóa học sinh:", error);
         }
     }
 
@@ -101,10 +127,24 @@ document.addEventListener("DOMContentLoaded", function () {
         const lesson = document.getElementById("lesson").value;
         const score = document.getElementById("new-score").value;
         if (name) {
-            updateScore(name, lesson, score);
+            updateScore(name, lassname, lesson, score);
         } else {
             alert("Vui lòng chọn học sinh.");
         }
+    });
+
+    // Xử lý sự kiện gửi biểu mẫu xóa học sinh
+    deleteStudentForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const name = document.getElementById("delete-name").value;
+        const classname = document.getElementById("delete-classname").value;
+        deleteStudent(name, classname);
+    });
+
+    // Cập nhật danh sách học sinh khi lớp học thay đổi
+    classnameInput.addEventListener("change", function () {
+        const classname = classnameInput.value;
+        loadStudents(classname);
     });
 
     function capitalizeFirstLetter(string) {
