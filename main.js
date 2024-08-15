@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const lessonSelectElement = document.getElementById("lesson-select");
     const classnameInputElement = document.getElementById("classname-input");
     const scoreCreatedAtElement = document.getElementById("score-created-at");
+    let timeoutId;
 
     // Định nghĩa các API endpoint
     const apiGetScore = url + "score-lesson";
@@ -65,10 +66,12 @@ document.addEventListener("DOMContentLoaded", function () {
     // Hàm render HTML dựa trên dữ liệu trả về từ API
     async function renderHtml(data) {
         // Xóa bảng cũ nếu có
-        const tableWrapper = document.querySelector(".table-wrapper");
+        const tableWrapper = document.querySelector("table");
 
+        console.log(tableWrapper);
         if (tableWrapper.classList.contains) {
-            const existingTable = tableWrapper.querySelector("table").remove();
+            const existingTable = tableWrapper.querySelectorAll("table");
+            existingTable.forEach((element) => element.remove());
         }
 
         document
@@ -213,20 +216,29 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Hàm xử lý khi thay đổi lớp
-    function handleChangeClassname() {
-        classnameValue = classnameInputElement.value;
-        const data = {
-            classname: classnameValue,
-            lesson: lessonValue,
-        };
-        renderHtml(data);
-    }
+    function handleChangeClassname(event) {
+        // Xóa timeout hiện tại nếu có
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+        }
 
-    // Thêm sự kiện khi thay đổi bài học
-    lessonSelectElement.addEventListener("change", handleChangeLesson);
+        // Đặt timeout mới
+        timeoutId = setTimeout(() => {
+            classnameValue = classnameInputElement.value;
+            const data = {
+                classname: classnameValue,
+                lesson: lessonValue,
+            };
+            renderHtml(data);
+            console.log("Input value:", event.target.value);
+        }, 1000);
+    }
 
     // Thêm sự kiện khi thay đổi lớp
     classnameInputElement.addEventListener("input", handleChangeClassname);
+
+    // Thêm sự kiện khi thay đổi bài học
+    lessonSelectElement.addEventListener("change", handleChangeLesson);
 
     // Gọi API khi tải trang lần đầu
     getScoreApi();
