@@ -204,23 +204,12 @@ button {
     font-style: italic;
 }
 
-.table-light {
-    --bs-table-color: #880808;
+table {
+    margin-bottom: 0 !important;
 }
 
-table > :not(caption) > * > * {
-    padding: 0.5rem 0.5rem;
-    color: var(
-        --bs-table-color-state,
-        var(--bs-table-color-type, var(--bs-table-color))
-    );
-    background-color: var(--bs-table-bg);
-    border-bottom-width: var(--bs-border-width);
-    box-shadow: inset 10px 10px 10px 9999px
-        var(
-            --bs-table-bg-state,
-            var(--bs-table-bg-type, var(--bs-table-accent-bg))
-        );
+.table-light {
+    --bs-table-color: #880808;
 }
 
 th,
