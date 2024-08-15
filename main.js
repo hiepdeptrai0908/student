@@ -66,12 +66,9 @@ document.addEventListener("DOMContentLoaded", function () {
     async function renderHtml(data) {
         // Xóa bảng cũ nếu có
         const tableWrapper = document.querySelector(".table-wrapper");
-        const existingTable = tableWrapper.querySelector("table");
-        if (existingTable) {
-            tableWrapper.removeChild(existingTable);
-        }
+        const existingTable = tableWrapper.querySelector("table").remove();
 
-        // Xóa các span con trong các phần tử hiển thị top score, bottom score, và no test
+        // Xóa các span con trong các phần tử hiển thị điểm cao nhất, thấp nhất và chưa kiểm tra
         document
             .querySelectorAll(".rank-item-max span")
             .forEach((span) => span.remove());
@@ -83,6 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .forEach((span) => span.remove());
 
         try {
+            // Gửi yêu cầu POST đến API để lấy dữ liệu điểm số
             const response = await fetch(apiGetScore, {
                 method: "POST",
                 headers: {
@@ -93,11 +91,13 @@ document.addEventListener("DOMContentLoaded", function () {
             const datas = await response.json();
 
             // Xác định thời gian điểm được tạo từ dữ liệu đầu tiên (hoặc thay đổi logic nếu cần)
-            if (datas.length > 0) {
-                const createdAt = datas[0].created_at; // Lấy giá trị created_at từ dữ liệu đầu tiên
-                scoreCreatedAtElement.textContent = formatDateTime(createdAt);
+            if (Array.isArray(datas) && datas.length > 0) {
+                const createdAt = datas[0]?.created_at;
+                scoreCreatedAtElement.textContent = createdAt
+                    ? formatDateTime(createdAt)
+                    : `"Chưa có dữ liệu"`;
             } else {
-                scoreCreatedAtElement.textContent = "Không có dữ liệu";
+                scoreCreatedAtElement.textContent = `"Chưa có dữ liệu"`;
             }
 
             // Lọc các điểm số không phải là 0
@@ -120,7 +120,6 @@ document.addEventListener("DOMContentLoaded", function () {
             const headerRow = document.createElement("tr");
             headerRow.className = "table-light";
 
-            // Thêm các tiêu đề cột vào hàng tiêu đề
             ["STT", "Họ và Tên", "Điểm", "Sai"].forEach((text) => {
                 const th = document.createElement("th");
                 th.textContent = text;
@@ -193,14 +192,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         .appendChild(newSpan);
                 }
             });
-
-            // Hiển thị thông báo nếu không có dữ liệu
-            if (datas.length === 0) {
-                const noDataMessage = document.createElement("p");
-                noDataMessage.textContent = "No data available";
-                noDataMessage.style.textAlign = "center";
-                tableWrapper.appendChild(noDataMessage);
-            }
         } catch (error) {
             console.error("Lỗi truy vấn dữ liệu:", error);
         }

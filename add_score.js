@@ -1,11 +1,9 @@
 import url from "./url.js";
 
 document.addEventListener("DOMContentLoaded", function () {
-    // URL của API cung cấp danh sách sinh viên và API xóa bài học
     const allStudentApi = url + "students";
     const apiDeleteLesson = url + "delete-lesson";
 
-    // Lấy các phần tử HTML cần sử dụng
     const deleteScoreLessonForm = document.getElementById(
         "delete-score-lesson"
     );
@@ -16,27 +14,46 @@ document.addEventListener("DOMContentLoaded", function () {
     const confirmDeleteModal = new bootstrap.Modal(
         document.getElementById("confirm-delete-modal")
     );
-    let formToSubmit; // Biến lưu trữ biểu mẫu cần gửi
+    let formToSubmit;
 
-    // Hàm để lấy dữ liệu từ API và tạo bảng sinh viên
     async function loadStudents(classname = classnameInput.value) {
         try {
-            // Gửi yêu cầu GET tới API để lấy danh sách sinh viên theo lớp
             const response = await fetch(`${allStudentApi}/${classname}`);
             const students = await response.json();
 
             const table = document.getElementById("student-table");
             const studentCount = document.getElementById("student-count");
 
-            // Nếu không có dữ liệu, hiển thị thông báo "không có dữ liệu"
+            // Xóa nội dung bảng trước khi cập nhật
+            table.innerHTML = "";
+
             if (students.length === 0) {
-                table.innerHTML = `
-                    <tbody>
-                        <tr>
-                        <tr>
-                            <td colspan="3" class="text-center">Không có dữ liệu</td>
-                        </tr>
-                    </tbody>`;
+                // Tạo bảng mới
+                table.className = "table table-hover border";
+                table.style.width = "100%";
+
+                // Tạo hàng tiêu đề
+                const thead = document.createElement("thead");
+                const headerRow = document.createElement("tr");
+                headerRow.className = "table-light";
+
+                ["STT", "Họ và Tên", "Điểm"].forEach((text) => {
+                    const th = document.createElement("th");
+                    th.textContent = text;
+                    headerRow.appendChild(th);
+                });
+
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
+
+                // Tạo phần thân bảng với thông báo không có dữ liệu
+                const tbody = document.createElement("tbody");
+                const noDataRow = document.createElement("tr");
+                noDataRow.innerHTML =
+                    '<td colspan="3" class="text-center"><b>Lớp này không có học sinh nào!</b><br /><span style="font-style: italic; opacity: 0.8;">(Chú ý xác nhận lại đúng tên lớp không: <br />kể cả viết hoa hoặc dấu cách!)</span></td>';
+                tbody.appendChild(noDataRow);
+                table.appendChild(tbody);
+
                 studentCount.textContent = "0";
                 return;
             }
@@ -44,17 +61,16 @@ document.addEventListener("DOMContentLoaded", function () {
             // Tạo các hàng bảng với dữ liệu sinh viên
             let rows = students
                 .map((student, index) => {
-                    const stt = (index + 1).toString().padStart(2, "0"); // Đảm bảo STT có 2 chữ số
+                    const stt = (index + 1).toString().padStart(2, "0");
                     return `
-                    <tr>
-                        <td>${stt}</td>
-                        <td>${student.name}</td>
-                        <td><input class="score-input" type="number" name="score[]" max="50" /></td>
-                    </tr>`;
+                <tr>
+                    <td>${stt}</td>
+                    <td>${student.name}</td>
+                    <td><input class="score-input" type="number" name="score[]" max="50" /></td>
+                </tr>`;
                 })
                 .join("");
 
-            // Cập nhật nội dung bảng và số lượng sinh viên
             table.innerHTML = `
                 <thead>
                     <tr class="table-light">
@@ -70,16 +86,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Gọi hàm loadStudents khi trang được tải
     loadStudents();
 
-    // Xử lý sự kiện gửi biểu mẫu để xác nhận và gửi dữ liệu
     document
         .getElementById("score-form")
         .addEventListener("submit", function (event) {
-            event.preventDefault(); // Ngăn chặn hành động gửi mặc định của biểu mẫu
-            formToSubmit = this; // Lưu trữ biểu mẫu cần gửi
-            confirmModal.show(); // Hiển thị modal xác nhận
+            event.preventDefault();
+            formToSubmit = this;
+            confirmModal.show();
         });
 
     document
@@ -89,47 +103,46 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.querySelector("#lesson-delete").value;
             document.querySelector(".info-classname").textContent =
                 document.querySelector("#classname-delete").value;
-            event.preventDefault(); // Ngăn chặn hành động gửi mặc định của biểu mẫu
-            formToSubmit = this; // Lưu trữ biểu mẫu cần gửi
-            confirmDeleteModal.show(); // Hiển thị modal xác nhận
+            event.preventDefault();
+            formToSubmit = this;
+            confirmDeleteModal.show();
         });
 
-    // Xử lý khi người dùng nhấn nút "Xác Nhận" trong modal xác nhận
     document
         .getElementById("confirm-submit")
         .addEventListener("click", async function () {
             confirmModal.hide();
             try {
+                const classname =
+                    document.querySelector("#classname-update").value;
                 const lesson = document.querySelector(
                     'select[name="lesson"]'
                 ).value;
-                const names = document.querySelectorAll("td:nth-child(2)"); // Lấy tên sinh viên từ bảng
+                const names = document.querySelectorAll("td:nth-child(2)");
                 const scores = document.querySelectorAll(
                     'input[name="score[]"]'
-                ); // Lấy điểm sinh viên từ bảng
+                );
                 const insertScoreApi = url + "score";
 
-                // Tạo mảng dữ liệu từ các trường nhập liệu
                 const data = Array.from(names).map((nameInput, index) => ({
+                    classname,
                     lesson: lesson,
                     name: nameInput.textContent,
                     score: scores[index].value,
                 }));
 
-                // Gửi yêu cầu POST tới API để lưu điểm
                 await fetch(insertScoreApi, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(data),
                 })
                     .then((response) => response.text())
-                    .then((text) => alert(text)); // Hiển thị thông báo phản hồi từ server
+                    .then((text) => alert(text));
             } catch (error) {
                 console.error("Lỗi khi gửi dữ liệu điểm:", error);
             }
         });
 
-    // Xử lý khi người dùng nhấn nút "Xác Nhận" trong modal xoá điểm
     document
         .getElementById("confirm-delete-submit")
         .addEventListener("click", async function () {
@@ -139,21 +152,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 const classname =
                     document.getElementById("classname-delete").value;
 
-                // Gửi yêu cầu POST tới API để xoá điểm
                 await fetch(apiDeleteLesson, {
                     method: "DELETE",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ classname, lesson }),
                 })
                     .then((response) => response.text())
-                    .then((text) => alert(text)); // Hiển thị thông báo phản hồi từ server
+                    .then((text) => alert(text));
             } catch (error) {
                 console.error("Lỗi khi xoá bảng điểm:", error);
             }
         });
 
-    // Cập nhật danh sách sinh viên khi lớp học thay đổi
-    classnameInput.addEventListener("change", function () {
-        loadStudents(classnameInput.value); // Gọi lại hàm loadStudents với lớp học mới
+    classnameInput.addEventListener("input", function () {
+        loadStudents(classnameInput.value);
     });
 });
