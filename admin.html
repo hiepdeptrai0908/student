@@ -33,6 +33,7 @@
                     id="classname-input"
                     class="heading-class-item"
                     value="N5 - 08"
+                    onchange="handleChangeClassname(event)"
                 />
                 <div class="heading-class-desciption">
                     sĩ số : <span id="student-count">0</span>
@@ -94,10 +95,6 @@
             </div>
             <div class="rank-item rank-item-no-test">
                 <p class="rank-item-title">Chưa kiểm tra:</p>
-                <p
-                    class="rank-item-name rank-item-name__min"
-                    id="no-test-count"
-                ></p>
             </div>
         </div>
         <hr />
@@ -112,6 +109,7 @@
                 id="student-table"
             ></table>
         </div>
+
         <script type="module" src="main.js"></script>
     </body>
 </html>

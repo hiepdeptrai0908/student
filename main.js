@@ -66,9 +66,11 @@ document.addEventListener("DOMContentLoaded", function () {
     async function renderHtml(data) {
         // Xóa bảng cũ nếu có
         const tableWrapper = document.querySelector(".table-wrapper");
-        const existingTable = tableWrapper.querySelector("table").remove();
 
-        // Xóa các span con trong các phần tử hiển thị điểm cao nhất, thấp nhất và chưa kiểm tra
+        if (tableWrapper.classList.contains) {
+            const existingTable = tableWrapper.querySelector("table").remove();
+        }
+
         document
             .querySelectorAll(".rank-item-max span")
             .forEach((span) => span.remove());
@@ -106,8 +108,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 .map((item) => item.score);
 
             // Tìm điểm số nhỏ nhất và lớn nhất
-            const minScore = Math.min(...nonZeroScores);
-            const maxScore = Math.max(...nonZeroScores);
+            const minScore =
+                nonZeroScores.length > 0 ? Math.min(...nonZeroScores) : 0;
+            const maxScore =
+                nonZeroScores.length > 0 ? Math.max(...nonZeroScores) : 0;
+
             studentCountElement.innerHTML = datas.length;
 
             // Tạo bảng mới
@@ -153,9 +158,9 @@ document.addEventListener("DOMContentLoaded", function () {
             const totalRow = document.createElement("tr");
             totalRow.className = "total-row";
             totalRow.innerHTML = `
-                <td colspan="3" style="text-align: right; font-weight: bold;">Tổng số câu sai:</td>
-                <td style="font-weight: bold;">${totalWrong}</td>
-            `;
+            <td colspan="3" style="text-align: right; font-weight: bold;">Tổng số câu sai:</td>
+            <td style="font-weight: bold;">${totalWrong}</td>
+        `;
             tbody.appendChild(totalRow);
 
             table.appendChild(tbody);
@@ -173,7 +178,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         .appendChild(newSpan);
                 }
 
-                if (data.score === minScore) {
+                if (data.score === minScore && minScore !== 0) {
                     const newSpan = document.createElement("span");
                     newSpan.textContent = `・🆘 ${data.name} （ ${data.score} điểm ）`;
                     newSpan.className = "rank-item-name rank-item-name__min";
@@ -182,7 +187,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         .appendChild(newSpan);
                 }
 
-                if (data.score === 0) {
+                if ((data.score === 0) & (maxScore != 0)) {
                     const newSpan = document.createElement("span");
                     newSpan.textContent = `・🤷‍♂️ ${data.name}`;
                     newSpan.className =
