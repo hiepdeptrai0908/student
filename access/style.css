@@ -3,6 +3,10 @@
     padding: 0;
 }
 
+html {
+    font-size: 70%;
+}
+
 body {
     margin: auto;
     padding: 20px;
@@ -11,17 +15,32 @@ body {
     max-width: 764px;
 }
 
+.wrapper {
+    display: block;
+    margin-bottom: 50px;
+}
+
+.manager-core-table,
+.manager-class,
+.manager-insert-core,
+.manager-student {
+    padding-bottom: 40px;
+}
+
 h1 {
     text-transform: uppercase;
     font-weight: 700;
     color: rgb(50, 48, 48);
     text-align: center;
-    font-size: 20px;
+    font-size: 16px;
+    height: 40px;
+    line-height: 40px;
+    margin-bottom: -10px;
 }
 
 h2 {
     text-transform: uppercase;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
     margin-top: 30px;
 }
@@ -29,26 +48,26 @@ h2 {
 input,
 select,
 button {
-    line-height: 35px;
-    min-height: 40px;
+    line-height: 34px;
+    height: 34px;
     width: auto;
-    border-radius: 8px;
+    border-radius: 4px;
     outline: transparent;
-    padding: 0 12px;
+    padding: 0 10px;
 }
 
 button {
     text-transform: uppercase;
+    font-weight: 700;
 }
 
 .heading {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 20px 0;
     font-weight: 700;
     font-size: 15px;
-    background-color: #666;
+    background-color: #009688;
     padding: 20px;
 }
 
@@ -83,6 +102,10 @@ button {
         sans-serif;
 }
 
+#manager-option {
+    margin-bottom: 20px;
+}
+
 /* ADD SCORE */
 
 .heading-lesson {
@@ -103,8 +126,6 @@ button {
     text-align: center;
     font-weight: 700;
     font-size: 20px;
-    line-height: 35px;
-    min-height: 40px;
     padding: 11px;
     border: transparent;
 }
@@ -127,32 +148,14 @@ button {
 
 .rank-item-name__max {
     color: green;
-    animation: blink-animation 1.3s ease-out infinite;
 }
 
 .rank-item-name__min {
     color: red;
-    animation: blink-animation 1.3s ease-out infinite 0.3s;
 }
 
 .rank-item-name__no-test {
     color: #bc9700;
-    animation: blink-animation 1.3s ease-out infinite 0.9s;
-}
-
-@keyframes blink-animation {
-    0% {
-        opacity: 0.8; /* Bắt đầu mờ dần */
-        transform: scale(1); /* Tạo hiệu ứng phồng nhẹ */
-    }
-    50% {
-        opacity: 1; /* Hiển thị rõ ràng hơn */
-        transform: scale(1.01); /* Phồng nhẹ để tạo cảm giác nhấp nháy */
-    }
-    100% {
-        opacity: 0.8; /* Kết thúc mờ dần */
-        transform: scale(1); /* Trở về kích thước ban đầu */
-    }
 }
 
 .add-item-title {
@@ -168,7 +171,6 @@ button {
     padding: 2px 14px;
     align-items: center;
     outline: none;
-    text-transform: capitalize;
 }
 
 .btn {
@@ -218,12 +220,18 @@ td {
     padding: 8px;
     vertical-align: middle; /* Căn giữa theo chiều dọc */
 }
+td:first-child {
+    font-weight: 700;
+    background-color: #f8f9fa;
+    width: 30px;
+}
+td {
+    height: 40px;
+}
 
 th,
-td:nth-child(3),
-td:first-child,
-td:last-child {
-    text-align: center; /* Căn giữa theo chiều ngang cho cột đầu tiên và cột cuối cùng */
+td {
+    text-align: center;
 }
 
 .manager-btn {
@@ -252,4 +260,84 @@ a:hover {
 
 a:focus {
     outline: none; /* Loại bỏ viền khi liên kết nhận focus */
+}
+
+/* MODAL LOGIN */
+/* Overlay to blur the background */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it is on top of other elements */
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+/* Modal styles */
+.modal-login {
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1001; /* Higher than the overlay to ensure it's on top */
+}
+
+/* Modal title */
+.modal-login-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 4px;
+    text-align: center;
+}
+
+/* Modal description */
+.modal-login-description {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+    text-align: center;
+    font-style: italic;
+}
+
+/* Modal input */
+.modal-login-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    text-transform: uppercase;
+}
+
+/* Button styles */
+.btn-success {
+    background-color: #28a745;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.manager-core-table {
+    display: flex;
+    flex-direction: column;
+}
+
+.btn-success {
+    font-size: inherit;
 }

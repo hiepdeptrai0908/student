@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>ADMIN</title>
+        <title>Điểm Học Sinh Đông Minh</title>
         <link rel="icon" href="favicon.png" type="image/png" />
         <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -25,81 +25,567 @@
         <link rel="stylesheet" href="access/style.css" />
     </head>
     <body>
-        <h1>Bài kiểm tra từ vựng</h1>
-        <div class="heading">
-            <div class="heading-class">
+        <div class="modal-overlay">
+            <div class="modal-login">
+                <div class="modal-login-title">ĐĂNG NHẬP</div>
+                <div class="modal-login-description">
+                    （Nếu là học sinh thì nhập "HS"）
+                </div>
                 <input
+                    class="modal-login-input"
                     type="text"
-                    id="classname-input"
-                    class="heading-class-item"
-                    value="N5 - 08"
+                    autofocus="true"
+                    autocomplete="off"
                 />
-                <div class="heading-class-desciption">
-                    sĩ số : <span id="student-count">0</span>
+                <button class="btn btn-success btn-login">Xác Nhận</button>
+            </div>
+        </div>
+        <div class="wrapper" hidden>
+            <select class="form-select" id="manager-option">
+                <!-- Các tùy chọn bài học -->
+                <option value="1">Hiển thị bảng điểm</option>
+                <option value="2">Quản lý lớp học</option>
+                <option value="3">Quản lý học sinh</option>
+                <option value="4">Nhập điểm</option>
+
+                <!-- Thêm các tùy chọn khác nếu cần -->
+            </select>
+
+            <!-- Quản lý bảng điểm -->
+            <div class="manager-core-table">
+                <select
+                    class="add-item-input form-select"
+                    id="screen-score__class-dropdown"
+                    name="classname"
+                    required
+                >
+                    <option value="">-- Chọn Lớp Học --</option>
+                    <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                </select>
+
+                <select
+                    class="add-item-input form-select"
+                    id="screen-score__lesson-dropdown"
+                    name="lesson"
+                    required
+                >
+                    <option value="">-- Chọn Bài --</option>
+                    <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                </select>
+                <div class="rank">
+                    <div class="rank-item rank-item-max">
+                        <p class="rank-item-title">Điểm cao nhất:</p>
+                    </div>
+                    <div class="rank-item rank-item-min">
+                        <p class="rank-item-title">Điểm thấp nhất:</p>
+                    </div>
+                    <div class="rank-item rank-item-no-test">
+                        <p class="rank-item-title">Chưa kiểm tra:</p>
+                    </div>
+                </div>
+                <hr />
+                <div class="created-at">
+                    Điểm đã được tạo vào lúc:<br />
+                    <span id="score-created-at">
+                        00:00 ngày 00 tháng 00 năm 0000</span
+                    >
+                </div>
+                <div class="table-wrapper">
+                    <table
+                        class="table-score table-hover border"
+                        style="width: 100%"
+                        id="student-table"
+                    ></table>
                 </div>
             </div>
-            <div class="heading-lesson">
-                <p class="heading-lesson-title">BÀI</p>
-                <select
-                    name="lesson"
-                    class="heading-lesson-input"
-                    id="lesson-select"
+
+            <!-- Quản lý lớp học -->
+            <div class="manager-class">
+                <!-- Bảng hiển thị danh sách lớp học -->
+                <div class="table-class-wrapper">
+                    <table
+                        class="table table-class border"
+                        style="width: 100%"
+                        id="class-table"
+                    >
+                        <thead>
+                            <tr class="table-light">
+                                <th width="30px">STT</th>
+                                <th>Tên Lớp</th>
+                                <th>Sĩ Số</th>
+                                <th>Ngày Tạo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dữ liệu sẽ được thêm vào đây bằng JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Form thêm lớp học mới -->
+                <form id="add-class-form">
+                    <h2>Thêm Lớp Học Mới</h2>
+                    <div class="add-item">
+                        <label class="add-item-title" for="add-classname"
+                            >Tên Lớp:</label
+                        >
+                        <input
+                            class="add-item-input"
+                            type="text"
+                            id="add-classname"
+                            name="classname"
+                            value="N5 - 0"
+                            autocomplete="off"
+                            required
+                        />
+                    </div>
+                    <button id="add-btn" class="btn btn-success" type="submit">
+                        Thêm
+                    </button>
+                </form>
+                <hr />
+                <!-- Form sửa lớp học -->
+                <form id="edit-class-form">
+                    <h2>Sửa Lớp Học</h2>
+                    <div class="add-item">
+                        <label class="add-item-title" for="old-class-dropdown"
+                            >Tên Lớp Cũ:</label
+                        >
+                        <select
+                            class="add-item-input form-select"
+                            id="old-class-dropdown"
+                            name="classname"
+                            required
+                        >
+                            <option value="">-- Chọn Lớp Học --</option>
+                            <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                        </select>
+                    </div>
+                    <div class="add-item">
+                        <label class="add-item-title" for="new-classname"
+                            >Tên Lớp Mới:</label
+                        >
+                        <input
+                            class="add-item-input"
+                            type="text"
+                            id="new-classname"
+                            name="new_classname"
+                            value=""
+                            autocomplete="off"
+                            required
+                        />
+                    </div>
+                    <button
+                        id="update-btn"
+                        class="btn btn-primary"
+                        type="submit"
+                    >
+                        Cập Nhật
+                    </button>
+                </form>
+                <hr />
+                <!-- Form xóa lớp học -->
+                <form id="delete-class-form">
+                    <h2>Xóa Lớp Học</h2>
+                    <div class="add-item">
+                        <label
+                            class="add-item-title"
+                            for="delete-class-dropdown"
+                            >Chọn Lớp Học:</label
+                        >
+                        <select
+                            class="add-item-input form-select"
+                            id="delete-class-dropdown"
+                            name="classname"
+                            required
+                        >
+                            <option value="">-- Chọn Lớp Học --</option>
+                            <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                        </select>
+                    </div>
+                    <button
+                        id="delete-btn"
+                        class="btn btn-danger"
+                        type="submit"
+                    >
+                        Xóa
+                    </button>
+                </form>
+            </div>
+
+            <!-- Quản lý học sinh -->
+            <div class="manager-student">
+                <!-- Form thêm học sinh -->
+                <form id="add-student-form">
+                    <h2>Thêm Học Sinh Mới</h2>
+
+                    <div class="add-item">
+                        <label class="add-item-title" for="classname"
+                            >Tên Lớp:</label
+                        >
+                        <select
+                            class="add-item-input form-select"
+                            id="old-student-dropdown"
+                            name="classname"
+                            required
+                        >
+                            <option value="">-- Chọn Lớp Học --</option>
+                            <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="add-item-title" for="name"
+                            >Họ & Tên:</label
+                        >
+                        <input
+                            class="add-item-input"
+                            type="text"
+                            id="name"
+                            name="name"
+                            autocomplete="off"
+                            required
+                        />
+                    </div>
+
+                    <button id="add-btn" class="btn btn-success" type="submit">
+                        Thêm
+                    </button>
+                </form>
+                <hr />
+
+                <!-- Form sửa điểm -->
+                <form id="update-score-form">
+                    <h2>Sửa Điểm Học Sinh</h2>
+
+                    <div class="add-item">
+                        <label class="add-item-title" for="classname-update"
+                            >Tên Lớp:</label
+                        >
+                        <select
+                            class="add-item-input form-select"
+                            id="update-student-dropdown"
+                            name="classname"
+                            required
+                        >
+                            <option value="">-- Chọn Lớp Học --</option>
+                            <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="add-item-title" for="student-select"
+                            >Họ & Tên:</label
+                        >
+                        <select
+                            class="add-item-input"
+                            id="student-select"
+                            name="student-select"
+                            required
+                        >
+                            <option value="">-- Chọn Học Sinh --</option>
+                            <!-- Options will be added dynamically here -->
+                        </select>
+                    </div>
+
+                    <div class="add-item">
+                        <label class="add-item-title" for="lesson">Bài:</label>
+                        <input
+                            class="add-item-input"
+                            type="number"
+                            id="lesson"
+                            name="lesson"
+                            value=""
+                            autocomplete="off"
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label class="add-item-title" for="new-score"
+                            >Điểm Mới:</label
+                        >
+                        <input
+                            class="add-item-input"
+                            type="number"
+                            id="new-score"
+                            name="new-score"
+                            autocomplete="off"
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label class="add-item-title" for="new-score"
+                            >Chú thích:</label
+                        >
+                        <input
+                            class="add-item-input"
+                            type="text"
+                            id="comment"
+                            name="comment"
+                            autocomplete="off"
+                        />
+                    </div>
+                    <button
+                        id="update-btn"
+                        class="btn btn-warning"
+                        type="submit"
+                    >
+                        Cập Nhật Điểm
+                    </button>
+                </form>
+                <hr />
+                <!-- Form xóa học sinh -->
+                <form id="delete-student-form">
+                    <h2>Xóa Học Sinh</h2>
+                    <div class="add-item">
+                        <label class="add-item-title" for="delete-classname"
+                            >Tên Lớp:</label
+                        >
+                        <select
+                            class="add-item-input form-select"
+                            id="delete-student-dropdown"
+                            name="classname"
+                            required
+                        >
+                            <option value="">-- Chọn Lớp Học --</option>
+                            <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                        </select>
+                    </div>
+                    <div class="add-item">
+                        <label class="add-item-title" for="delete-name"
+                            >Họ & Tên:</label
+                        >
+                        <select
+                            class="add-item-input"
+                            id="delete-student-select"
+                            name="student-select"
+                            required
+                        >
+                            <option value="">-- Chọn Học Sinh --</option>
+                            <!-- Options will be added dynamically here -->
+                        </select>
+                    </div>
+
+                    <button
+                        id="delete-btn"
+                        class="btn btn-danger"
+                        type="submit"
+                    >
+                        Xóa
+                    </button>
+                </form>
+                <hr />
+                <!-- Form thông tin học sinh -->
+                <div>
+                    <h2>Bảng điểm cá nhân</h2>
+                    <div class="add-item">
+                        <label
+                            class="add-item-title"
+                            for="table-student-dropdown"
+                            >Tên Lớp:</label
+                        >
+                        <select
+                            class="add-item-input form-select"
+                            id="table-student-dropdown"
+                            name="classname"
+                            required
+                        >
+                            <option value="">-- Chọn Lớp Học --</option>
+                            <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                        </select>
+                    </div>
+                    <div class="add-item">
+                        <label class="add-item-title" for="table-student-select"
+                            >Họ & Tên:</label
+                        >
+                        <select
+                            class="add-item-input"
+                            id="table-student-select"
+                            name="student-select"
+                            required
+                        >
+                            <option value="">-- Chọn Học Sinh --</option>
+                            <!-- Options will be added dynamically here -->
+                        </select>
+                    </div>
+                    <div class="table-wrapper">
+                        <table
+                            class="table border"
+                            style="width: 100%"
+                            id="student-score-table"
+                        >
+                            <thead>
+                                <tr class="table-light">
+                                    <th width="60px">STT</th>
+                                    <th width="60px">Bài</th>
+                                    <th width="60px">Điểm</th>
+                                    <th width="60px">Sai</th>
+                                    <th>Chú Thích</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dữ liệu sẽ được thêm vào đây bằng JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NHẬP ĐIỂM -->
+            <div class="manager-insert-core">
+                <form id="score-form" method="post">
+                    <select
+                        class="add-item-input form-select"
+                        id="insert-score__class-dropdown"
+                        name="classname"
+                        required
+                    >
+                        <option value="">-- Chọn Lớp Học --</option>
+                        <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                    </select>
+                    <select
+                        name="lesson"
+                        id="insert-score__lesson-dropdown"
+                        class="add-item-input form-select"
+                    >
+                        <!-- Các option đã được rút gọn -->
+                        <option value="">-- Chọn Bài --</option>
+                        <option value="1">Bài 1</option>
+                        <option value="2">Bài 2</option>
+                        <option value="3">Bài 3</option>
+                        <option value="4">Bài 4</option>
+                        <option value="5">Bài 5</option>
+                        <option value="6">Bài 6</option>
+                        <option value="7">Bài 7</option>
+                        <option value="8">Bài 8</option>
+                        <option value="9">Bài 9</option>
+                        <option value="10">Bài 10</option>
+                        <option value="11">Bài 11</option>
+                        <option value="12">Bài 12</option>
+                        <option value="13">Bài 13</option>
+                        <option value="14">Bài 14</option>
+                        <option value="15">Bài 15</option>
+                        <option value="16">Bài 16</option>
+                        <option value="17">Bài 17</option>
+                        <option value="18">Bài 18</option>
+                        <option value="19">Bài 19</option>
+                        <option value="20">Bài 20</option>
+                        <option value="21">Bài 21</option>
+                        <option value="22">Bài 22</option>
+                        <option value="23">Bài 23</option>
+                        <option value="24">Bài 24</option>
+                        <option value="25">Bài 25</option>
+
+                        <!-- Thêm các option khác nếu cần -->
+                    </select>
+
+                    <div class="table-wrapper">
+                        <table
+                            class="table border"
+                            style="width: 100%"
+                            id="insert-score__student-table"
+                        >
+                            <thead>
+                                <tr class="table-light">
+                                    <th width="40px">STT</th>
+                                    <th>Họ và Tên</th>
+                                    <th width="90px">Điểm</th>
+                                    <th>Chú thích</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dữ liệu sẽ được thêm vào đây bằng JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <button
+                        class="btn btn-success"
+                        style="margin-top: 10px"
+                        type="submit"
+                    >
+                        Xác nhận
+                    </button>
+                </form>
+                <hr />
+                <form id="delete-score-lesson">
+                    <h2>Xoá điểm của cả lớp</h2>
+
+                    <select
+                        class="add-item-input form-select"
+                        id="delete-score__class-dropdown"
+                        name="classname"
+                        required
+                    >
+                        <option value="">-- Chọn Lớp Học --</option>
+                        <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                    </select>
+
+                    <select
+                        class="add-item-input form-select"
+                        id="delete-score__lesson-dropdown"
+                        name="lesson"
+                        required
+                    >
+                        <option value="">-- Chọn Bài --</option>
+                        <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                    </select>
+                    <button
+                        id="delete-btn"
+                        class="btn btn-danger"
+                        type="submit"
+                    >
+                        Xoá điểm
+                    </button>
+                </form>
+                <!-- Modal Xác Nhận -->
+                <div
+                    class="modal fade"
+                    id="confirm-modal"
+                    tabindex="-1"
+                    aria-labelledby="confirm-modal-label"
+                    aria-hidden="true"
                 >
-                    <!-- Các tùy chọn bài học -->
-                    <option value="1">01</option>
-                    <option value="2">02</option>
-                    <option value="3">03</option>
-                    <option value="4">04</option>
-                    <option value="5">05</option>
-                    <option value="6">06</option>
-                    <option value="7">07</option>
-                    <option value="8">08</option>
-                    <option value="9">09</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
-                    <option value="13">13</option>
-                    <option value="14">14</option>
-                    <option value="15">15</option>
-                    <option value="16">16</option>
-                    <option value="17">17</option>
-                    <option value="18">18</option>
-                    <option value="19">19</option>
-                    <option value="20">20</option>
-                    <option value="21">21</option>
-                    <option value="22">22</option>
-                    <option value="23">23</option>
-                    <option value="24">24</option>
-                    <option value="25">25</option>
-                    <!-- Thêm các tùy chọn khác nếu cần -->
-                </select>
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5
+                                    class="modal-title"
+                                    id="confirm-modal-label"
+                                >
+                                    Xác Nhận
+                                </h5>
+                                <button
+                                    type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"
+                                ></button>
+                            </div>
+                            <div class="modal-body">
+                                Bạn có chắc chắn muốn ${message} không?
+                            </div>
+                            <div class="modal-footer">
+                                <button
+                                    type="button"
+                                    class="btn btn-secondary"
+                                    data-bs-dismiss="modal"
+                                >
+                                    Hủy
+                                </button>
+                                <button
+                                    type="button"
+                                    class="btn btn-primary"
+                                    id="confirm-submit"
+                                >
+                                    Xác Nhận
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="rank">
-            <div class="rank-item rank-item-max">
-                <p class="rank-item-title">Điểm cao nhất:</p>
-            </div>
-            <div class="rank-item rank-item-min">
-                <p class="rank-item-title">Điểm thấp nhất:</p>
-            </div>
-            <div class="rank-item rank-item-no-test">
-                <p class="rank-item-title">Chưa kiểm tra:</p>
-            </div>
-        </div>
-        <hr />
-        <div class="created-at">
-            Điểm đã được tạo vào lúc:<br />
-            <span id="score-created-at"> 00:00 ngày 00 tháng 00 năm 0000</span>
-        </div>
-        <div class="table-wrapper">
-            <table
-                class="table table-hover border"
-                style="width: 100%"
-                id="student-table"
-            ></table>
-        </div>
-
-        <script type="module" src="main.js"></script>
+        <script type="module" src="/access/main.js"></script>
     </body>
 </html>
