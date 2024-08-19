@@ -221,7 +221,7 @@ async function showCoreTable(data) {
         tbody.innerHTML += `
             <tr>
                 <td>${rowIndex}</td>
-                <td style="min-width:90px; text-align:left;">${item.name}</td>
+                <td style="min-width:120px; text-align:left;">${item.name}</td>
                 <td>${item.score}</td>
                 <td>${item.error}</td>
                 <td style="font-style:italic; color:#666; font-size:9px; text-align:left;">${item.comment}</td>
