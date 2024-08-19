@@ -280,14 +280,22 @@ a:focus {
 
 /* Modal styles */
 .modal-login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     background-color: #f5f5f5;
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 20px;
     width: 100%;
-    max-width: 700px;
+    max-width: 650px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     z-index: 1001; /* Higher than the overlay to ensure it's on top */
+}
+
+.modal-login > button {
+    max-width: 200px;
 }
 
 /* Modal title */
@@ -310,6 +318,7 @@ a:focus {
 /* Modal input */
 .modal-login-input {
     width: 100%;
+    max-width: 200px;
     padding: 10px;
     margin-bottom: 20px;
     border: 1px solid #ccc;
