@@ -48,8 +48,8 @@ h2 {
 input,
 select,
 button {
-    line-height: 34px;
-    height: 34px;
+    line-height: 40px;
+    height: 40px;
     width: auto;
     border-radius: 4px;
     outline: transparent;
