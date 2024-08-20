@@ -41,6 +41,19 @@ const elements = {
     ),
 };
 
+const timeOut = 400;
+const doneTypingInterval = 300;
+// Hàm hiện modal loading
+function showLoadingModal() {
+    const loadingModal = document.getElementById("loadingModal");
+    loadingModal.style.display = "flex";
+}
+
+// Hàm để ẩn modal loading
+function hideLoadingModal() {
+    const loadingModal = document.getElementById("loadingModal");
+    loadingModal.style.display = "none";
+}
 // Hàm để hiển thị hoặc ẩn các phần tử
 function toggleVisibility(elementsToShow, elementsToHide) {
     elementsToShow.forEach((el) => el.removeAttribute("hidden"));
@@ -171,7 +184,7 @@ async function showCoreTable(data) {
     document
         .querySelectorAll(".rank-item-no-test span")
         .forEach((span) => span.remove());
-
+    showLoadingModal();
     const response = await fetch(url + "score-lesson", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -180,89 +193,105 @@ async function showCoreTable(data) {
 
     // Dữ liệu trả về -> datas
     const datas = await response.json();
-    const createdAt = datas[0]?.created_at;
-    elements.scoreCreatedAtElement.textContent = createdAt
-        ? formatDateTime(createdAt)
-        : "Chưa có dữ liệu";
+    setTimeout(() => {
+        hideLoadingModal();
+        const createdAt = datas[0]?.created_at;
+        elements.scoreCreatedAtElement.textContent = createdAt
+            ? formatDateTime(createdAt)
+            : "Chưa có dữ liệu";
 
-    // Lọc các điểm số không phải là 0
-    const nonZeroScores = datas
-        .filter((item) => item.score > 0)
-        .map((item) => item.score);
+        // Lọc các điểm số không phải là 0
+        const nonZeroScores = datas
+            .filter((item) => item.score > 0)
+            .map((item) => item.score);
 
-    // Tìm điểm số nhỏ nhất và lớn nhất
-    const minScore = nonZeroScores.length > 0 ? Math.min(...nonZeroScores) : 0;
-    const maxScore = nonZeroScores.length > 0 ? Math.max(...nonZeroScores) : 0;
+        // Tìm điểm số nhỏ nhất và lớn nhất
+        const minScore =
+            nonZeroScores.length > 0 ? Math.min(...nonZeroScores) : 0;
+        const maxScore =
+            nonZeroScores.length > 0 ? Math.max(...nonZeroScores) : 0;
 
-    // Tạo bảng mới
-    const table = document.createElement("table");
-    table.className = "table table-hover border";
-    table.style.width = "100%";
+        // Tạo bảng mới
+        const table = document.createElement("table");
+        table.className = "table table-hover border";
+        table.style.width = "100%";
 
-    // Tạo hàng tiêu đề
-    const thead = document.createElement("thead");
-    thead.innerHTML = `
-        <tr class="table-light">
-            <th>STT</th>
-            <th>Họ và Tên</th>
-            <th width="45px">Điểm</th>
-            <th width="45px">Sai</th>
-            <th>Chú thích</th>
-        </tr>
-    `;
-    table.appendChild(thead);
-
-    // Tạo phần thân bảng
-    const tbody = document.createElement("tbody");
-    let totalWrong = 0;
-
-    datas.forEach((item, index) => {
-        const rowIndex = index + 1 < 10 ? `0${index + 1}` : index + 1;
-        tbody.innerHTML += `
-            <tr>
-                <td>${rowIndex}</td>
-                <td style="min-width:150px; text-align:left;">${item.name}</td>
-                <td>${item.score}</td>
-                <td>${item.error}</td>
-                <td style="font-style:italic; color:#666; font-size:8px; text-align:left;">${item.comment}</td>
+        // Tạo hàng tiêu đề
+        const thead = document.createElement("thead");
+        thead.innerHTML = `
+            <tr class="table-light">
+                <th>STT</th>
+                <th>Họ và Tên</th>
+                <th width="45px">Điểm</th>
+                <th width="45px">Sai</th>
+                <th>Chú thích</th>
             </tr>
         `;
-        totalWrong += item.error;
-    });
+        table.appendChild(thead);
 
-    // Thêm hàng mới vào cuối bảng để hiển thị tổng số câu sai
-    tbody.innerHTML += `
-        <tr class="total-row">
-            <td text-align="center" colspan="5" style="font-weight: bold;">TỔNG SỐ CÂU SAI: ${totalWrong}</td>
-        </tr>
-    `;
+        // Tạo phần thân bảng
+        const tbody = document.createElement("tbody");
+        let totalWrong = 0;
 
-    table.appendChild(tbody);
-    tableWrapper.appendChild(table);
+        datas.forEach((item, index) => {
+            const rowIndex = index + 1 < 10 ? `0${index + 1}` : index + 1;
+            tbody.innerHTML += `
+                <tr>
+                    <td>${rowIndex}</td>
+                    <td style="min-width:150px; text-align:left;">${
+                        item.name
+                    }</td>
+                    <td>${item.score}</td>
+                    <td>${item.error}</td>
+                    <td style="font-style:italic; color:#333; font-size:10px; text-align:left;" ${
+                        item.comment == "Chưa đóng phạt" ||
+                        item.comment == "chưa đóng phạt" ||
+                        item.comment == "Chưa đóng tiền" ||
+                        item.comment == "chưa đóng tiền"
+                            ? `class="error"`
+                            : `class=""`
+                    }>${item.comment}</td>
+                </tr>
+            `;
+            totalWrong += item.error;
+        });
 
-    // Duyệt qua dữ liệu và thêm span cho các điểm số khác nhau
-    datas.forEach((item) => {
-        if (item.score === maxScore && item.score !== 0) {
-            const newSpan = document.createElement("span");
-            newSpan.textContent = `・🥇 ${item.name} （ ${item.score} điểm ）`;
-            newSpan.className = "rank-item-name rank-item-name__max";
-            document.querySelector(".rank-item-max").appendChild(newSpan);
-        }
+        // Thêm hàng mới vào cuối bảng để hiển thị tổng số câu sai
+        tbody.innerHTML += `
+            <tr class="total-row">
+                <td text-align="center" colspan="5" style="font-weight: bold;">TỔNG SỐ CÂU SAI: ${totalWrong}</td>
+            </tr>
+        `;
 
-        if (item.score === minScore && minScore !== 0) {
-            const newSpan = document.createElement("span");
-            newSpan.textContent = `・💸 ${item.name} （ ${item.score} điểm ）`;
-            newSpan.className = "rank-item-name rank-item-name__min";
-            document.querySelector(".rank-item-min").appendChild(newSpan);
-        }
+        table.appendChild(tbody);
+        tableWrapper.appendChild(table);
 
-        if (item.score === 0 && maxScore !== 0) {
-            const newSpan = document.createElement("span");
-            newSpan.textContent = `・🤷‍♂️ ${item.name}`;
-            newSpan.className = "rank-item-name rank-item-name__no-test";
-            document.querySelector(".rank-item-no-test").appendChild(newSpan);
-        }
-    });
+        // Duyệt qua dữ liệu và thêm span cho các điểm số khác nhau
+        datas.forEach((item) => {
+            if (item.score === maxScore && item.score !== 0) {
+                const newSpan = document.createElement("span");
+                newSpan.textContent = `・🥇 ${item.name} （ ${item.score} điểm ）`;
+                newSpan.className = "rank-item-name rank-item-name__max";
+                document.querySelector(".rank-item-max").appendChild(newSpan);
+            }
+
+            if (item.score === minScore && minScore !== 0) {
+                const newSpan = document.createElement("span");
+                newSpan.textContent = `・💸 ${item.name} （ ${item.score} điểm ）`;
+                newSpan.className = "rank-item-name rank-item-name__min";
+                document.querySelector(".rank-item-min").appendChild(newSpan);
+            }
+
+            if (item.score === 0 && maxScore !== 0) {
+                const newSpan = document.createElement("span");
+                newSpan.textContent = `・🤷‍♂️ ${item.name}`;
+                newSpan.className = "rank-item-name rank-item-name__no-test";
+                document
+                    .querySelector(".rank-item-no-test")
+                    .appendChild(newSpan);
+            }
+        });
+    }, timeOut);
 }
 
 function handleChangeLessonScreen(e) {
@@ -290,29 +319,31 @@ showCoreTable({
 // Lấy dữ liệu lớp học và hiển thị ra table class
 async function fetchClassData() {
     try {
+        showLoadingModal();
         const response = await fetch(url + "class");
         const data = await response.json();
-        const tbody = document.querySelector("#class-table tbody");
-        tbody.innerHTML = data
-            .map((item, index) => {
-                const createdAt = new Date(item.created_at);
-                const formattedDate = `${String(createdAt.getDate()).padStart(
-                    2,
-                    "0"
-                )}-${String(createdAt.getMonth() + 1).padStart(
-                    2,
-                    "0"
-                )}-${createdAt.getFullYear()}`;
-                return `
-                <tr>
-                    <td>${String(index + 1).padStart(2, "0")}</td>
-                    <td>${item.classname}</td>
-                    <td>${item.student_count}</td>
-                    <td>${formattedDate}</td>
-                </tr>
-            `;
-            })
-            .join("");
+        setTimeout(() => {
+            hideLoadingModal();
+            const tbody = document.querySelector("#class-table tbody");
+            tbody.innerHTML = data
+                .map((item, index) => {
+                    const createdAt = new Date(item.created_at);
+                    const formattedDate = `${String(
+                        createdAt.getDate()
+                    ).padStart(2, "0")}-${String(
+                        createdAt.getMonth() + 1
+                    ).padStart(2, "0")}-${createdAt.getFullYear()}`;
+                    return `
+                    <tr>
+                        <td>${String(index + 1).padStart(2, "0")}</td>
+                        <td>${item.classname}</td>
+                        <td>${item.student_count}</td>
+                        <td>${formattedDate}</td>
+                    </tr>
+                `;
+                })
+                .join("");
+        }, timeOut);
     } catch (error) {
         console.error("Có lỗi xảy ra khi lấy dữ liệu:", error);
     }
@@ -407,11 +438,6 @@ async function fetchClasses() {
     }
 }
 
-async function fetchLesson() {
-    const response = await fetch(url + "class");
-    const data = await response.json();
-}
-
 // Xử lý thêm lớp học mới
 document
     .getElementById("add-class-form")
@@ -422,6 +448,7 @@ document
         const data = { classname };
 
         try {
+            showLoadingModal();
             const response = await fetch(url + "class", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -431,7 +458,10 @@ document
                 throw new Error("Network response was not ok");
             }
             const message = await response.text();
-            alert(message);
+            setTimeout(() => {
+                hideLoadingModal();
+                alert(message);
+            }, timeOut);
             fetchClassData();
             fetchClasses();
         } catch (error) {
@@ -442,6 +472,7 @@ document
 // Xử lý cập nhật lớp học
 async function updateClass(classId, newClassname) {
     try {
+        showLoadingModal();
         const response = await fetch(url + "class", {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
@@ -451,7 +482,11 @@ async function updateClass(classId, newClassname) {
             throw new Error("Network response was not ok");
         }
         const message = await response.text();
-        alert(message);
+        setTimeout(() => {
+            hideLoadingModal();
+            alert(message);
+            document.getElementById("edit-class-form").reset();
+        }, timeOut);
         fetchClassData();
         fetchClasses();
     } catch (error) {
@@ -491,6 +526,7 @@ document
 
             if (confirmDelete) {
                 try {
+                    showLoadingModal();
                     const response = await fetch(url + "class", {
                         method: "DELETE",
                         headers: { "Content-Type": "application/json" },
@@ -500,7 +536,10 @@ document
                         throw new Error("Network response was not ok");
                     }
                     const message = await response.text();
-                    alert(message);
+                    setTimeout(() => {
+                        hideLoadingModal();
+                        alert(message);
+                    }, timeOut);
                     fetchClassData();
                     fetchClasses();
                 } catch (error) {
@@ -532,6 +571,7 @@ function capitalizeFirstLetterOfEachWord(str) {
 // Hàm để gửi yêu cầu POST thêm học sinh mới
 async function addStudent(classId, name) {
     try {
+        showLoadingModal();
         const response = await fetch(url + "student", {
             method: "POST",
             headers: {
@@ -545,10 +585,14 @@ async function addStudent(classId, name) {
         }
 
         const result = await response.text();
-        alert(result);
+        setTimeout(() => {
+            hideLoadingModal();
+            alert(result);
+            document.getElementById("add-student-form").reset();
+        }, timeOut);
+
         fetchClassData();
         fetchClasses();
-        document.getElementById("add-student-form").reset();
         // Thực hiện các hành động sau khi thêm thành công, ví dụ: cập nhật danh sách học sinh
         // fetchStudents(); // Nếu có hàm fetchStudents để lấy danh sách học sinh
     } catch (error) {
@@ -579,37 +623,79 @@ document
 // Hàm để lấy danh sách học sinh của lớp học từ API và cập nhật vào dropdown
 async function fetchStudentsByClass(classId) {
     try {
+        showLoadingModal();
         const response = await fetch(`${url}class/${classId}/students`);
         const students = await response.json();
+        setTimeout(() => {
+            hideLoadingModal();
+            const studentSelect = document.getElementById("student-select");
+            const tableStudentSelect = document.getElementById(
+                "table-student-select"
+            );
 
-        const studentSelect = document.getElementById("student-select");
-        const tableStudentSelect = document.getElementById(
-            "table-student-select"
-        );
+            // Hàm cập nhật tùy chọn học sinh cho dropdown
+            function updateStudentOptions(selectElement, students) {
+                let optionsHtml =
+                    '<option value="">-- Chọn Học Sinh --</option>';
 
-        // Hàm cập nhật tùy chọn học sinh cho dropdown
-        function updateStudentOptions(selectElement, students) {
-            selectElement.innerHTML =
-                '<option value="">-- Chọn Học Sinh --</option>'; // Xóa các tùy chọn hiện tại
-            students.forEach((student) => {
-                const option = document.createElement("option");
-                option.value = student.id; // ID học sinh
-                option.textContent = student.name; // Tên học sinh
-                selectElement.appendChild(option);
-            });
-        }
+                students.forEach((student) => {
+                    optionsHtml += `
+                            <option value="${student.id}">${student.name}</option>
+                        `;
+                });
+                selectElement.innerHTML = optionsHtml;
+            }
+            updateStudentOptions(studentSelect, students);
+            updateStudentOptions(tableStudentSelect, students);
 
-        // Cập nhật tùy chọn cho cả hai dropdown
-        updateStudentOptions(studentSelect, students);
-        updateStudentOptions(tableStudentSelect, students);
+            // Cập nhật tùy chọn cho cả hai dropdown
+        }, timeOut);
     } catch (error) {
         console.error("Có lỗi xảy ra khi lấy danh sách học sinh:", error);
+    }
+}
+
+// Hàm gọi API để lấy dữ liệu điểm mới và chú thích
+async function fetchScoreData(class_id, student_id, lesson) {
+    try {
+        showLoadingModal();
+        const response = await fetch(url + "score-student", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ class_id, student_id, lesson }),
+        });
+
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+        console.log(data);
+        setTimeout(() => {
+            hideLoadingModal();
+            document.getElementById("new-score").value = data[0].score || "";
+            document.getElementById("comment").value = data[0].comment || "";
+        }, 250);
+    } catch (error) {
+        console.error("Error fetching score data:", error);
+    }
+}
+
+// Hàm xử lý thay đổi giá trị của student-select
+function handleStudentSelectChange() {
+    const class_id = document.getElementById("update-student-dropdown").value;
+    const student_id = document.getElementById("student-select").value;
+    const lesson = document.getElementById("lesson").value;
+
+    if (class_id && student_id && lesson != 0) {
+        fetchScoreData(Number(class_id), Number(student_id), Number(lesson));
     }
 }
 
 // Hàm để gửi yêu cầu POST cập nhật điểm học sinh
 async function updateScore(studentId, classId, lesson, score, comment) {
     try {
+        showLoadingModal();
         const response = await fetch(url + "score", {
             method: "PUT",
             headers: {
@@ -629,20 +715,46 @@ async function updateScore(studentId, classId, lesson, score, comment) {
         }
 
         const result = await response.text();
-        alert(result);
-
-        // reset lại table sau khi sửa điểm
-        document.getElementById("update-score-form").reset();
-
+        setTimeout(() => {
+            hideLoadingModal();
+            alert(result);
+            // reset lại table sau khi sửa điểm
+            document.getElementById("update-score-form").reset();
+        }, timeOut);
         fetchClassData();
         fetchClasses();
-        document.getElementById("update-score-form").reset();
-        // Thực hiện các hành động sau khi cập nhật thành công, ví dụ: làm mới dữ liệu hoặc thông báo
     } catch (error) {
         console.error("Có lỗi xảy ra khi cập nhật điểm:", error);
         alert("Có lỗi xảy ra khi cập nhật điểm.");
     }
 }
+
+// Thêm sự kiện cho dropdown student-select
+document
+    .getElementById("student-select")
+    .addEventListener("change", handleStudentSelectChange);
+
+// Thêm sự kiện cho input lesson
+let typingTimer;
+
+document.getElementById("lesson").addEventListener("input", function () {
+    clearTimeout(typingTimer); // Xóa timeout cũ
+    typingTimer = setTimeout(() => {
+        const class_id = document.getElementById(
+            "update-student-dropdown"
+        ).value;
+        const student_id = document.getElementById("student-select").value;
+        const lesson = this.value;
+
+        if (class_id && student_id && lesson != 0) {
+            fetchScoreData(
+                Number(class_id),
+                Number(student_id),
+                Number(lesson)
+            );
+        }
+    }, doneTypingInterval);
+});
 
 // Xử lý khi gửi form cập nhật điểm
 document
@@ -721,6 +833,7 @@ async function fetchStudentsForDeletion(classId) {
 // Hàm để gửi yêu cầu DELETE xóa học sinh
 async function deleteStudent(studentId, classId) {
     try {
+        showLoadingModal();
         const response = await fetch(url + `student`, {
             method: "DELETE",
             headers: {
@@ -737,7 +850,10 @@ async function deleteStudent(studentId, classId) {
         }
 
         const result = await response.text();
-        alert(result);
+        setTimeout(() => {
+            hideLoadingModal();
+            alert(result);
+        }, timeOut);
         fetchClassData();
         fetchClasses();
         document.getElementById("delete-student-form").reset();
@@ -798,7 +914,7 @@ const tbody = document
     .getElementsByTagName("tbody")[0];
 const row = document.createElement("tr");
 row.innerHTML = `
-                    <td colspan="5" class="text-center">Chưa chọn học sinh</td>
+                    <td colspan="6" class="text-center">Chưa chọn học sinh</td>
                 `;
 tbody.appendChild(row);
 async function renderTableScoreStudent(
@@ -806,6 +922,7 @@ async function renderTableScoreStudent(
     studentId = elements.tableStudentDropdown.value
 ) {
     // Gửi yêu cầu API để lấy dữ liệu bảng điểm
+    showLoadingModal();
     const response = await fetch(`${url}class/student`, {
         method: "POST",
         headers: {
@@ -818,37 +935,55 @@ async function renderTableScoreStudent(
     });
 
     const scores = await response.json();
+    setTimeout(() => {
+        hideLoadingModal();
+        // Lấy phần thân của bảng
+        const tbody = document
+            .getElementById("student-score-table")
+            .getElementsByTagName("tbody")[0];
 
-    // Lấy phần thân của bảng
-    const tbody = document
-        .getElementById("student-score-table")
-        .getElementsByTagName("tbody")[0];
+        // Xóa tất cả các hàng cũ trước khi thêm dữ liệu mới
+        tbody.innerHTML = "";
 
-    // Xóa tất cả các hàng cũ trước khi thêm dữ liệu mới
-    tbody.innerHTML = "";
-
-    if (scores.length === 0) {
-        // Hiển thị thông báo khi không có dữ liệu
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td colspan="5" class="text-center">Chưa có bảng điểm</td>
-        `;
-        tbody.appendChild(row);
-    } else {
-        scores.forEach((score, index) => {
+        if (scores.length === 0) {
+            // Hiển thị thông báo khi không có dữ liệu
             const row = document.createElement("tr");
-            // Thêm số thứ tự với định dạng số 0 nếu nhỏ hơn 10
-            const formattedIndex = (index + 1).toString().padStart(2, "0");
             row.innerHTML = `
-                <td">${formattedIndex}</td>
-                <td width="40px">${score.lesson}</td>
-                <td width="40px">${score.score}</td>
-                <td width="40px">${score.error}</td>
-                <td style="font-style:italic; color:#666; font-size:9px; text-align:left;">${score.comment}</td>
+                <td colspan="6" class="text-center">Chưa có bảng điểm</td>
             `;
             tbody.appendChild(row);
-        });
-    }
+        } else {
+            scores.forEach((score, index) => {
+                const row = document.createElement("tr");
+                // Thêm số thứ tự với định dạng số 0 nếu nhỏ hơn 10
+                const formattedIndex = (index + 1).toString().padStart(2, "0");
+                const createdAt = new Date(score.created_at);
+                const formattedDate = `${String(createdAt.getDate()).padStart(
+                    2,
+                    "0"
+                )}-${String(createdAt.getMonth() + 1).padStart(
+                    2,
+                    "0"
+                )}-${createdAt.getFullYear()}`;
+                row.innerHTML = `
+                    <td>${formattedIndex}</td>
+                    <td width="40px">${score.lesson}</td>
+                    <td width="40px">${score.score}</td>
+                    <td width="40px">${score.error}</td>
+                    <td style="font-style:italic; color:#333; font-size:10px; text-align:left;" ${
+                        score.comment == "Chưa đóng phạt" ||
+                        score.comment == "chưa đóng phạt" ||
+                        score.comment == "Chưa đóng tiền" ||
+                        score.comment == "chưa đóng tiền"
+                            ? `class="error"`
+                            : `class=""`
+                    }>${score.comment}</td>
+                    <td>${formattedDate}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+    }, timeOut);
 }
 
 document
@@ -908,7 +1043,7 @@ async function updateStudentTable() {
             row.innerHTML = `
             <td>${index + 1 < 10 ? "0" : ""}${index + 1}</td>
             <td style="text-align: left;">${student.name}</td>
-            <td><input type="number" name="score-${
+            <td><input type="number" max="50" name="score-${
                 student.id
             }" class="form-control" /></td>
             <td><input type="text" name="comment-${
@@ -971,6 +1106,7 @@ document
 
         // Gửi dữ liệu lên API
         try {
+            showLoadingModal();
             const response = await fetch(url + "score", {
                 method: "POST",
                 headers: {
@@ -979,13 +1115,14 @@ document
                 body: JSON.stringify(scoresData),
             });
 
-            const result = await response.text();
-            if (response.ok) {
-                document.getElementById("score-form").reset();
-                alert(result || "Điểm đã được nhập thành công!");
-            } else {
-                alert(result || "Có lỗi xảy ra khi nhập điểm.");
-            }
+            const result = await response.json();
+            setTimeout(() => {
+                hideLoadingModal();
+                alert(result.title);
+                if (result.status == "success") {
+                    document.getElementById("score-form").reset();
+                }
+            }, timeOut);
         } catch (error) {
             alert("Lỗi kết nối tới server.");
         }
@@ -1058,6 +1195,7 @@ elements.deleteScoreLesson.addEventListener("submit", function (event) {
 
         // Nếu người dùng xác nhận, tiến hành gửi yêu cầu xoá điểm
         if (confirmation) {
+            showLoadingModal();
             fetch(url + "lesson", {
                 method: "DELETE", // Sử dụng phương thức DELETE
                 headers: {
@@ -1067,9 +1205,12 @@ elements.deleteScoreLesson.addEventListener("submit", function (event) {
             })
                 .then((response) => response.text())
                 .then((message) => {
-                    renderLesson(classId);
-                    alert(message); // Thông báo thành công nếu xoá điểm thành công
-                    // Thực hiện các hành động tiếp theo nếu cần, ví dụ như làm mới bảng điểm
+                    setTimeout(() => {
+                        hideLoadingModal();
+                        renderLesson(classId);
+                        alert(message); // Thông báo thành công nếu xoá điểm thành công
+                        // Thực hiện các hành động tiếp theo nếu cần, ví dụ như làm mới bảng điểm
+                    }, timeOut);
                 })
                 .catch((error) => {
                     console.error("Có lỗi:", error); // Log lỗi nếu có lỗi xảy ra trong quá trình xoá
