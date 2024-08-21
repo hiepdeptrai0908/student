@@ -1064,7 +1064,7 @@ document
 
         // Thêm bước xác nhận trước khi gửi dữ liệu
         const confirmSubmit = confirm(
-            "Bạn chắc chắn đã nhập điểm xong ? Tiến hành xử lý dữ liệu..."
+            "Bạn chắc chắn đã nhập điểm xong + đúng tên lớp và bài kiểm tra ? Tiến hành xử lý dữ liệu..."
         );
         if (!confirmSubmit) {
             return; // Hủy gửi form nếu người dùng không chắc chắn
