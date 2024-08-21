@@ -1008,8 +1008,8 @@ function renderCurentTable() {
     `;
 }
 renderCurentTable();
-// Hàm để lấy danh sách học sinh và cập nhật vào bảng
 
+// Hàm để lấy danh sách học sinh và cập nhật vào bảng
 async function updateStudentTable() {
     const classId = document.getElementById(
         "insert-score__class-dropdown"
@@ -1020,6 +1020,7 @@ async function updateStudentTable() {
         renderCurentTable();
         return;
     }
+
     // Gửi yêu cầu API để lấy danh sách học sinh theo lớp
     const response = await fetch(`${url}class/${classId}/students`);
     const students = await response.json();
@@ -1061,6 +1062,14 @@ document
     .addEventListener("submit", async (event) => {
         event.preventDefault(); // Ngăn chặn hành động submit mặc định của form
 
+        // Thêm bước xác nhận trước khi gửi dữ liệu
+        const confirmSubmit = confirm(
+            "Bạn chắc chắn đã nhập điểm xong ? Tiến hành xử lý dữ liệu..."
+        );
+        if (!confirmSubmit) {
+            return; // Hủy gửi form nếu người dùng không chắc chắn
+        }
+
         const classId = document.getElementById(
             "insert-score__class-dropdown"
         ).value;
@@ -1077,7 +1086,7 @@ document
             return;
         }
         if (!lesson || lesson == 0) {
-            alert("Vui lòng chọn và bài.");
+            alert("Vui lòng chọn bài.");
             return;
         }
 
