@@ -75,7 +75,7 @@ function handleLogin() {
                 elements.managerInsertCore,
             ]
         );
-    } else if (["ADMIN", "AKAMARU"].includes(loginInputValue)) {
+    } else if (["ADMINN", "AKAMARU"].includes(loginInputValue)) {
         elements.modalOverlay.style.display = "none";
         toggleVisibility(
             [
