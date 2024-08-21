@@ -291,7 +291,7 @@ async function showCoreTable(data) {
                     .appendChild(newSpan);
             }
         });
-    }, timeOut);
+    }, 1000);
 }
 
 function handleChangeLessonScreen(e) {
