@@ -164,7 +164,7 @@ function formatDateTime(dateString) {
     const year = date.getFullYear();
     const dayOfWeek = daysOfWeek[date.getDay()]; // Lấy tên ngày trong tuần từ mảng
 
-    return `${hours}:${minutes} ${dayOfWeek}, ngày ${day} tháng ${month} năm ${year}`;
+    return `${dayOfWeek}, ngày ${day} tháng ${month} năm ${year}`;
 }
 async function showCoreTable(data) {
     // Xóa bảng cũ nếu có
@@ -957,11 +957,22 @@ async function renderTableScoreStudent(
                 const row = document.createElement("tr");
                 // Thêm số thứ tự với định dạng số 0 nếu nhỏ hơn 10
                 const formattedIndex = (index + 1).toString().padStart(2, "0");
+
+                // Format date
+                const daysOfWeek = [
+                    "Chủ Nhật",
+                    "Thứ Hai",
+                    "Thứ Ba",
+                    "Thứ Tư",
+                    "Thứ Năm",
+                    "Thứ Sáu",
+                    "Thứ Bảy",
+                ];
                 const createdAt = new Date(score.created_at);
-                const formattedDate = `${String(createdAt.getDate()).padStart(
-                    2,
-                    "0"
-                )}-${String(createdAt.getMonth() + 1).padStart(
+                const dayOfWeek = daysOfWeek[createdAt.getDay()];
+                const formattedDate = `${dayOfWeek}<br />${String(
+                    createdAt.getDate()
+                ).padStart(2, "0")}-${String(createdAt.getMonth() + 1).padStart(
                     2,
                     "0"
                 )}-${createdAt.getFullYear()}`;
