@@ -99,7 +99,7 @@
                 </div>
                 <div class="table-wrapper">
                     <div style="text-align: center">
-                        Thang điểm: <b>50 đ</b>
+                        Thang điểm: <b id="show-max-score__table">00 đ</b>
                     </div>
                     <table
                         class="table-score table-hover border"
@@ -299,20 +299,22 @@
                     </div>
 
                     <div class="add-item">
-                        <label class="add-item-title" for="lesson">Bài:</label>
-                        <input
-                            class="add-item-input"
-                            type="number"
-                            id="lesson"
+                        <select
                             name="lesson"
-                            value=""
-                            autocomplete="off"
+                            id="lesson"
+                            class="add-item-input form-select"
                             required
-                        />
+                        >
+                            <!-- Các option đã được rút gọn -->
+                            <option value="">-- Chọn Bài --</option>
+                        </select>
                     </div>
                     <div>
                         <label class="add-item-title" for="new-score"
-                            >Điểm Mới (Thang điểm: <b>50 đ</b>):</label
+                            >Điểm Mới: （<i
+                                >Thang điểm:
+                                <b id="show-max-score__update">00 đ</b></i
+                            >）</label
                         >
                         <input
                             class="add-item-input"
@@ -320,7 +322,6 @@
                             id="new-score"
                             name="new-score"
                             autocomplete="off"
-                            max="50"
                             required
                         />
                     </div>
@@ -421,7 +422,7 @@
                     </div>
                     <div class="table-wrapper">
                         <div style="text-align: center">
-                            Thang điểm: <b>50 đ</b>
+                            Thang điểm: <b id="show-max-score__student">00 đ</b>
                         </div>
                         <table
                             class="table border"
@@ -430,11 +431,11 @@
                         >
                             <thead>
                                 <tr class="table-light">
-                                    <th width="40px">STT</th>
-                                    <th width="40px">Bài</th>
-                                    <th width="40px">Điểm</th>
-                                    <th width="40px">Sai</th>
-                                    <th style="min-width: 120px">Chú Thích</th>
+                                    <th width="30px">STT</th>
+                                    <th width="100px">Nội Dung</th>
+                                    <th width="45px">Thang Điểm</th>
+                                    <th width="45px">Điểm</th>
+                                    <th style="min-width: 110px">Chú Thích</th>
                                     <th width="120px">Ngày Tạo</th>
                                 </tr>
                             </thead>
@@ -460,44 +461,43 @@
                     </select>
                     <select
                         name="lesson"
-                        id="insert-score__lesson-dropdown"
+                        id="insert-score__test-content-dropdown"
                         class="add-item-input form-select"
                     >
                         <!-- Các option đã được rút gọn -->
-                        <option value="">-- Chọn Bài --</option>
-                        <option value="1">Bài 1</option>
-                        <option value="2">Bài 2</option>
-                        <option value="3">Bài 3</option>
-                        <option value="4">Bài 4</option>
-                        <option value="5">Bài 5</option>
-                        <option value="6">Bài 6</option>
-                        <option value="7">Bài 7</option>
-                        <option value="8">Bài 8</option>
-                        <option value="9">Bài 9</option>
-                        <option value="10">Bài 10</option>
-                        <option value="11">Bài 11</option>
-                        <option value="12">Bài 12</option>
-                        <option value="13">Bài 13</option>
-                        <option value="14">Bài 14</option>
-                        <option value="15">Bài 15</option>
-                        <option value="16">Bài 16</option>
-                        <option value="17">Bài 17</option>
-                        <option value="18">Bài 18</option>
-                        <option value="19">Bài 19</option>
-                        <option value="20">Bài 20</option>
-                        <option value="21">Bài 21</option>
-                        <option value="22">Bài 22</option>
-                        <option value="23">Bài 23</option>
-                        <option value="24">Bài 24</option>
-                        <option value="25">Bài 25</option>
-
+                        <option value="">-- Chọn nội dung kiểm tra --</option>
+                        <option value="0">Từ vựng</option>
+                        <option value="1">Ngữ pháp</option>
+                        <option value="2">Hán tự</option>
+                        <option value="3">Định kỳ mỗi 5 bài</option>
+                        <option value="4">JLPT thi thử</option>
                         <!-- Thêm các option khác nếu cần -->
                     </select>
+                    <div>
+                        <select
+                            name="lesson"
+                            id="insert-score__lesson-dropdown"
+                            class="add-item-input form-select"
+                        >
+                            <!-- Các option đã được rút gọn -->
+                            <option value="">-- Chọn Bài --</option>
+                        </select>
+                        <label class="add-item-title" for="max-score"
+                            >Thang điểm:</label
+                        >
+                        <input
+                            class="add-item-input"
+                            type="number"
+                            id="insert-score__max-score"
+                            name="max-score"
+                            autocomplete="off"
+                            max="180"
+                            value="50"
+                            required
+                        />
+                    </div>
 
                     <div class="table-wrapper">
-                        <div style="text-align: center">
-                            Thang điểm: <b>50 đ</b>
-                        </div>
                         <table
                             class="table border"
                             style="width: 100%"
@@ -507,7 +507,7 @@
                                 <tr class="table-light">
                                     <th width="40px">STT</th>
                                     <th>Họ và Tên</th>
-                                    <th width="90px">Điểm</th>
+                                    <th width="100px">Điểm</th>
                                     <th>Chú thích</th>
                                 </tr>
                             </thead>

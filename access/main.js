@@ -39,10 +39,14 @@ const elements = {
     screenScoreLessonDropdown: document.getElementById(
         "screen-score__lesson-dropdown"
     ),
+    updateScoreLessonDropdown: document.getElementById("lesson"),
+    showMaxScoreUpdate: document.getElementById("show-max-score__update"),
+    showMaxScoreStudent: document.getElementById("show-max-score__student"),
+    showMaxScoreTable: document.getElementById("show-max-score__table"),
 };
 
-const timeOut = 400;
-const doneTypingInterval = 300;
+const timeOut = 300;
+const doneTypingInterval = 400;
 // Hàm hiện modal loading
 function showLoadingModal() {
     const loadingModal = document.getElementById("loadingModal");
@@ -166,6 +170,22 @@ function formatDateTime(dateString) {
 
     return `${dayOfWeek}, ngày ${day} tháng ${month} năm ${year}`;
 }
+
+// Format tên bài học
+function handleLessonName(lessonNumber) {
+    if (lessonNumber < 100) {
+        return `Từ Vựng Bài ${lessonNumber}`;
+    } else if (lessonNumber >= 100 && lessonNumber < 200) {
+        return `Ngữ Pháp Bài ${lessonNumber - 100}`;
+    } else if (lessonNumber >= 200 && lessonNumber < 300) {
+        return `Hán Tự Bài ${lessonNumber - 200}`;
+    } else if (lessonNumber >= 300 && lessonNumber < 400) {
+        return `Kiểm Tra Bài ${lessonNumber - 300 - 4} - ${lessonNumber - 300}`;
+    } else if (lessonNumber >= 400 && lessonNumber < 500) {
+        return `JLPT Lần ${lessonNumber - 400}`;
+    }
+}
+
 async function showCoreTable(data) {
     // Xóa bảng cũ nếu có
     const tableWrapper = document.querySelector("table");
@@ -199,7 +219,7 @@ async function showCoreTable(data) {
         elements.scoreCreatedAtElement.textContent = createdAt
             ? formatDateTime(createdAt)
             : "Chưa có dữ liệu";
-
+        elements.showMaxScoreTable.textContent = `${datas[0].max_score} đ`;
         // Lọc các điểm số không phải là 0
         const nonZeroScores = datas
             .filter((item) => item.score > 0)
@@ -300,6 +320,7 @@ function handleChangeLessonScreen(e) {
     const data = {
         class_id: classId,
         lesson: lesson,
+        lesson_name: handleLessonName(lesson),
     };
     if (classId && lesson) {
         showCoreTable(data);
@@ -313,6 +334,7 @@ elements.screenScoreLessonDropdown.addEventListener(
 showCoreTable({
     class_id: Number(elements.screenScoreClassDropdown.value),
     lesson: Number(elements.screenScoreLessonDropdown.value),
+    lesson_name: handleLessonName(lesson),
 });
 
 // CHỨC NĂNG QUẢN LÝ LỚP HỌC
@@ -645,6 +667,9 @@ async function fetchStudentsByClass(classId) {
                 });
                 selectElement.innerHTML = optionsHtml;
             }
+
+            renderLesson(classId);
+
             updateStudentOptions(studentSelect, students);
             updateStudentOptions(tableStudentSelect, students);
 
@@ -662,7 +687,12 @@ async function fetchScoreData(class_id, student_id, lesson) {
         const response = await fetch(url + "score-student", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ class_id, student_id, lesson }),
+            body: JSON.stringify({
+                class_id,
+                student_id,
+                lesson,
+                lesson_name: handleLessonName(lesson),
+            }),
         });
 
         if (!response.ok) {
@@ -673,6 +703,10 @@ async function fetchScoreData(class_id, student_id, lesson) {
         console.log(data);
         setTimeout(() => {
             hideLoadingModal();
+            elements.showMaxScoreUpdate.textContent = `${data[0].max_score} đ`;
+            elements.showMaxScoreStudent.textContent = `${data[0].max_score} đ`;
+            document.getElementById("new-score").max =
+                data[0].max_score || "50";
             document.getElementById("new-score").value = data[0].score || "";
             document.getElementById("comment").value = data[0].comment || "";
         }, 250);
@@ -693,7 +727,14 @@ function handleStudentSelectChange() {
 }
 
 // Hàm để gửi yêu cầu POST cập nhật điểm học sinh
-async function updateScore(studentId, classId, lesson, score, comment) {
+async function updateScore(
+    studentId,
+    classId,
+    lesson,
+    score,
+    comment,
+    lessonName
+) {
     try {
         showLoadingModal();
         const response = await fetch(url + "score", {
@@ -705,6 +746,7 @@ async function updateScore(studentId, classId, lesson, score, comment) {
                 student_id: studentId,
                 class_id: classId,
                 lesson,
+                lesson_name: lessonName,
                 score,
                 comment,
             }),
@@ -737,7 +779,7 @@ document
 // Thêm sự kiện cho input lesson
 let typingTimer;
 
-document.getElementById("lesson").addEventListener("input", function () {
+elements.updateScoreLessonDropdown.addEventListener("change", function () {
     clearTimeout(typingTimer); // Xóa timeout cũ
     typingTimer = setTimeout(() => {
         const class_id = document.getElementById(
@@ -768,12 +810,13 @@ document
         const classId = classDropdown.value;
         const studentId = document.getElementById("student-select").value;
         const lesson = document.getElementById("lesson").value.trim();
+        const lessonName = handleLessonName(lesson);
         const score = document.getElementById("new-score").value.trim();
         const comment = document.getElementById("comment").value.trim();
 
         if (classId && studentId && lesson && score) {
             // Gọi hàm cập nhật điểm học sinh
-            updateScore(studentId, classId, lesson, score, comment);
+            updateScore(studentId, classId, lesson, score, comment, lessonName);
         } else {
             alert("Vui lòng chọn lớp học, học sinh, bài và điểm.");
         }
@@ -978,9 +1021,9 @@ async function renderTableScoreStudent(
                 )}-${createdAt.getFullYear()}`;
                 row.innerHTML = `
                     <td>${formattedIndex}</td>
-                    <td width="40px">${score.lesson}</td>
-                    <td width="40px">${score.score}</td>
-                    <td width="40px">${score.error}</td>
+                    <td width="100px">${handleLessonName(score.lesson)}</td>
+                    <td width="45px">${score.max_score}</td>
+                    <td width="45px">${score.score}</td>
                     <td style="font-style:italic; color:#333; font-size:10px; text-align:left;" ${
                         score.comment == "Chưa đóng phạt" ||
                         score.comment == "chưa đóng phạt" ||
@@ -989,7 +1032,7 @@ async function renderTableScoreStudent(
                             ? `class="error"`
                             : `class=""`
                     }>${score.comment}</td>
-                    <td>${formattedDate}</td>
+                    <td width="120px">${formattedDate}</td>
                 `;
                 tbody.appendChild(row);
             });
@@ -1009,6 +1052,7 @@ document
     });
 
 // Nhập điểm
+let insertMaxScore = document.getElementById("insert-score__max-score").value;
 function renderCurentTable() {
     document
         .getElementById("insert-score__student-table")
@@ -1020,6 +1064,75 @@ function renderCurentTable() {
 }
 renderCurentTable();
 
+// Chọn nội dung kiểm tra
+document
+    .getElementById("insert-score__test-content-dropdown")
+    .addEventListener("change", function () {
+        const lessonDropdown = document.getElementById(
+            "insert-score__lesson-dropdown"
+        );
+        const selectedValue = Number(this.value);
+
+        // Xóa hết các tùy chọn hiện có
+        lessonDropdown.innerHTML = '<option value="">-- Chọn Bài --</option>';
+
+        // Nếu không phải là bài kiểm tra định kỳ hay JLPT, thêm các bài học từ 1 đến 50
+
+        let options = "";
+        if (selectedValue === 0) {
+            for (let i = 1; i <= 50; i++) {
+                options += `<option value="${i}">${handleLessonName(
+                    i
+                )}</option>`;
+            }
+            lessonDropdown.innerHTML += options;
+        } else if (selectedValue === 1) {
+            for (let i = 1; i <= 50; i++) {
+                options += `<option value="${i + 100}">${handleLessonName(
+                    i + 100
+                )}</option>`;
+            }
+            lessonDropdown.innerHTML += options;
+        } else if (selectedValue === 2) {
+            for (let i = 1; i <= 32; i++) {
+                options += `<option value="${i + 200}">${handleLessonName(
+                    i + 200
+                )}</option>`;
+            }
+            lessonDropdown.innerHTML += options;
+        } else if (selectedValue === 3) {
+            for (let i = 1; i <= 50; i += 5) {
+                options += `<option value="${i + 4 + 300}">${handleLessonName(
+                    i + 4 + 300
+                )}</option>`;
+            }
+            lessonDropdown.innerHTML += options;
+        } else if (selectedValue === 4) {
+            for (let i = 1; i <= 5; i++) {
+                options += `<option value="${i + 400}">${handleLessonName(
+                    i + 400
+                )}</option>`;
+            }
+            lessonDropdown.innerHTML += options;
+        } else {
+            options += `<option value="">-- Chọn Bài --</option>`;
+            lessonDropdown.innerHTML += options;
+        }
+        // Bạn có thể thêm logic riêng nếu cần xử lý cho các bài kiểm tra định kỳ hoặc JLPT
+    });
+
+// Lấy thang điểm đưa vào max-score
+// Chọn nội dung kiểm tra
+function handleInputMaxScore() {
+    insertMaxScore = this.value;
+    const insertScoreElement = document.querySelectorAll(".max-score_input");
+    for (let i = 0; i < insertScoreElement.length; i++) {
+        insertScoreElement[i].max = insertMaxScore;
+    }
+}
+document
+    .getElementById("insert-score__max-score")
+    .addEventListener("input", handleInputMaxScore);
 // Hàm để lấy danh sách học sinh và cập nhật vào bảng
 async function updateStudentTable() {
     const classId = document.getElementById(
@@ -1055,14 +1168,15 @@ async function updateStudentTable() {
             row.innerHTML = `
             <td>${index + 1 < 10 ? "0" : ""}${index + 1}</td>
             <td style="text-align: left;">${student.name}</td>
-            <td><input type="number" max="50" name="score-${
+            <td><input type="number" max="${insertMaxScore}" name="score-${
                 student.id
-            }" class="form-control" /></td>
+            }" class="form-control max-score_input" /></td>
             <td><input type="text" name="comment-${
                 student.id
             }" class="form-control" /></td>
         `;
             tbody.appendChild(row);
+            console.log(insertMaxScore);
         });
     }
 }
@@ -1075,7 +1189,7 @@ document
 
         // Thêm bước xác nhận trước khi gửi dữ liệu
         const confirmSubmit = confirm(
-            "Bạn chắc chắn đã nhập điểm xong + đúng tên lớp và bài kiểm tra ? Tiến hành xử lý dữ liệu..."
+            "Bạn chắc chắn đã nhập điểm xong + đúng tên lớp và nội dung kiểm tra ? Tiến hành xử lý dữ liệu..."
         );
         if (!confirmSubmit) {
             return; // Hủy gửi form nếu người dùng không chắc chắn
@@ -1119,9 +1233,12 @@ document
                 student_id: Number(studentId),
                 class_id: Number(classId),
                 lesson: Number(lesson),
+                lesson_name: handleLessonName(lesson),
+                max_score: insertMaxScore,
                 score: Number(score),
                 comment: comment,
             });
+            console.log(scoresData);
         }
 
         // Gửi dữ liệu lên API
@@ -1164,16 +1281,16 @@ function renderLesson(classId) {
     if (classId) {
         fetch(`${url}class/${classId}`)
             .then((response) => response.json())
-            .then((data) => {
+            .then((datas) => {
                 // Xóa các tùy chọn cũ
                 elements.deleteScoreLessonDropdown.innerHTML =
                     '<option value="">-- Chọn Bài --</option>';
 
                 // Thêm các tùy chọn mới
-                data.forEach((lesson) => {
+                datas.forEach((data) => {
                     const option = document.createElement("option");
-                    option.value = lesson.lesson; // Hoặc trường dữ liệu thích hợp
-                    option.textContent = `Bài ${lesson.lesson}`; // Hoặc trường dữ liệu thích hợp
+                    option.value = data.lesson; // Hoặc trường dữ liệu thích hợp
+                    option.textContent = `${handleLessonName(data.lesson)}`; // Hoặc trường dữ liệu thích hợp
                     elements.deleteScoreLessonDropdown.appendChild(option);
                 });
 
@@ -1182,11 +1299,24 @@ function renderLesson(classId) {
                     '<option value="">-- Chọn Bài --</option>';
 
                 // Thêm các tùy chọn mới
-                data.forEach((lesson) => {
+                datas.forEach((data) => {
                     const option = document.createElement("option");
-                    option.value = lesson.lesson; // Hoặc trường dữ liệu thích hợp
-                    option.textContent = `Bài ${lesson.lesson}`; // Hoặc trường dữ liệu thích hợp
+                    option.value = data.lesson; // Hoặc trường dữ liệu thích hợp
+                    option.textContent = `${handleLessonName(data.lesson)}`; // Hoặc trường dữ liệu thích hợp
                     elements.screenScoreLessonDropdown.appendChild(option);
+                });
+
+                // FORM UPDATE ĐIỂM
+                // Xóa các tùy chọn cũ
+                elements.updateScoreLessonDropdown.innerHTML =
+                    '<option value="">-- Chọn Bài --</option>';
+
+                // Thêm các tùy chọn mới
+                datas.forEach((data) => {
+                    const option = document.createElement("option");
+                    option.value = data.lesson; // Hoặc trường dữ liệu thích hợp
+                    option.textContent = `${handleLessonName(data.lesson)}`; // Hoặc trường dữ liệu thích hợp
+                    elements.updateScoreLessonDropdown.appendChild(option);
                 });
             })
             .catch((error) => {
@@ -1221,7 +1351,11 @@ elements.deleteScoreLesson.addEventListener("submit", function (event) {
                 headers: {
                     "Content-Type": "application/json", // Định dạng dữ liệu gửi đi
                 },
-                body: JSON.stringify({ class_id: classId, lesson: lesson }), // Gửi dữ liệu class_id và lesson dưới dạng JSON
+                body: JSON.stringify({
+                    class_id: classId,
+                    lesson: lesson,
+                    lesson_name: handleLessonName(lesson),
+                }), // Gửi dữ liệu class_id và lesson dưới dạng JSON
             })
                 .then((response) => response.text())
                 .then((message) => {
