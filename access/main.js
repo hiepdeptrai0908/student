@@ -45,6 +45,8 @@ const elements = {
     showMaxScoreTable: document.getElementById("show-max-score__table"),
 };
 
+const tableWrapper = document.querySelector("table");
+
 const timeOut = 300;
 const doneTypingInterval = 400;
 // Hàm hiện modal loading
@@ -187,7 +189,7 @@ function handleLessonName(lessonNumber) {
 }
 
 // Xóa bảng cũ nếu có
-function handleClearTable(tableWrapper) {
+function handleClearTable() {
     if (tableWrapper) {
         const existingTables = tableWrapper.querySelectorAll("table");
         existingTables.forEach((element) => element.remove());
@@ -205,8 +207,7 @@ function handleClearTable(tableWrapper) {
 }
 
 async function showCoreTable(data) {
-    const tableWrapper = document.querySelector("table");
-    handleClearTable(tableWrapper);
+    handleClearTable();
     showLoadingModal();
     const response = await fetch(url + "score-lesson", {
         method: "POST",
@@ -222,7 +223,9 @@ async function showCoreTable(data) {
         elements.scoreCreatedAtElement.textContent = createdAt
             ? formatDateTime(createdAt)
             : "Chưa có dữ liệu";
-        elements.showMaxScoreTable.textContent = `${datas[0]?.max_score} đ`;
+        elements.showMaxScoreTable.textContent = `${
+            datas[0]?.max_score ? datas[0]?.max_score : "..."
+        } đ`;
         // Lọc các điểm số không phải là 0
         const nonZeroScores = datas
             .filter((item) => item.score > 0)
@@ -335,8 +338,11 @@ function handleChangeLessonScreen(e) {
         lesson: lesson,
         lesson_name: handleLessonName(lesson),
     };
+
     if (classId && lesson) {
         showCoreTable(data);
+    } else {
+        handleClearTable();
     }
 }
 
@@ -780,8 +786,7 @@ async function updateScore(
             // reset lại table sau khi sửa điểm
             document.getElementById("update-score-form").reset();
         }, timeOut);
-        const tableWrapper = document.querySelector("table");
-        handleClearTable(tableWrapper);
+        handleClearTable();
         fetchClassData();
         fetchClasses();
     } catch (error) {
@@ -1296,7 +1301,11 @@ document
 // SCREEN SCORE LESSON
 elements.screenScoreClassDropdown.addEventListener("change", function () {
     const classId = this.value;
-    renderLesson(classId);
+    if (classId) {
+        renderLesson(classId);
+    } else {
+        handleClearTable();
+    }
 });
 
 // DELETE SCORE LESSON
