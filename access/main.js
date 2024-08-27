@@ -186,10 +186,8 @@ function handleLessonName(lessonNumber) {
     }
 }
 
-async function showCoreTable(data) {
-    // Xóa bảng cũ nếu có
-    const tableWrapper = document.querySelector("table");
-
+// Xóa bảng cũ nếu có
+function handleClearTable(tableWrapper) {
     if (tableWrapper) {
         const existingTables = tableWrapper.querySelectorAll("table");
         existingTables.forEach((element) => element.remove());
@@ -204,6 +202,11 @@ async function showCoreTable(data) {
     document
         .querySelectorAll(".rank-item-no-test span")
         .forEach((span) => span.remove());
+}
+
+async function showCoreTable(data) {
+    const tableWrapper = document.querySelector("table");
+    handleClearTable(tableWrapper);
     showLoadingModal();
     const response = await fetch(url + "score-lesson", {
         method: "POST",
@@ -219,7 +222,7 @@ async function showCoreTable(data) {
         elements.scoreCreatedAtElement.textContent = createdAt
             ? formatDateTime(createdAt)
             : "Chưa có dữ liệu";
-        elements.showMaxScoreTable.textContent = `${datas[0].max_score} đ`;
+        elements.showMaxScoreTable.textContent = `${datas[0]?.max_score} đ`;
         // Lọc các điểm số không phải là 0
         const nonZeroScores = datas
             .filter((item) => item.score > 0)
@@ -286,6 +289,9 @@ async function showCoreTable(data) {
         table.appendChild(tbody);
         tableWrapper.appendChild(table);
 
+        // Số lượng học sinh chưa làm bài kiểm tra
+        let countNoTest = 0;
+
         // Duyệt qua dữ liệu và thêm span cho các điểm số khác nhau
         datas.forEach((item) => {
             if (item.score === maxScore && item.score !== 0) {
@@ -303,6 +309,7 @@ async function showCoreTable(data) {
             }
 
             if (item.score === 0 && maxScore !== 0) {
+                countNoTest += 1;
                 const newSpan = document.createElement("span");
                 newSpan.textContent = `・🤷‍♂️ ${item.name}`;
                 newSpan.className = "rank-item-name rank-item-name__no-test";
@@ -311,6 +318,12 @@ async function showCoreTable(data) {
                     .appendChild(newSpan);
             }
         });
+        if (countNoTest == 0 && maxScore !== 0) {
+            const newSpan = document.createElement("span");
+            newSpan.textContent = `・Cả lớp đã làm bài kiểm tra đầy đủ.`;
+            newSpan.className = "rank-item-name rank-item-name__no-test";
+            document.querySelector(".rank-item-no-test").appendChild(newSpan);
+        }
     }, 1000);
 }
 
@@ -731,10 +744,21 @@ async function updateScore(
     studentId,
     classId,
     lesson,
+    maxScore,
     score,
     comment,
     lessonName
 ) {
+    const datas = {
+        student_id: studentId,
+        class_id: classId,
+        lesson,
+        max_score: maxScore,
+        lesson_name: lessonName,
+        score,
+        comment,
+    };
+    console.log(datas);
     try {
         showLoadingModal();
         const response = await fetch(url + "score", {
@@ -742,14 +766,7 @@ async function updateScore(
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-                student_id: studentId,
-                class_id: classId,
-                lesson,
-                lesson_name: lessonName,
-                score,
-                comment,
-            }),
+            body: JSON.stringify(datas),
         });
 
         if (!response.ok) {
@@ -763,6 +780,8 @@ async function updateScore(
             // reset lại table sau khi sửa điểm
             document.getElementById("update-score-form").reset();
         }, timeOut);
+        const tableWrapper = document.querySelector("table");
+        handleClearTable(tableWrapper);
         fetchClassData();
         fetchClasses();
     } catch (error) {
@@ -811,12 +830,21 @@ document
         const studentId = document.getElementById("student-select").value;
         const lesson = document.getElementById("lesson").value.trim();
         const lessonName = handleLessonName(lesson);
+        const maxScore = document.getElementById("new-score").max;
         const score = document.getElementById("new-score").value.trim();
         const comment = document.getElementById("comment").value.trim();
 
         if (classId && studentId && lesson && score) {
             // Gọi hàm cập nhật điểm học sinh
-            updateScore(studentId, classId, lesson, score, comment, lessonName);
+            updateScore(
+                studentId,
+                classId,
+                lesson,
+                maxScore,
+                score,
+                comment,
+                lessonName
+            );
         } else {
             alert("Vui lòng chọn lớp học, học sinh, bài và điểm.");
         }
@@ -1279,45 +1307,49 @@ elements.deleteScoreClassDropdown.addEventListener("change", function () {
 
 function renderLesson(classId) {
     if (classId) {
+        showLoadingModal();
         fetch(`${url}class/${classId}`)
             .then((response) => response.json())
             .then((datas) => {
-                // Xóa các tùy chọn cũ
-                elements.deleteScoreLessonDropdown.innerHTML =
-                    '<option value="">-- Chọn Bài --</option>';
+                setTimeout(() => {
+                    hideLoadingModal();
+                    // Xóa các tùy chọn cũ
+                    elements.deleteScoreLessonDropdown.innerHTML =
+                        '<option value="">-- Chọn Bài --</option>';
 
-                // Thêm các tùy chọn mới
-                datas.forEach((data) => {
-                    const option = document.createElement("option");
-                    option.value = data.lesson; // Hoặc trường dữ liệu thích hợp
-                    option.textContent = `${handleLessonName(data.lesson)}`; // Hoặc trường dữ liệu thích hợp
-                    elements.deleteScoreLessonDropdown.appendChild(option);
-                });
+                    // Thêm các tùy chọn mới
+                    datas.forEach((data) => {
+                        const option = document.createElement("option");
+                        option.value = data.lesson; // Hoặc trường dữ liệu thích hợp
+                        option.textContent = `${handleLessonName(data.lesson)}`; // Hoặc trường dữ liệu thích hợp
+                        elements.deleteScoreLessonDropdown.appendChild(option);
+                    });
 
-                // Xóa các tùy chọn cũ
-                elements.screenScoreLessonDropdown.innerHTML =
-                    '<option value="">-- Chọn Bài --</option>';
+                    // Xóa các tùy chọn cũ
+                    elements.screenScoreLessonDropdown.innerHTML =
+                        '<option value="">-- Chọn Bài --</option>';
 
-                // Thêm các tùy chọn mới
-                datas.forEach((data) => {
-                    const option = document.createElement("option");
-                    option.value = data.lesson; // Hoặc trường dữ liệu thích hợp
-                    option.textContent = `${handleLessonName(data.lesson)}`; // Hoặc trường dữ liệu thích hợp
-                    elements.screenScoreLessonDropdown.appendChild(option);
-                });
+                    // Thêm các tùy chọn mới
+                    datas.forEach((data) => {
+                        const option = document.createElement("option");
+                        option.value = data.lesson; // Hoặc trường dữ liệu thích hợp
+                        option.textContent = `${handleLessonName(data.lesson)}`; // Hoặc trường dữ liệu thích hợp
+                        elements.screenScoreLessonDropdown.appendChild(option);
+                    });
 
-                // FORM UPDATE ĐIỂM
-                // Xóa các tùy chọn cũ
-                elements.updateScoreLessonDropdown.innerHTML =
-                    '<option value="">-- Chọn Bài --</option>';
+                    // FORM UPDATE ĐIỂM
+                    // Xóa các tùy chọn cũ
+                    elements.updateScoreLessonDropdown.innerHTML =
+                        '<option value="">-- Chọn Bài --</option>';
 
-                // Thêm các tùy chọn mới
-                datas.forEach((data) => {
-                    const option = document.createElement("option");
-                    option.value = data.lesson; // Hoặc trường dữ liệu thích hợp
-                    option.textContent = `${handleLessonName(data.lesson)}`; // Hoặc trường dữ liệu thích hợp
-                    elements.updateScoreLessonDropdown.appendChild(option);
-                });
+                    // Thêm các tùy chọn mới
+                    datas.forEach((data) => {
+                        const option = document.createElement("option");
+                        option.value = data.lesson; // Hoặc trường dữ liệu thích hợp
+                        option.textContent = `${handleLessonName(data.lesson)}`; // Hoặc trường dữ liệu thích hợp
+                        elements.updateScoreLessonDropdown.appendChild(option);
+                    });
+                }, timeOut);
             })
             .catch((error) => {
                 console.error("Error fetching lessons:", error);
