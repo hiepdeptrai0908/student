@@ -47,7 +47,7 @@ const elements = {
 
 const tableWrapper = document.querySelector("table");
 
-const timeOut = 300;
+const timeOut = 200;
 const doneTypingInterval = 400;
 // Hàm hiện modal loading
 function showLoadingModal() {
