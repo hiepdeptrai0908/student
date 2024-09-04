@@ -19,10 +19,10 @@
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
-            href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap"
+            href="https://fonts.googleapis.com/css2 ?family=Dancing+Script:wght@400..700&display=swap"
             rel="stylesheet"
         />
-        <link rel="stylesheet" href="access/style.css" />
+        <link rel="stylesheet" href="access/css/style.css" />
     </head>
     <body>
         <div class="modal-overlay">
@@ -54,6 +54,7 @@
                 <option value="2">Quản lý lớp học</option>
                 <option value="3">Quản lý học sinh</option>
                 <option value="4">Nhập điểm</option>
+                <option value="5">Download tài liệu</option>
 
                 <!-- Thêm các tùy chọn khác nếu cần -->
             </select>
@@ -537,8 +538,580 @@
                     </button>
                 </form>
             </div>
+            <div class="manager-files">
+                <div class="file-items">
+                    <h2 class="file-heading">Nhập môn tiếng nhật</h2>
+                    <ol class="file">
+                        <li class="file-item">
+                            <a
+                                class="file-link"
+                                href="./access/files/chu_cai/kata_hira.pdf"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống 2 bảng chữ cái ?');"
+                                >2 Bảng chữ cái</a
+                            >
+                        </li>
+                        <li class="file-item">
+                            <a
+                                class="file-link"
+                                href="./access/files/chu_cai/hiragana_book.pdf"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống tập viết bảng Hiragana ?');"
+                                >Tập viết bảng Hiragana</a
+                            >
+                        </li>
+                        <li class="file-item">
+                            <a
+                                class="file-link"
+                                href="./access/files/chu_cai/katakana_book.pdf"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống tập viết bảng Katakana ?');"
+                                >Tập viết bảng Katakana</a
+                            >
+                        </li>
+                        <li class="file-item">
+                            <a
+                                class="file-link"
+                                href="./access/files/chu_cai/chao_hoi.pdf"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống 12 mẫu câu chào hỏi cơ bản ?');"
+                                >12 mẫu câu chào hỏi cơ bản</a
+                            >
+                        </li>
+                        <li class="file-item">
+                            <a
+                                class="file-link"
+                                href="./access/files/chu_cai/自己紹介.pdf"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống mẫu giới thiệu bản thân cơ bản ?');"
+                                >Giới thiệu bản thân cơ bản</a
+                            >
+                        </li>
+                    </ol>
+                </div>
+
+                <br />
+                <hr />
+                <br />
+                <!-- Bộ Thủ -->
+                <div class="file-items">
+                    <h2 class="file-heading">Bộ Thủ</h2>
+                    <ol class="file">
+                        <li class="file-item">
+                            <a
+                                class="file-link"
+                                href="./access/files/bo_thu/mat_truoc.pdf"
+                                download="140 bộ thủ (mặt trước)"
+                                onclick="return confirm('Tiến hành tải xuống mặt trước của 140 bộ thủ ?');"
+                                >140 bộ thủ (mặt trước)</a
+                            >
+                            <a
+                                class="file-link"
+                                href="./access/files/bo_thu/mat_sau.pdf"
+                                download="140 bộ thủ (mặt sau)"
+                                onclick="return confirm('Tiến hành tải xuống mặt sau của 140 bộ thủ ?');"
+                                >140 bộ thủ (mặt sau)</a
+                            >
+                        </li>
+                        <li class="file-item">
+                            <a
+                                class="file-link"
+                                href="./access/files/bo_thu/y_nghia.pdf"
+                                download="Ý nghĩa của 140 bộ thủ"
+                                onclick="return confirm('Tiến hành tải xuống ý nghĩa của 140 bộ thủ ?');"
+                                >Ý nghĩa của 140 bộ thủ</a
+                            >
+                            <a
+                                class="file-link"
+                                href="./access/files/bo_thu/luyen_viet.pdf"
+                                download="Giấy ô ly luyện viết 140 bộ thủ"
+                                onclick="return confirm('Tiến hành tải xuống giấy ô ly luyện viết 140 bộ thủ ?');"
+                                >Giấy ô ly luyện viết 140 bộ thủ</a
+                            >
+                        </li>
+                        <li class="file-item">
+                            <a
+                                class="file-link"
+                                href="./access/files/bo_thu/lo_trinh.pdf"
+                                download="Giới thiệu lộ trình học Hán Tự"
+                                onclick="return confirm('Tiến hành tải xuống file PDF giới thiệu lộ trình học Hán Tự ?');"
+                                >File PDF giới thiệu lộ trình học Hán Tự<br /><span
+                                    style="
+                                        text-transform: none;
+                                        font-style: italic;
+                                    "
+                                    >(Nếu photo cho học sinh thì bỏ đi 2 trang
+                                    cuối)</span
+                                ></a
+                            >
+                        </li>
+                    </ol>
+                </div>
+
+                <br />
+                <hr />
+                <br />
+
+                <!-- Giáo Án -->
+                <div class="file-items">
+                    <h2 class="file-heading">Giáo Án</h2>
+                    <ol class="file">
+                        <li class="file-item">
+                            <a
+                                class="file-link"
+                                href="./access/files/giao_an/N5.pdf"
+                                download="Giáo Án N5"
+                                onclick="return confirm('Tiến hành tải xuống giáo án N5 (みんなの日本語初級I) ?');"
+                                >N5 (みんなの日本語初級I)</a
+                            >
+                        </li>
+                        <li class="file-item">
+                            <a
+                                class="file-link"
+                                href="./access/files/giao_an/N4.pdf"
+                                download="Giáo Án N4"
+                                onclick="return confirm('Tiến hành tải xuống giáo án N4 (みんなの日本語初級II) ?');"
+                                >N4 (みんなの日本語初級II)</a
+                            >
+                        </li>
+                        <li class="file-item">
+                            <a
+                                class="file-link"
+                                href="./access/files/giao_an/N3_somatome.pdf"
+                                download="Giáo Án N3 (soumatome)"
+                                onclick="return confirm('Tiến hành tải xuống giáo án N3 (総まとめ) ?');"
+                                >N3 (総まとめ)</a
+                            >
+                        </li>
+                    </ol>
+                </div>
+
+                <br />
+                <hr />
+                <br />
+
+                <!-- Từ vựng -->
+                <div class="file-items">
+                    <h2 class="file-heading">Kiểm Tra Từ Vựng</h2>
+                    <ol class="file">
+                        <li class="file-item">
+                            <a
+                                class="file-link"
+                                href="./access/files/vocabulary/voca_n5.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống file kiểm tra từ vựng 25 bài N5 ?');"
+                                >File Kiểm Tra Từ Vựng 25 bài N5</a
+                            >
+                        </li>
+                        <li class="file-item">
+                            <a
+                                class="file-link"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống file kiểm tra từ vựng 25 bài N4 ?');"
+                                >File Kiểm Tra Từ Vựng 25 bài N4</a
+                            >
+                        </li>
+                    </ol>
+                </div>
+
+                <br />
+                <hr />
+                <br />
+                <!-- Ngữ pháp -->
+                <div class="file-items">
+                    <h2 class="file-heading">Kiểm Tra Ngữ Pháp</h2>
+                    <ol class="file">
+                        <li class="file-item">
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n5.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra ngữ pháp N5 ?');"
+                                >Ngữ Pháp N5</a
+                            >
+                        </li>
+                        <li class="file-item">
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra ngữ pháp N4 ?');"
+                                >Ngữ Pháp N4</a
+                            >
+                        </li>
+                    </ol>
+                </div>
+
+                <br />
+                <hr />
+                <br />
+                <!-- Viết hán tự từ vựng N5 -->
+                <div class="file-items">
+                    <h2 class="file-heading">
+                        Viết hán tự từ vựng N5<br />MINANO NIHONGO
+                    </h2>
+                    <ol class="file">
+                        <li class="file-item">
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n5.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống hán tự từ vựng Minano Nihongo Bài 1 ?');"
+                                >Bài 1</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống hán tự từ vựng Minano Nihongo Bài 2 ?');"
+                                >Bài 2</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống hán tự từ vựng Minano Nihongo Bài 3 ?');"
+                                >Bài 3</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống hán tự từ vựng Minano Nihongo Bài 4 ?');"
+                                >Bài 4</a
+                            >
+                        </li>
+                        <li class="file-item">
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n5.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống hán tự từ vựng Minano Nihongo Bài 5 ?');"
+                                >Bài 5</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống hán tự từ vựng Minano Nihongo Bài 6 ?');"
+                                >Bài 6</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống hán tự từ vựng Minano Nihongo Bài 7 ?');"
+                                >Bài 7</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống hán tự từ vựng Minano Nihongo Bài 8 ?');"
+                                >Bài 8</a
+                            >
+                        </li>
+                        <li class="file-item">
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n5.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống hán tự từ vựng Minano Nihongo Bài 9 ?');"
+                                >Bài 9</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống hán tự từ vựng Minano Nihongo Bài 10 ?');"
+                                >Bài 10</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống hán tự từ vựng Minano Nihongo Bài 11 ?');"
+                                >Bài 11</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống hán tự từ vựng Minano Nihongo Bài 12 ?');"
+                                >Bài 12</a
+                            >
+                        </li>
+                    </ol>
+                </div>
+
+                <br />
+                <hr />
+                <br />
+                <!-- Look And Learn -->
+                <div class="file-items">
+                    <h2 class="file-heading">Kiểm Tra Look And Learn</h2>
+                    <ol class="file">
+                        <li class="file-item">
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n5.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra Look And Learn - bài 1 ?');"
+                                >Bài 1</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra Look And Learn - bài 2 ?');"
+                                >Bài 2</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra Look And Learn - bài 3 ?');"
+                                >Bài 3</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra Look And Learn - bài 4 ?');"
+                                >Bài 4</a
+                            >
+                        </li>
+                        <li class="file-item">
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra Look And Learn - bài 5 ?');"
+                                >Bài 5</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra Look And Learn - bài 6 ?');"
+                                >Bài 6</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra Look And Learn - bài 7 ?');"
+                                >Bài 7</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra Look And Learn - bài 8 ?');"
+                                >Bài 8</a
+                            >
+                        </li>
+                        <li class="file-item">
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra Look And Learn - bài 9 ?');"
+                                >Bài 9</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra Look And Learn - bài 10 ?');"
+                                >Bài 10</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra Look And Learn - bài 11 ?');"
+                                >Bài 11</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra Look And Learn - bài 12 ?');"
+                                >Bài 12</a
+                            >
+                        </li>
+                        <li class="file-item">
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n5.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra viết nét 521 chữ và âm ONYOMI ?');"
+                                >Kiểm tra viết nét 521 chữ và âm ONYOMI</a
+                            >
+                        </li>
+                    </ol>
+                </div>
+
+                <br />
+                <hr />
+                <br />
+                <!-- 5 Bài -->
+                <div class="file-items">
+                    <h2 class="file-heading">
+                        Kiểm tra định kỳ 5 bài<br />MINANO NIHONGO
+                    </h2>
+                    <ol class="file">
+                        <li class="file-item">
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n5.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra 01 - 05 Minano Nihongo ?');"
+                                >01 - 05</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống đáp án 01 - 05 Minano Nihongo ?');"
+                                >đáp án 01 - 05</a
+                            >
+                        </li>
+                        <li class="file-item">
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra 06 - 10 Minano Nihongo ?');"
+                                >06 - 10</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống đáp án 06 - 10 Minano Nihongo ?');"
+                                >đáp án 06 - 10</a
+                            >
+                        </li>
+                        <li class="file-item">
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n5.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra 11 - 15 Minano Nihongo ?');"
+                                >11 - 15</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống đáp án 11 - 15 Minano Nihongo ?');"
+                                >đáp án 11 - 15</a
+                            >
+                        </li>
+                        <li class="file-item">
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra 16 - 20 Minano Nihongo ?');"
+                                >16 - 20</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống đáp án 16 - 20 Minano Nihongo ?');"
+                                >đáp án 16 - 20</a
+                            >
+                        </li>
+                        <li class="file-item">
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n5.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra 21 - 25 Minano Nihongo ?');"
+                                >21 - 25</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống đáp án 21 - 25 Minano Nihongo ?');"
+                                >đáp án 21 - 25</a
+                            >
+                        </li>
+                        <li class="file-item">
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra 26 - 30 Minano Nihongo ?');"
+                                >26 - 30</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống đáp án 26 - 30 Minano Nihongo ?');"
+                                >đáp án 26 - 30</a
+                            >
+                        </li>
+                        <li class="file-item">
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n5.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra 31 - 35 Minano Nihongo ?');"
+                                >31 - 35</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống đáp án 31 - 35 Minano Nihongo ?');"
+                                >đáp án 31 - 35</a
+                            >
+                        </li>
+                        <li class="file-item">
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra 36 - 40 Minano Nihongo ?');"
+                                >36 - 40</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống đáp án 36 - 40 Minano Nihongo ?');"
+                                >đáp án 36 - 40</a
+                            >
+                        </li>
+                        <li class="file-item">
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n5.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra 41 - 45 Minano Nihongo ?');"
+                                >41 - 45</a
+                            >
+                            <a
+                                class="file-link disabled"
+                                href="./access/files/vocabulary/voca_n4.xlsx"
+                                download=""
+                                onclick="return confirm('Tiến hành tải xuống đáp án 41 - 45 Minano Nihongo ?');"
+                                >đáp án 41 - 45</a
+                            >
+                        </li>
+                    </ol>
+                </div>
+            </div>
         </div>
 
-        <script type="module" src="/access/main.js"></script>
+        <script type="module" src="/access/js/main.js"></script>
     </body>
 </html>
