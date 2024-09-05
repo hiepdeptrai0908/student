@@ -83,7 +83,7 @@ function handleLogin() {
                 elements.managerFiles,
             ]
         );
-    } else if (["ADMINN", "AKAMARU", "DONGMINH"].includes(loginInputValue)) {
+    } else if (["ADMINN"].includes(loginInputValue)) {
         elements.modalOverlay.style.display = "none";
         toggleVisibility(
             [
