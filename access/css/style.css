@@ -575,3 +575,48 @@ a:focus {
 .btn-success {
     font-size: inherit;
 }
+
+.max-score {
+    position: relative;
+}
+
+.max-score:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    border-top: 1.5px solid #00ff15;
+    border-right: 1.5px solid #00ff15;
+    border-radius: 50%;
+    animation: animateD 1.5s linear infinite;
+}
+
+.min-score {
+    position: relative;
+}
+
+.min-score:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 30px;
+    height: 30px;
+    border-top: 1.5px solid red;
+    border-right: 1.5px solid red;
+    border-radius: 50%;
+    animation: animateD 1.5s linear infinite;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes animateD {
+    from {
+        transform: translate(-50%, -50%) rotate(-360deg); /* Kết hợp translate và rotate */
+    }
+    to {
+        transform: translate(-50%, -50%) rotate(0deg); /* Kết hợp translate và rotate */
+    }
+}

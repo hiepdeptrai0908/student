@@ -266,13 +266,21 @@ async function showCoreTable(data) {
 
         datas.forEach((item, index) => {
             const rowIndex = index + 1 < 10 ? `0${index + 1}` : index + 1;
+            let classes = "";
+            if (item.score === maxScore && item.score !== 0) {
+                classes = "max-score";
+            }
+
+            if (item.score === minScore && minScore !== 0) {
+                classes = "min-score";
+            }
             tbody.innerHTML += `
                 <tr>
                     <td>${rowIndex}</td>
                     <td style="min-width:150px; text-align:left;">${
                         item.name
                     }</td>
-                    <td>${item.score}</td>
+                    <td class=${classes}>${item.score}</td>
                     <td>${item.error}</td>
                     <td style="font-style:italic; color:#333; font-size:10px; text-align:left;" ${
                         item.comment == "Chưa đóng phạt" ||
@@ -384,6 +392,7 @@ async function fetchClassData() {
                         <td>${String(index + 1).padStart(2, "0")}</td>
                         <td>${item.classname}</td>
                         <td>${item.student_count}</td>
+                        <td>${item.lesson_count} Bài</td>
                         <td>${formattedDate}</td>
                     </tr>
                 `;
