@@ -392,7 +392,7 @@ async function fetchClassData() {
                         <td>${String(index + 1).padStart(2, "0")}</td>
                         <td>${item.classname}</td>
                         <td>${item.student_count}</td>
-                        <td>${item.lesson_count} Bài</td>
+                        <td>${item.lesson_count} bài</td>
                         <td>${formattedDate}</td>
                     </tr>
                 `;
