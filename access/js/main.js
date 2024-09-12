@@ -48,7 +48,7 @@ const elements = {
 
 const tableWrapper = document.querySelector("table");
 
-const timeOut = 200;
+const timeOut = 100;
 const doneTypingInterval = 400;
 // Hàm hiện modal loading
 function showLoadingModal() {
@@ -187,9 +187,15 @@ function handleLessonName(lessonNumber) {
     } else if (lessonNumber >= 200 && lessonNumber < 300) {
         return `Hán Tự Bài ${lessonNumber - 200}`;
     } else if (lessonNumber >= 300 && lessonNumber < 400) {
-        return `Kiểm Tra Bài ${lessonNumber - 300 - 4} - ${lessonNumber - 300}`;
+        return `Minano Nihongo: Bài ${lessonNumber - 300 - 4} → Bài ${
+            lessonNumber - 300
+        }`;
     } else if (lessonNumber >= 400 && lessonNumber < 500) {
-        return `JLPT Lần ${lessonNumber - 400}`;
+        return `Look And Learn: Bài ${lessonNumber - 400 - 4} → Bài ${
+            lessonNumber - 400
+        }`;
+    } else if (lessonNumber >= 500 && lessonNumber < 600) {
+        return `JLPT Lần ${lessonNumber - 500}`;
     }
 }
 
@@ -231,6 +237,7 @@ async function showCoreTable(data) {
         elements.showMaxScoreTable.textContent = `${
             datas[0]?.max_score ? datas[0]?.max_score : "..."
         } đ`;
+
         // Lọc các điểm số không phải là 0
         const nonZeroScores = datas
             .filter((item) => item.score > 0)
@@ -263,6 +270,10 @@ async function showCoreTable(data) {
         // Tạo phần thân bảng
         const tbody = document.createElement("tbody");
         let totalWrong = 0;
+        let totalCompletedTests = 0; // Tổng số bài làm khác 0
+        const maxScoreDB = datas[0]?.max_score || 0; // Giả sử max_score có sẵn trong dữ liệu
+        // Số lượng học sinh chưa làm bài kiểm tra
+        let countNoTest = 0;
 
         datas.forEach((item, index) => {
             const rowIndex = index + 1 < 10 ? `0${index + 1}` : index + 1;
@@ -274,6 +285,7 @@ async function showCoreTable(data) {
             if (item.score === minScore && minScore !== 0) {
                 classes = "min-score";
             }
+
             tbody.innerHTML += `
                 <tr>
                     <td>${rowIndex}</td>
@@ -292,21 +304,46 @@ async function showCoreTable(data) {
                     }>${item.comment}</td>
                 </tr>
             `;
+
             totalWrong += item.error;
+
+            // Đếm số bài đã làm khác 0
+            if (item.score > 0) {
+                totalCompletedTests++;
+            }
         });
 
-        // Thêm hàng mới vào cuối bảng để hiển thị tổng số câu sai
+        // Tính tổng số câu dựa trên maxScore và số bài đã làm != 0
+        const totalQuestions = totalCompletedTests * maxScoreDB;
+
+        // Tính phần trăm đúng
+        let correctPercent =
+            totalQuestions > 0
+                ? ((totalQuestions - totalWrong) / totalQuestions) * 100
+                : 0;
+
+        // Thêm hàng mới vào cuối bảng để hiển thị tổng số câu sai và phần trăm đúng
         tbody.innerHTML += `
-            <tr class="total-row">
-                <td text-align="center" colspan="5" style="font-weight: bold;">TỔNG SỐ CÂU SAI: ${totalWrong}</td>
+            <tr class="total-row" style="height: 50px;">
+                <td text-align="center" colspan="5" style="font-weight: 600;">
+                    TỔNG SỐ CÂU SAI:<span style="color:${
+                        totalWrong != 0 ? "red" : "green"
+                    };"> ${totalWrong}</span> / ${totalQuestions}
+                </td>
+            </tr>
+            <tr class="total-row" style="height: 50px;">
+                <td text-align="center" colspan="5" style="font-weight: 600;">
+                    TỶ LỆ ĐÚNG CỦA CẢ LỚP: <span style=color:${
+                        correctPercent.toFixed(2) < 60 ? "red" : "green"
+                    };"> ${correctPercent.toFixed(
+            2
+        )}</span> %<br /><i><span style="font-weight: 300;">(Không tính những bài chưa làm)</span></i>
+                </td>
             </tr>
         `;
 
         table.appendChild(tbody);
         tableWrapper.appendChild(table);
-
-        // Số lượng học sinh chưa làm bài kiểm tra
-        let countNoTest = 0;
 
         // Duyệt qua dữ liệu và thêm span cho các điểm số khác nhau
         datas.forEach((item) => {
@@ -336,11 +373,11 @@ async function showCoreTable(data) {
         });
         if (countNoTest == 0 && maxScore !== 0) {
             const newSpan = document.createElement("span");
-            newSpan.textContent = `・Cả lớp đã làm bài kiểm tra đầy đủ.`;
+            newSpan.textContent = `・Không có ai.`;
             newSpan.className = "rank-item-name rank-item-name__no-test";
             document.querySelector(".rank-item-no-test").appendChild(newSpan);
         }
-    }, 1000);
+    }, 500);
 }
 
 function handleChangeLessonScreen(e) {
@@ -741,7 +778,7 @@ async function fetchScoreData(class_id, student_id, lesson) {
                 data[0].max_score || "50";
             document.getElementById("new-score").value = data[0].score || "";
             document.getElementById("comment").value = data[0].comment || "";
-        }, 250);
+        }, timeOut);
     } catch (error) {
         console.error("Error fetching score data:", error);
     }
@@ -1153,9 +1190,16 @@ document
             }
             lessonDropdown.innerHTML += options;
         } else if (selectedValue === 4) {
+            for (let i = 1; i <= 30; i += 5) {
+                options += `<option value="${i + 4 + 400}">${handleLessonName(
+                    i + 4 + 400
+                )}</option>`;
+            }
+            lessonDropdown.innerHTML += options;
+        } else if (selectedValue === 5) {
             for (let i = 1; i <= 5; i++) {
-                options += `<option value="${i + 400}">${handleLessonName(
-                    i + 400
+                options += `<option value="${i + 500}">${handleLessonName(
+                    i + 500
                 )}</option>`;
             }
             lessonDropdown.innerHTML += options;
