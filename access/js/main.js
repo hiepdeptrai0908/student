@@ -1638,7 +1638,7 @@ function renderLogBook(element, logInfo) {
             }
         } else {
             // Nếu chỉ có 1 phần tử, thêm lớp mặc định (nếu cần)
-            classes = "";
+            classes = "slide-in-right";
         }
 
         // Create the HTML structure
