@@ -640,7 +640,7 @@ a:focus {
 
 .manager-class-log-book {
     line-height: 18px;
-    font-size: 12px;
+    font-size: 11px;
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -900,7 +900,7 @@ a:focus {
 
 .absent-wrapper-item__name {
     font-weight: 700;
-    min-width: 30%;
+    min-width: 25%;
     display: flex;
     justify-content: flex-start;
     margin-left: 10px;
