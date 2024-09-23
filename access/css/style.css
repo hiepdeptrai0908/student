@@ -11,6 +11,7 @@ body {
     line-height: 20px;
     font-family: sans-serif;
     color: #444;
+    position: relative;
 }
 
 .wrapper {
@@ -814,6 +815,10 @@ a:focus {
     align-items: center;
 }
 
+#log-book-write__date {
+    width: 100%;
+}
+
 .log-book-write__date-item {
     width: 100%;
 }
@@ -1006,5 +1011,18 @@ input[type="radio"] {
     }
     .log-book-content-wrapper + .log-book-content-wrapper {
         margin-left: 0px;
+    }
+    .flatpickr-calendar {
+        width: 40%;
+        min-width: 310px;
+        display: block;
+        transform: translateX(
+            0%
+        ); /* Di chuyển phần tử về bên trái 50% chiều rộng của nó */
+        top: 0; /* Đặt vị trí ở trên cùng */
+        left: 50%; /* Đặt phần tử ở giữa chiều ngang */
+        position: absolute; /* Cần để sử dụng left và transform */
+        right: auto;
+        /* Thêm các thuộc tính khác nếu cần */
     }
 }
