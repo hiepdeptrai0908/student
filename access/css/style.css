@@ -640,7 +640,7 @@ a:focus {
 
 .manager-class-log-book {
     line-height: 18px;
-    font-size: 11px;
+    font-size: 14px;
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -1024,5 +1024,8 @@ input[type="radio"] {
         position: absolute; /* Cần để sử dụng left và transform */
         right: auto;
         /* Thêm các thuộc tính khác nếu cần */
+    }
+    .manager-class-log-book {
+        font-size: 11px;
     }
 }
