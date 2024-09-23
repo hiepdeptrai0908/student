@@ -1593,7 +1593,19 @@ function renderLogBook(element, logInfo) {
         console.error("logInfo không phải là array:", logInfo);
         return; // Dừng hàm nếu không phải là mảng
     }
-    logInfo.forEach((log) => {
+
+    // Kiểm tra nếu mảng rỗng
+    if (logInfo.length === 0) {
+        const noDataHtml = `
+            <div class="no-data">
+                <img class="no-data-img" src="access/images/no-data.jpeg" alt="No Data" style="animation: fadeIn 1s forwards;" />
+            </div>
+        `;
+        element.innerHTML = noDataHtml;
+        return; // Dừng hàm nếu không có dữ liệu
+    }
+
+    logInfo.forEach((log, index) => {
         const {
             classname: className,
             student_count: studentCount,
@@ -1612,9 +1624,26 @@ function renderLogBook(element, logInfo) {
             (student) => student.absent == false
         );
 
+        const logBookElement = document.createElement("div");
+        logBookElement.className = "log-book-today-class";
+
+        let classes = "slide-in-right";
+        // Thêm lớp animation dựa trên chỉ số chẵn/lẻ
+        if (logInfo.length > 1) {
+            // Kiểm tra nếu có hơn 1 phần tử
+            if (index % 2 === 0) {
+                classes = "slide-in-left";
+            } else {
+                classes = "slide-in-right";
+            }
+        } else {
+            // Nếu chỉ có 1 phần tử, thêm lớp mặc định (nếu cần)
+            classes = "";
+        }
+
         // Create the HTML structure
         const logBookHtml = `
-                <div class="log-book-today-class">
+                <div class="log-book-today-class ${classes}">
                     <div class="log-book-today-class-item">
                         <div class="log-book-heading">
                             <p class="log-book-heading-item">
@@ -1833,8 +1862,9 @@ function addStudentToSelected(name, id, absent, reason) {
 
         const selectedList = document.getElementById("selected-list");
         const listItem = document.createElement("li");
+        const classes = "slide-in-right";
         listItem.innerHTML = `
-            <div class="absent-wrapper">
+            <div class="absent-wrapper ${"slide-in-right"}">
                 <div class="absent-wrapper-item absent-wrapper-item__name">
                     <i class="fa-solid fa-user-graduate"></i> ${name}
                 </div>
@@ -1928,7 +1958,17 @@ async function fetchClassLogData() {
     const classId = elements.logBookWriteDropdown.value;
 
     // Kiểm tra nếu đủ điều kiện (tất cả trường đều được chọn)
-    if (part && logAt && classId) {
+    if (
+        part &&
+        part !== "undefined" &&
+        part.trim() !== "" &&
+        logAt &&
+        logAt !== "undefined" &&
+        logAt.trim() !== "" &&
+        classId &&
+        classId !== "undefined" &&
+        classId.trim() !== ""
+    ) {
         showLoadingModal();
 
         // Gọi API để lấy dữ liệu
