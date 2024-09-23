@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,17 +11,27 @@
             integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
             crossorigin="anonymous"
         />
-        <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"
-        ></script>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
             href="https://fonts.googleapis.com/css2 ?family=Dancing+Script:wght@400..700&display=swap"
             rel="stylesheet"
         />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+            integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
+        <!-- Thêm CSS của Flatpickr -->
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://npmcdn.com/flatpickr/dist/themes/dark.css"
+        />
+
+        <link rel="stylesheet" href="access/css/reset.css" />
         <link rel="stylesheet" href="access/css/style.css" />
     </head>
     <body>
@@ -47,7 +57,7 @@
                 <span class="ring-span1"></span>
             </div>
         </div>
-        <div class="wrapper" hidden>
+        <div class="wrapper">
             <select class="form-select" id="manager-option">
                 <!-- Các tùy chọn bài học -->
                 <option value="1">Hiển thị bảng điểm</option>
@@ -55,6 +65,7 @@
                 <option value="3">Quản lý học sinh</option>
                 <option value="4">Nhập điểm</option>
                 <option value="5">Download tài liệu</option>
+                <option value="6">Sổ đầu bài</option>
 
                 <!-- Thêm các tùy chọn khác nếu cần -->
             </select>
@@ -151,7 +162,9 @@
                             required
                         />
                     </div>
-                    <button class="btn btn-success" type="submit">Thêm</button>
+                    <button class="btn btn-success" type="submit">
+                        <i class="fa-regular fa-square-plus white"></i>Thêm
+                    </button>
                 </form>
                 <hr />
                 <!-- Form sửa lớp học -->
@@ -186,7 +199,7 @@
                         />
                     </div>
                     <button class="btn btn-primary" type="submit">
-                        Cập Nhật
+                        <i class="fa-solid fa-arrows-rotate white"></i>Cập Nhật
                     </button>
                 </form>
                 <hr />
@@ -209,7 +222,9 @@
                             <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
                         </select>
                     </div>
-                    <button class="btn btn-danger" type="submit">Xóa</button>
+                    <button class="btn btn-danger" type="submit">
+                        <i class="fa-solid fa-trash-can white"></i>Xóa
+                    </button>
                 </form>
             </div>
 
@@ -248,7 +263,9 @@
                         />
                     </div>
 
-                    <button class="btn btn-success" type="submit">Thêm</button>
+                    <button class="btn btn-success" type="submit">
+                        <i class="fa-regular fa-square-plus white"></i>Thêm
+                    </button>
                 </form>
                 <hr />
 
@@ -333,8 +350,9 @@
                             autocomplete="off"
                         />
                     </div>
-                    <button class="btn btn-warning" type="submit">
-                        Cập Nhật Điểm
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fa-solid fa-arrows-rotate white"></i>Cập Nhật
+                        Điểm
                     </button>
                 </form>
                 <hr />
@@ -370,7 +388,9 @@
                         </select>
                     </div>
 
-                    <button class="btn btn-danger" type="submit">Xóa</button>
+                    <button class="btn btn-danger" type="submit">
+                        <i class="fa-solid fa-trash-can white"></i>Xóa
+                    </button>
                 </form>
                 <hr />
                 <!-- Form thông tin học sinh -->
@@ -536,6 +556,7 @@
                         <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
                     </select>
                     <button class="btn btn-danger" type="submit">
+                        <i class="fa-solid fa-trash-can white"></i>
                         Xoá điểm
                     </button>
                 </form>
@@ -547,9 +568,8 @@
                         <li class="file-item">
                             <a
                                 class="file-link"
-                                href="./access/files/chu_cai/kata_hira.pdf"
-                                download=""
-                                onclick="return confirm('Tiến hành tải xuống 2 bảng chữ cái ?');"
+                                href="./access/files/chu_cai/総合_ひらがなとカタカナ.pdf"
+                                target="_blank"
                                 >2 Bảng chữ cái</a
                             >
                         </li>
@@ -557,8 +577,7 @@
                             <a
                                 class="file-link"
                                 href="./access/files/chu_cai/hiragana_book.pdf"
-                                download=""
-                                onclick="return confirm('Tiến hành tải xuống tập viết bảng Hiragana ?');"
+                                target="_blank"
                                 >Tập viết bảng Hiragana</a
                             >
                         </li>
@@ -566,26 +585,23 @@
                             <a
                                 class="file-link"
                                 href="./access/files/chu_cai/katakana_book.pdf"
-                                download=""
-                                onclick="return confirm('Tiến hành tải xuống tập viết bảng Katakana ?');"
+                                target="_blank"
                                 >Tập viết bảng Katakana</a
                             >
                         </li>
                         <li class="file-item">
                             <a
                                 class="file-link"
-                                href="./access/files/chu_cai/chao_hoi.pdf"
-                                download=""
-                                onclick="return confirm('Tiến hành tải xuống 12 mẫu câu chào hỏi cơ bản ?');"
+                                href="./access/files/chu_cai/基本の挨拶.pdf"
+                                target="_blank"
                                 >12 mẫu câu chào hỏi cơ bản</a
                             >
                         </li>
                         <li class="file-item">
                             <a
                                 class="file-link"
-                                href="./access/files/chu_cai/自己紹介.pdf"
-                                download=""
-                                onclick="return confirm('Tiến hành tải xuống mẫu giới thiệu bản thân cơ bản ?');"
+                                href="./access/files/chu_cai/基本の自己紹介.pdf"
+                                target="_blank"
                                 >Giới thiệu bản thân cơ bản</a
                             >
                         </li>
@@ -597,46 +613,15 @@
                 <br />
                 <!-- Bộ Thủ -->
                 <div class="file-items">
-                    <h2 class="file-heading">Bộ Thủ</h2>
+                    <h2 class="file-heading">
+                        Quy Tắc Hán Tự <br />&<br />Bộ Thủ
+                    </h2>
                     <ol class="file">
                         <li class="file-item">
                             <a
                                 class="file-link"
-                                href="./access/files/bo_thu/mat_truoc.pdf"
-                                download="140 bộ thủ (mặt trước)"
-                                onclick="return confirm('Tiến hành tải xuống mặt trước của 140 bộ thủ ?');"
-                                >140 bộ thủ (mặt trước)</a
-                            >
-                            <a
-                                class="file-link"
-                                href="./access/files/bo_thu/mat_sau.pdf"
-                                download="140 bộ thủ (mặt sau)"
-                                onclick="return confirm('Tiến hành tải xuống mặt sau của 140 bộ thủ ?');"
-                                >140 bộ thủ (mặt sau)</a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/bo_thu/y_nghia.pdf"
-                                download="Ý nghĩa của 140 bộ thủ"
-                                onclick="return confirm('Tiến hành tải xuống ý nghĩa của 140 bộ thủ ?');"
-                                >Ý nghĩa của 140 bộ thủ</a
-                            >
-                            <a
-                                class="file-link"
-                                href="./access/files/bo_thu/luyen_viet.pdf"
-                                download="Giấy ô ly luyện viết 140 bộ thủ"
-                                onclick="return confirm('Tiến hành tải xuống giấy ô ly luyện viết 140 bộ thủ ?');"
-                                >Giấy ô ly luyện viết 140 bộ thủ</a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/bo_thu/lo_trinh.pdf"
-                                download="Giới thiệu lộ trình học Hán Tự"
-                                onclick="return confirm('Tiến hành tải xuống file PDF giới thiệu lộ trình học Hán Tự ?');"
+                                href="./access/files/bo_thu/漢字のロードマップ.pdf"
+                                target="_blank"
                                 >File PDF giới thiệu lộ trình học Hán Tự<br /><span
                                     style="
                                         text-transform: none;
@@ -645,6 +630,40 @@
                                     >(Nếu photo cho học sinh thì bỏ đi 2 trang
                                     cuối)</span
                                 ></a
+                            >
+                        </li>
+                        <li class="file-item">
+                            <a
+                                class="file-link"
+                                href="./access/files/bo_thu/PTKSのルール.pdf"
+                                target="_blank"
+                                >Quy tắc PTKS (Phòng Trọ Khách Sạn)
+                            </a>
+                        </li>
+
+                        <li class="file-item">
+                            <a
+                                class="file-link"
+                                href="./access/files/bo_thu/音予測ルール.pdf"
+                                target="_blank"
+                                >Bộ quy tắc đoán âm ONYOMI từ Hán Việt<br /><span
+                                    style="
+                                        text-transform: none;
+                                        font-style: italic;
+                                    "
+                                    >(1 tờ - 1 trang: Không nên photo 2 mặt vì
+                                    khó nhìn)</span
+                                ></a
+                            >
+                        </li>
+
+                        <li class="file-item">
+                            <a
+                                class="file-link"
+                                href="./access/files/bo_thu/140部首.zip"
+                                target="_blank"
+                                onclick="return confirm('Tiến hành tải xuống file tài liệu 140 bộ thủ ?');"
+                                >140 Bộ Thủ</a
                             >
                         </li>
                     </ol>
@@ -661,28 +680,25 @@
                         <li class="file-item">
                             <a
                                 class="file-link"
-                                href="./access/files/giao_an/N5.pdf"
-                                download="Giáo Án N5"
-                                onclick="return confirm('Tiến hành tải xuống giáo án N5 (みんなの日本語初級I) ?');"
-                                >N5 (みんなの日本語初級I)</a
+                                href="./access/files/giao_an/N5のカリキュラム (みんなの日本語初級I).pdf"
+                                target="_blank"
+                                >N5のカリキュラム (みんなの日本語初級I)</a
                             >
                         </li>
                         <li class="file-item">
                             <a
                                 class="file-link"
-                                href="./access/files/giao_an/N4.pdf"
-                                download="Giáo Án N4"
-                                onclick="return confirm('Tiến hành tải xuống giáo án N4 (みんなの日本語初級II) ?');"
-                                >N4 (みんなの日本語初級II)</a
+                                href="./access/files/giao_an/N4のカリキュラム (みんなの日本語初級II).pdf"
+                                target="_blank"
+                                >N4のカリキュラム (みんなの日本語初級II)</a
                             >
                         </li>
                         <li class="file-item">
                             <a
                                 class="file-link"
-                                href="./access/files/giao_an/N3_somatome.pdf"
-                                download="Giáo Án N3 (soumatome)"
-                                onclick="return confirm('Tiến hành tải xuống giáo án N3 (総まとめ) ?');"
-                                >N3 (総まとめ)</a
+                                href="./access/files/giao_an/N3のカリキュラム (総まとめ).pdf"
+                                target="_blank"
+                                >N3のカリキュラム (総まとめ)</a
                             >
                         </li>
                     </ol>
@@ -757,25 +773,25 @@
                         <li class="file-item">
                             <a
                                 class="file-link"
-                                href="./access/files/han_tu_mina/Bài 1 - Kanji Từ Vựng Mina.pdf"
+                                href="./access/files/han_tu_mina/第1課の漢字_みんなの日本語.pdf"
                                 target="_blank"
                                 >Bài 1</a
                             >
                             <a
                                 class="file-link"
-                                href="./access/files/han_tu_mina/Bài 2 - Kanji Từ Vựng Mina.pdf"
+                                href="./access/files/han_tu_mina/第2課の漢字_みんなの日本語.pdf"
                                 target="_blank"
                                 >Bài 2</a
                             >
                             <a
                                 class="file-link"
-                                href="./access/files/han_tu_mina/Bài 3 - Kanji Từ Vựng Mina.pdf"
+                                href="./access/files/han_tu_mina/第3課の漢字_みんなの日本語.pdf"
                                 target="_blank"
                                 >Bài 3</a
                             >
                             <a
                                 class="file-link"
-                                href="./access/files/han_tu_mina/Bài 4 - Kanji Từ Vựng Mina.pdf"
+                                href="./access/files/han_tu_mina/第4課の漢字_みんなの日本語.pdf"
                                 target="_blank"
                                 >Bài 4</a
                             >
@@ -783,25 +799,25 @@
                         <li class="file-item">
                             <a
                                 class="file-link"
-                                href="./access/files/han_tu_mina/Bài 5 - Kanji Từ Vựng Mina.pdf"
+                                href="./access/files/han_tu_mina/第5課の漢字_みんなの日本語.pdf"
                                 target="_blank"
                                 >Bài 5</a
                             >
                             <a
                                 class="file-link"
-                                href="./access/files/han_tu_mina/Bài 6 - Kanji Từ Vựng Mina.pdf"
+                                href="./access/files/han_tu_mina/第6課の漢字_みんなの日本語.pdf"
                                 target="_blank"
                                 >Bài 6</a
                             >
                             <a
                                 class="file-link"
-                                href="./access/files/han_tu_mina/Bài 7 - Kanji Từ Vựng Mina.pdf"
+                                href="./access/files/han_tu_mina/第7課の漢字_みんなの日本語.pdf"
                                 target="_blank"
                                 >Bài 7</a
                             >
                             <a
                                 class="file-link"
-                                href="./access/files/han_tu_mina/Bài 8 - Kanji Từ Vựng Mina.pdf"
+                                href="./access/files/han_tu_mina/第8課の漢字_みんなの日本語.pdf"
                                 target="_blank"
                                 >Bài 8</a
                             >
@@ -809,25 +825,25 @@
                         <li class="file-item">
                             <a
                                 class="file-link"
-                                href="./access/files/han_tu_mina/Bài 9 - Kanji Từ Vựng Mina.pdf"
+                                href="./access/files/han_tu_mina/第9課の漢字_みんなの日本語.pdf"
                                 target="_blank"
                                 >Bài 9</a
                             >
                             <a
                                 class="file-link"
-                                href="./access/files/han_tu_mina/Bài 10 - Kanji Từ Vựng Mina.pdf"
+                                href="./access/files/han_tu_mina/第10課の漢字_みんなの日本語.pdf"
                                 target="_blank"
                                 >Bài 10</a
                             >
                             <a
                                 class="file-link"
-                                href="./access/files/han_tu_mina/Bài 11 - Kanji Từ Vựng Mina.pdf"
+                                href="./access/files/han_tu_mina/第11課の漢字_みんなの日本語.pdf"
                                 target="_blank"
                                 >Bài 11</a
                             >
                             <a
                                 class="file-link"
-                                href="./access/files/han_tu_mina/Bài 12 - Kanji Từ Vựng Mina.pdf"
+                                href="./access/files/han_tu_mina/第12課の漢字_みんなの日本語.pdf"
                                 target="_blank"
                                 >Bài 12</a
                             >
@@ -835,26 +851,26 @@
                         <li class="file-item">
                             <a
                                 class="file-link"
-                                href="./access/files/han_tu_mina/Bài 13 - Kanji Từ Vựng Mina.pdf"
+                                href="./access/files/han_tu_mina/第13課の漢字_みんなの日本語.pdf"
                                 target="_blank"
                                 >Bài 13</a
                             >
                             <a
                                 class="file-link"
-                                href="./access/files/han_tu_mina/Bài 14 - Kanji Từ Vựng Mina.pdf"
+                                href="./access/files/han_tu_mina/第14課の漢字_みんなの日本語.pdf"
                                 target="_blank"
                                 >Bài 14</a
                             >
                             <a
                                 class="file-link"
-                                href="./access/files/han_tu_mina/Bài 15 - Kanji Từ Vựng Mina.pdf"
+                                href="./access/files/han_tu_mina/第15課の漢字_みんなの日本語.pdf"
                                 target="_blank"
                                 >Bài 15</a
                             >
                             <a
                                 class="file-link disabled"
                                 style="visibility: none; opacity: 0"
-                                href="./access/files/han_tu_mina/Bài 16 - Kanji Từ Vựng Mina.pdf"
+                                href="./access/files/han_tu_mina/第16課の漢字_みんなの日本語.pdf"
                                 target="_blank"
                                 >Bài 16</a
                             >
@@ -1175,8 +1191,200 @@
                     </ol>
                 </div>
             </div>
+
+            <!-- Sổ đầu bài -->
+            <div class="manager-class-log-book">
+                <div class="log-book-option">
+                    <button class="log-book-option-btn active" name="today">
+                        <i class="fa-regular fa-calendar-days"></i>Hôm Nay
+                    </button>
+                    <button class="log-book-option-btn" name="search">
+                        <i class="fa-solid fa-magnifying-glass"></i>Tìm kiếm
+                    </button>
+                    <button class="log-book-option-btn" name="write">
+                        <i class="fa-solid fa-pen-nib"></i>Ghi Sổ
+                    </button>
+                </div>
+
+                <!-- TODAY -->
+                <div class="log-book-today"></div>
+
+                <!-- SEARCH -->
+                <div class="log-book-search" style="display: none">
+                    <form id="log-book-search-form">
+                        <div class="log-book-write__date-item">
+                            <label
+                                class="add-item-title"
+                                for="log-book-search__part"
+                                >Buổi học:</label
+                            >
+                            <select
+                                class="add-item-input form-select"
+                                id="log-book-search__part"
+                                name="part"
+                            >
+                                <option value="BUỔI SÁNG">Buổi Sáng</option>
+                                <option value="BUỔI CHIỀU">Buổi Chiều</option>
+                                <option value="BUỔI TỐI">Buổi Tối</option>
+                            </select>
+                        </div>
+                        <div class="log-book-write__date-item">
+                            <label
+                                class="add-item-title"
+                                for="log-book-search__date"
+                                >Ngày học:</label
+                            >
+                            <input
+                                type="date"
+                                id="log-book-search__date"
+                                class="add-item-input date-input"
+                                aria-label="Ngày học"
+                                name="log_at"
+                            />
+                        </div>
+                        <div class="log-book-write__dates">
+                            <div class="log-book-write__date-item">
+                                <label
+                                    class="add-item-title"
+                                    for="log-book-search__class-dropdown"
+                                    >Tên Lớp:</label
+                                >
+                                <select
+                                    class="add-item-input form-select"
+                                    id="log-book-search__class-dropdown"
+                                    name="class_id"
+                                >
+                                    <option value="">-- Tất cả --</option>
+                                    <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                                </select>
+                            </div>
+                        </div>
+                        <button
+                            id="confirm-log-class-btn"
+                            class="btn btn-success"
+                            style="margin-top: 10px"
+                            type="submit"
+                        >
+                            <i class="fa-solid fa-magnifying-glass"></i>Tìm kiếm
+                        </button>
+                    </form>
+                    <div id="search-results"></div>
+                </div>
+
+                <!-- WRITE -->
+                <form class="log-book-write" style="display: none">
+                    <div class="log-book-write__dates">
+                        <div class="log-book-write__date-item">
+                            <label
+                                class="add-item-title"
+                                for="log-book-write__part"
+                                >Buổi học:</label
+                            >
+                            <select
+                                class="add-item-input form-select"
+                                id="log-book-write__part"
+                                name="part"
+                            >
+                                <option value="">-- Chọn buổi học --</option>
+                                <option value="BUỔI SÁNG">Buổi Sáng</option>
+                                <option value="BUỔI CHIỀU">Buổi Chiều</option>
+                                <option value="BUỔI TỐI">Buổi Tối</option>
+                            </select>
+                        </div>
+                        <div class="log-book-write__date-item">
+                            <label
+                                class="add-item-title log-book-write__date"
+                                for="log-book-write__date"
+                                >Ngày học:</label
+                            >
+                            <input
+                                type="date"
+                                id="log-book-write__date"
+                                class="add-item-input date-input"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="log-book-write__dates">
+                        <div class="log-book-write__date-item">
+                            <label
+                                class="add-item-title"
+                                for="log-book-write__lesson-dropdown"
+                                >Tên Lớp:</label
+                            >
+                            <select
+                                class="add-item-input form-select"
+                                id="log-book-write__lesson-dropdown"
+                                name="classname"
+                            >
+                                <option value="">-- Chọn Lớp Học --</option>
+                                <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                            </select>
+                        </div>
+                        <div class="log-book-write__date-item">
+                            <label
+                                class="add-item-title"
+                                for="log-book-write__teacher"
+                                >Giáo viên dạy:</label
+                            >
+                            <input
+                                class="add-item-input form-select"
+                                id="log-book-write__teacher"
+                                name="teacher"
+                                type="text"
+                                required
+                            />
+                        </div>
+                    </div>
+
+                    <label class="add-item-title" for="log-book-write__content"
+                        >Nội dung buổi học:</label
+                    >
+                    <input
+                        id="log-book-write__content"
+                        name="content"
+                        class="add-item-input form-select"
+                        required
+                    />
+
+                    <div class="write-absent">
+                        <div class="absent-counts">
+                            <span class="absent-count-title">Vắng: </span
+                            ><span class="absent-count">0</span>
+                            <i class="fa-solid fa-user-graduate"></i>
+                        </div>
+                        <input
+                            id="log-book-write__absent"
+                            name="absent"
+                            class="add-item-input form-select"
+                            placeholder="Tìm tên học sinh vắng học ..."
+                            autocomplete="off"
+                        />
+                    </div>
+
+                    <ul id="suggestions-list" class="suggestions-list"></ul>
+                    <ol id="selected-list" class="selected-list"></ol>
+
+                    <button
+                        id="confirm-log-class-btn"
+                        class="btn btn-success"
+                        style="margin-top: 10px"
+                        type="submit"
+                    >
+                        Xác nhận
+                    </button>
+                </form>
+            </div>
         </div>
 
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"
+        ></script>
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/vi.js"></script>
+        <script type="module" src="/access/js/custom.js"></script>
         <script type="module" src="/access/js/main.js"></script>
     </body>
 </html>

@@ -1,6 +1,7 @@
 import url from "../../url.js";
 /* -------------------------------------------------------------------------------------------------------------------------------- */
 // TRANG ADMIN
+
 const elements = {
     wrapper: document.querySelector(".wrapper"),
     managerOption: document.getElementById("manager-option"),
@@ -9,6 +10,7 @@ const elements = {
     managerStudent: document.querySelector(".manager-student"),
     managerInsertCore: document.querySelector(".manager-insert-core"),
     managerFiles: document.querySelector(".manager-files"),
+    managerClassLogBook: document.querySelector(".manager-class-log-book"),
     studentCountElement: document.getElementById("student-count"),
     lessonSelectElement: document.getElementById("lesson-select"),
     classnameInputElement: document.getElementById("classname-input"),
@@ -40,10 +42,24 @@ const elements = {
     screenScoreLessonDropdown: document.getElementById(
         "screen-score__lesson-dropdown"
     ),
+    logBookWriteDropdown: document.getElementById(
+        "log-book-write__lesson-dropdown"
+    ),
     updateScoreLessonDropdown: document.getElementById("lesson"),
     showMaxScoreUpdate: document.getElementById("show-max-score__update"),
     showMaxScoreStudent: document.getElementById("show-max-score__student"),
     showMaxScoreTable: document.getElementById("show-max-score__table"),
+    ///// Class Log Book //////////
+    logBookOption: document.querySelector(".log-book-option"),
+    logBookOptionBtns: document.querySelectorAll(".log-book-option-btn"),
+    logBookToday: document.querySelector(".log-book-today"),
+    logBookSearch: document.querySelector(".log-book-search"),
+    logBookWrite: document.querySelector(".log-book-write"),
+    // Search Log Book //////////////////
+    logBookSearchClassDropdown: document.querySelector(
+        "#log-book-search__class-dropdown"
+    ),
+    logBookSearchForm: document.querySelector("#log-book-search-form"),
 };
 
 const tableWrapper = document.querySelector("table");
@@ -81,6 +97,7 @@ function handleLogin() {
                 elements.managerStudent,
                 elements.managerInsertCore,
                 elements.managerFiles,
+                elements.managerClassLogBook,
             ]
         );
     } else if (["ADMINN"].includes(loginInputValue)) {
@@ -96,8 +113,10 @@ function handleLogin() {
                 elements.managerStudent,
                 elements.managerInsertCore,
                 elements.managerFiles,
+                elements.managerClassLogBook,
             ]
         );
+        optionScreen();
     } else {
         alert("Giá trị nhập không hợp lệ. Vui lòng thử lại.");
     }
@@ -109,15 +128,19 @@ function handleChangeLoginInput(event) {
 }
 
 // Xử lý màn hình tùy chọn quản lý
-function optionScreen(optionValue) {
+function optionScreen(
+    optionValue = localStorage.getItem("manager-option-value") || "1"
+) {
     const optionMap = {
         1: [elements.managerCoreTable],
         2: [elements.managerClass],
         3: [elements.managerStudent],
         4: [elements.managerInsertCore],
         5: [elements.managerFiles],
+        6: [elements.managerClassLogBook],
     };
 
+    elements.managerOption.value = optionValue;
     Object.keys(optionMap).forEach((key) => {
         if (key == optionValue) {
             toggleVisibility(
@@ -128,17 +151,18 @@ function optionScreen(optionValue) {
                     elements.managerStudent,
                     elements.managerInsertCore,
                     elements.managerFiles,
+                    elements.managerClassLogBook,
                 ].filter((el) => !optionMap[key].includes(el))
             );
         }
     });
-
-    localStorage.setItem("manager-option-value", optionValue);
 }
 
 // Xử lý thay đổi lựa chọn của quản lý
 function handleManagerOptionChange(e) {
-    optionScreen(e.target.value);
+    const optionValue = e.target.value;
+    optionScreen(optionValue);
+    localStorage.setItem("manager-option-value", optionValue);
 }
 
 // Gán các sự kiện cho các phần tử
@@ -176,6 +200,29 @@ function formatDateTime(dateString) {
     const dayOfWeek = daysOfWeek[date.getDay()]; // Lấy tên ngày trong tuần từ mảng
 
     return `${dayOfWeek}, ngày ${day} tháng ${month} năm ${year}`;
+}
+function formatShortDateTime(dateString) {
+    const date = new Date(dateString);
+
+    // Mảng chứa các tên của các ngày trong tuần
+    const daysOfWeek = [
+        "Chủ Nhật",
+        "Thứ Hai",
+        "Thứ Ba",
+        "Thứ Tư",
+        "Thứ Năm",
+        "Thứ Sáu",
+        "Thứ Bảy",
+    ];
+
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear();
+    const dayOfWeek = daysOfWeek[date.getDay()]; // Lấy tên ngày trong tuần từ mảng
+
+    return `${dayOfWeek} ${day} - ${month} - ${year}`;
 }
 
 // Format tên bài học
@@ -326,9 +373,9 @@ async function showCoreTable(data) {
         tbody.innerHTML += `
             <tr class="total-row" style="height: 50px;">
                 <td text-align="center" colspan="5" style="font-weight: 600;">
-                    TỔNG SỐ CÂU SAI:<span style="color:${
+                    TỔNG SỐ ĐIỂM SAI:<span style="color:${
                         totalWrong != 0 ? "red" : "green"
-                    };"> ${totalWrong}</span> / ${totalQuestions}
+                    };"> ${totalWrong}</span> / ${totalQuestions} điểm
                 </td>
             </tr>
             <tr class="total-row" style="height: 50px;">
@@ -525,6 +572,24 @@ async function fetchClasses() {
                         `<option value="${item.id}">${item.classname}</option>`
                 )
                 .join("");
+        // Log book write - class dropdown
+        elements.logBookWriteDropdown.innerHTML =
+            '<option value="">-- Chọn Lớp Học --</option>' +
+            data
+                .map(
+                    (item) =>
+                        `<option value="${item.id}">${item.classname}</option>`
+                )
+                .join("");
+        // Log book search - class dropdown
+        elements.logBookSearchClassDropdown.innerHTML =
+            '<option value="">-- Tất cả --</option>' +
+            data
+                .map(
+                    (item) =>
+                        `<option value="${item.id}">${item.classname}</option>`
+                )
+                .join("");
     } catch (error) {
         console.error("Có lỗi xảy ra khi lấy dữ liệu:", error);
     }
@@ -645,11 +710,16 @@ document
 
 // STUDENT MANAGER
 const inputField = document.getElementById("name");
+const inputNameTeacher = document.getElementById("log-book-write__teacher");
 
 // Viết hoa chữ cái đầu của từng từ và cập nhật giá trị của trường input
 inputField.addEventListener("input", () => {
     const value = inputField.value;
     inputField.value = capitalizeFirstLetterOfEachWord(value);
+});
+inputNameTeacher.addEventListener("input", () => {
+    const value = inputNameTeacher.value;
+    inputNameTeacher.value = capitalizeFirstLetterOfEachWord(value);
 });
 function capitalizeFirstLetterOfEachWord(str) {
     return str
@@ -754,6 +824,8 @@ async function fetchStudentsByClass(classId) {
 async function fetchScoreData(class_id, student_id, lesson) {
     try {
         showLoadingModal();
+        document.getElementById("new-score").value = "";
+        document.getElementById("comment").value = "";
         const response = await fetch(url + "score-student", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -833,11 +905,12 @@ async function updateScore(
             hideLoadingModal();
             alert(result);
             // reset lại table sau khi sửa điểm
-            document.getElementById("update-score-form").reset();
+            document.getElementById("student-select").value = "";
+            document.getElementById("new-score").value = "";
+            document.getElementById("comment").value = "";
         }, timeOut);
         handleClearTable();
         fetchClassData();
-        fetchClasses();
     } catch (error) {
         console.error("Có lỗi xảy ra khi cập nhật điểm:", error);
         alert("Có lỗi xảy ra khi cập nhật điểm.");
@@ -933,6 +1006,24 @@ document
                 '<option value="">-- Chọn Học Sinh --</option>'; // Xóa các tùy chọn hiện tại
         }
     });
+
+let studentDataInClass;
+let selectedStudents = new Set();
+// Xử lý khi chọn lớp học để viết sổ đầu bài
+elements.logBookWriteDropdown.addEventListener("change", async function () {
+    const classId = this.value;
+    if (classId) {
+        showLoadingModal();
+        await fetch(url + `class/${classId}/students`)
+            .then((response) => response.json())
+            .then((data) => {
+                studentDataInClass = data;
+            })
+            .finally(() => hideLoadingModal());
+    } else {
+        studentDataInClass = [];
+    }
+});
 // DELETE Student
 // Hàm để lấy danh sách học sinh của lớp học từ API và cập nhật vào dropdown
 async function fetchStudentsForDeletion(classId) {
@@ -954,6 +1045,12 @@ async function fetchStudentsForDeletion(classId) {
         console.error("Có lỗi xảy ra khi lấy danh sách học sinh:", error);
     }
 }
+
+document.addEventListener("click", function (e) {
+    if (!document.getElementById("log-book-write__absent").contains(e.target)) {
+        document.getElementById("suggestions-list").innerHTML = "";
+    }
+});
 
 // Hàm để gửi yêu cầu DELETE xóa học sinh
 async function deleteStudent(studentId, classId) {
@@ -1375,7 +1472,6 @@ function renderLesson(classId) {
             .then((response) => response.json())
             .then((datas) => {
                 setTimeout(() => {
-                    hideLoadingModal();
                     // Xóa các tùy chọn cũ
                     elements.deleteScoreLessonDropdown.innerHTML =
                         '<option value="">-- Chọn Bài --</option>';
@@ -1416,7 +1512,8 @@ function renderLesson(classId) {
             })
             .catch((error) => {
                 console.error("Error fetching lessons:", error);
-            });
+            })
+            .finally(() => hideLoadingModal());
     } else {
         // Nếu không có lớp học nào được chọn, reset dropdown bài học
         elements.deleteScoreLessonDropdown.innerHTML =
@@ -1454,17 +1551,15 @@ elements.deleteScoreLesson.addEventListener("submit", function (event) {
             })
                 .then((response) => response.text())
                 .then((message) => {
-                    setTimeout(() => {
-                        hideLoadingModal();
-                        renderLesson(classId);
-                        alert(message); // Thông báo thành công nếu xoá điểm thành công
-                        // Thực hiện các hành động tiếp theo nếu cần, ví dụ như làm mới bảng điểm
-                    }, timeOut);
+                    renderLesson(classId);
+                    alert(message); // Thông báo thành công nếu xoá điểm thành công
+                    // Thực hiện các hành động tiếp theo nếu cần, ví dụ như làm mới bảng điểm
                 })
                 .catch((error) => {
                     console.error("Có lỗi:", error); // Log lỗi nếu có lỗi xảy ra trong quá trình xoá
                     alert("Đã xảy ra lỗi khi xoá điểm !"); // Thông báo lỗi cho người dùng
-                });
+                })
+                .finally(() => hideLoadingModal());
         }
     } else {
         // Nếu lớp học hoặc bài học chưa được chọn, yêu cầu người dùng chọn trước khi xoá
@@ -1486,6 +1581,570 @@ document
     .getElementById("insert-score__lesson-dropdown")
     .addEventListener("change", updateValueLessonDropdown);
 
+/** CLASS LOG BOOK - Sổ đầu bài */
+
+/** TODAY LOG BOOK */
+function renderLogBook(element, logInfo) {
+    // Xóa nội dung cũ nếu cần
+    element.innerHTML = "";
+
+    // Kiểm tra xem logClassData có phải là một mảng không
+    if (!Array.isArray(logInfo)) {
+        console.error("logInfo không phải là array:", logInfo);
+        return; // Dừng hàm nếu không phải là mảng
+    }
+    logInfo.forEach((log) => {
+        const {
+            classname: className,
+            student_count: studentCount,
+            teacher,
+            part,
+            log_at: dateInfo,
+            content,
+            absentees = [],
+        } = log;
+
+        // Phân loại học sinh vắng có phép và không phép
+        const absentWithPermission = absentees.filter(
+            (student) => student.absent == true
+        );
+        const absentWithoutPermission = absentees.filter(
+            (student) => student.absent == false
+        );
+
+        // Create the HTML structure
+        const logBookHtml = `
+                <div class="log-book-today-class">
+                    <div class="log-book-today-class-item">
+                        <div class="log-book-heading">
+                            <p class="log-book-heading-item">
+                                <i class="fa-solid fa-school"></i>
+                                Lớp: ${className}
+                            </p>
+                            <p class="log-book-heading-item">
+                                <i class="fa-solid fa-graduation-cap"></i>
+                                Sĩ số: ${studentCount}
+                            </p>
+                            <p class="log-book-heading-item">
+                                <i class="fa-solid fa-person-chalkboard"></i>
+                                GV: ${teacher}
+                            </p>
+                        </div>
+                        <div class="log-book-date">
+                            <div class="log-book-date-item">
+                                <i class="fa-solid fa-clock"></i>
+                                ${part}: 
+                                ${formatShortDateTime(dateInfo)}
+                            </div>
+                            <div class="log-book-date-item log-book-date-item__absent">
+                                <span>Vắng: ${absentees.length}</span>
+                                <i class="fa-solid fa-user-graduate"></i>
+                            </div>
+                        </div>
+                        <div class="log-book-contents">
+                            <div class="log-book-content-wrapper">
+                                <div class="log-book-content-lesson">
+                                    <i class="fa-solid fa-book-open"></i>
+                                    <span style="font-weight: 700">Nội dung:</span>
+                                    ${content}
+                                </div>
+                            </div>
+                            <div class="log-book-content">
+                                <div class="log-book-content-wrapper">
+                                    <div class="log-book-content-heading">
+                                        <i class="fa-solid fa-bell"></i>
+                                        Vắng có phép: ${
+                                            absentWithPermission.length
+                                        }
+                                        <i class="fa-solid fa-user-graduate"></i>
+                                    </div>
+                                    <ul class="log-book-content-list">
+                                        ${absentWithPermission
+                                            .map(
+                                                (student, index) => `
+                                            <li class="log-book-content-list-item">
+                                                ${index + 1}. ${
+                                                    student.student_name
+                                                }
+                                                <span>- Lý do: ${
+                                                    student.reason
+                                                        ? student.reason
+                                                        : "không có."
+                                                }</span>
+                                            </li>
+                                        `
+                                            )
+                                            .join("")}
+                                    </ul>
+                                </div>
+                                <div class="log-book-content-wrapper">
+                                    <div class="log-book-content-heading">
+                                        <i class="fa-solid fa-bell-slash"></i>
+                                        Vắng không phép: ${
+                                            absentWithoutPermission.length
+                                        }
+                                        <i class="fa-solid fa-user-graduate"></i>
+                                    </div>
+                                    <ul class="log-book-content-list">
+                                        ${absentWithoutPermission
+                                            .map(
+                                                (student, index) => `
+                                            <li class="log-book-content-list-item">
+                                                ${index + 1}. ${
+                                                    student.student_name
+                                                }
+                                                <span>- Lý do: ${
+                                                    student.reason
+                                                        ? student.reason
+                                                        : "không có."
+                                                }</span>
+                                            </li>
+                                        `
+                                            )
+                                            .join("")}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>    
+            `;
+
+        // Tạo một phần tử DOM mới
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = logBookHtml;
+
+        // Thêm phần tử này vào DOM bằng appendChild()
+        element.appendChild(tempDiv);
+    });
+}
+
+function getTodayDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+}
+
+// SEARCH LOG BOOK
+elements.logBookSearchForm.addEventListener("submit", async function (event) {
+    event.preventDefault(); // Ngăn không reload trang
+
+    // Lấy giá trị từ các trường
+    let logAt = document.getElementById("log-book-search__date").value;
+    let classId = document.getElementById(
+        "log-book-search__class-dropdown"
+    ).value;
+    let part = document.getElementById("log-book-search__part").value;
+    const searchElement = document.getElementById("search-results");
+
+    renderLogBook(
+        searchElement,
+        await fetchLogClassData({
+            date: logAt,
+            classId,
+            part,
+        })
+    );
+});
+
+// WRITE LOG BOOK
+// Gán sự kiện "click" cho mỗi nút
+elements.logBookOptionBtns.forEach((button) => {
+    button.addEventListener("click", () => {
+        // Loại bỏ class "active" khỏi tất cả các nút
+        elements.logBookOptionBtns.forEach((btn) =>
+            btn.classList.remove("active")
+        );
+
+        // Thêm class "active" cho nút vừa được nhấn
+        button.classList.add("active");
+
+        // Hiển thị nội dung tương ứng dựa trên thuộc tính "name"
+        const name = button.getAttribute("name");
+        showLogBookContent(name);
+    });
+});
+
+document
+    .getElementById("log-book-write__absent")
+    .addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+        }
+    });
+
+let studentToRemoved = [];
+
+/// Hiển thị gợi ý khi người dùng nhập vào trường input
+document
+    .getElementById("log-book-write__absent")
+    .addEventListener("input", function () {
+        const query = this.value.toLowerCase();
+        const suggestionsList = document.getElementById("suggestions-list");
+        suggestionsList.innerHTML = "";
+
+        if (!studentDataInClass || studentDataInClass.length === 0) {
+            const messageItem = document.createElement("li");
+            messageItem.textContent =
+                "Không tìm thấy học sinh vì bạn chưa chọn lớp học !";
+            suggestionsList.appendChild(messageItem);
+            return;
+        }
+
+        if (query.length > 0) {
+            const filteredStudents = studentDataInClass.filter((student) =>
+                student.name.toLowerCase().includes(query)
+            );
+
+            filteredStudents.forEach((student) => {
+                const listItem = document.createElement("li");
+                listItem.textContent = student.name;
+                listItem.dataset.value = student.id;
+                listItem.addEventListener("click", function () {
+                    addStudentToSelected(this.textContent, this.dataset.value);
+                    document.getElementById("log-book-write__absent").value =
+                        "";
+                    suggestionsList.innerHTML = "";
+                });
+                suggestionsList.appendChild(listItem);
+            });
+        }
+    });
+
+// Thêm sinh viên vào danh sách đã chọn
+function addStudentToSelected(name, id, absent, reason) {
+    if (!selectedStudents.has(id)) {
+        selectedStudents.add(id);
+        document.querySelector(".absent-count").innerHTML =
+            selectedStudents.size || 0;
+
+        // Lưu thông tin học sinh trước khi xóa
+        const student = studentDataInClass.find(
+            (student) => student.id === parseInt(id)
+        );
+        if (student) {
+            studentToRemoved.push(student); // Thêm học sinh vào mảng
+            studentDataInClass = studentDataInClass.filter(
+                (student) => student.id !== parseInt(id)
+            );
+        }
+
+        const selectedList = document.getElementById("selected-list");
+        const listItem = document.createElement("li");
+        listItem.innerHTML = `
+            <div class="absent-wrapper">
+                <div class="absent-wrapper-item absent-wrapper-item__name">
+                    <i class="fa-solid fa-user-graduate"></i> ${name}
+                </div>
+                <div class="absent-wrapper-item">
+                    <label class="permit-label" for="absent-permit-${id}">
+                        <i class="fa-solid fa-bell"></i> CP
+                    </label>
+                    <input type="radio" name="absent-${id}" id="absent-permit-${id}" value="true" data-student-id="${id}" ${
+            absent == true ? "checked" : ""
+        } required>
+                </div>
+                <div class="absent-wrapper-item">
+                    <label class="no-permit-label" for="absent-no-permit-${id}">
+                        <i class="fa-solid fa-bell-slash"></i> KP
+                    </label>
+                    <input type="radio" name="absent-${id}" id="absent-no-permit-${id}" value="false" data-student-id="${id}" ${
+            absent == false ? "checked" : ""
+        } required>
+                </div>
+                <button class="remove-btn" data-id="${id}">
+                    <i class="fa-regular fa-trash-can error"></i>
+                </button>
+            </div>
+            <input
+                id="log-book-write__reason-${id}"
+                name="reason-${id}"
+                class="add-item-input form-select"
+                placeholder="Nhập lý do vắng học ..."
+                data-student-id="${id}"
+                value="${reason ? reason : ""}"
+            />
+            `;
+
+        listItem
+            .querySelector(".remove-btn")
+            .addEventListener("click", function () {
+                removeStudentFromSelected(this.dataset.id);
+            });
+        selectedList.appendChild(listItem);
+    }
+}
+
+// Xóa sinh viên khỏi danh sách đã chọn
+function removeStudentFromSelected(id) {
+    selectedStudents.delete(id);
+    const selectedList = document.getElementById("selected-list");
+    const studentItem = selectedList
+        .querySelector(`.remove-btn[data-id="${id}"]`)
+        .closest("li");
+
+    if (studentItem) {
+        studentItem.remove();
+        document.querySelector(".absent-count").innerHTML =
+            selectedStudents.size || 0;
+
+        // Tìm học sinh trong mảng studentToRemoved và thêm lại vào studentDataInClass
+        const studentIndex = studentToRemoved.findIndex(
+            (student) => student.id === parseInt(id)
+        );
+        if (studentIndex !== -1) {
+            studentDataInClass.push(studentToRemoved[studentIndex]);
+            studentToRemoved.splice(studentIndex, 1); // Xóa học sinh khỏi studentToRemoved
+        }
+    }
+}
+
+// Ẩn danh sách gợi ý khi nhấp ra ngoài
+document.addEventListener("click", function (e) {
+    if (!document.getElementById("log-book-write__absent").contains(e.target)) {
+        document.getElementById("suggestions-list").innerHTML = "";
+    }
+});
+
+// Hàm chuyển đổi ngày từ dd/mm/yyyy sang yyyy/mm/dd
+function convertDateFormat(dateString) {
+    const parts = dateString.split("/");
+    return `${parts[2]}-${parts[1]}-${parts[0]}`; // yyyy-mm-dd
+}
+
+// Lấy các phần tử từ form
+const partElement = document.getElementById("log-book-write__part");
+const dateElement = document.getElementById("log-book-write__date");
+// Hàm gọi API và điền thông tin vào form
+async function fetchClassLogData() {
+    const teacherElement = document.getElementById("log-book-write__teacher");
+    const contentElement = document.getElementById("log-book-write__content");
+    const selectedList = document.getElementById("selected-list");
+
+    const part = partElement.value;
+    const logAt = dateElement.value;
+    const classId = elements.logBookWriteDropdown.value;
+
+    // Kiểm tra nếu đủ điều kiện (tất cả trường đều được chọn)
+    if (part && logAt && classId) {
+        showLoadingModal();
+
+        // Gọi API để lấy dữ liệu
+        await fetch(
+            url +
+                `log-class?log_at=${convertDateFormat(
+                    logAt
+                )}&class_id=${classId}&part=${part}`
+        )
+            .then((response) => response.json())
+            .then((data) => {
+                const logClass = data[0]; // Giả định chỉ có một kết quả
+
+                // Điền thông tin giáo viên
+                teacherElement.value = logClass ? logClass.teacher : "";
+                // Điền nội dung buổi học
+                contentElement.value = logClass ? logClass.content : "";
+
+                // Xóa danh sách cũ
+                selectedList.innerHTML = "";
+
+                // Làm rỗng selectedStudents trước khi thêm dữ liệu mới
+                selectedStudents.clear();
+                document.querySelector(".absent-count").innerHTML =
+                    selectedStudents.size || 0;
+
+                // Hiển thị danh sách học sinh vắng
+                logClass?.absentees?.forEach((absentStudent) => {
+                    addStudentToSelected(
+                        absentStudent.student_name, // tên học sinh từ API
+                        absentStudent.student_id, // id học sinh
+                        absentStudent.absent,
+                        absentStudent.reason
+                    );
+                });
+            })
+            .catch((error) => {
+                console.error("Có lỗi xảy ra khi gọi API:", error);
+                alert("Đã có lỗi xảy ra, vui lòng liên hệ quản trị viên !");
+            })
+            .finally(() => hideLoadingModal());
+    } else {
+        // Điền thông tin giáo viên
+        teacherElement.value = "";
+        // Điền nội dung buổi học
+        contentElement.value = "";
+
+        // Xóa danh sách cũ
+        selectedList.innerHTML = "";
+
+        // Làm rỗng selectedStudents trước khi thêm dữ liệu mới
+        selectedStudents.clear();
+        document.querySelector(".absent-count").innerHTML =
+            selectedStudents.size || 0;
+        document.getElementById("selected-list").innerHTML = "";
+    }
+}
+
+// Lắng nghe sự kiện change trên các trường
+partElement.addEventListener("change", fetchClassLogData);
+dateElement.addEventListener("change", fetchClassLogData);
+elements.logBookWriteDropdown.addEventListener("change", fetchClassLogData);
+
+// Hàm xử lý sự kiện gửi form
+elements.logBookWrite.addEventListener("submit", function (event) {
+    event.preventDefault(); // Ngăn form gửi đi theo cách mặc định
+
+    // Lấy dữ liệu từ các trường nhập liệu
+    const classId = elements.logBookWriteDropdown.value;
+    const teacher = document.getElementById("log-book-write__teacher").value;
+    const content = document.getElementById("log-book-write__content").value;
+    const part = document.getElementById("log-book-write__part").value;
+    let logAt = document.getElementById("log-book-write__date").value;
+    const countAbsent = selectedStudents.size;
+
+    // Gọi API tạo log-class
+    const logClassData = {
+        class_id: classId,
+        teacher: teacher,
+        count_absent: countAbsent,
+        content: content,
+        part: part,
+        log_at: convertDateFormat(logAt),
+    };
+
+    showLoadingModal();
+    fetch(url + "log-class", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(logClassData),
+    })
+        .then((response) => response.json())
+        .then((logClassResult) => {
+            // Tạo mảng để gom dữ liệu học sinh vắng mặt
+            const absentDataArray = [];
+
+            // Duyệt qua tất cả các học sinh được chọn
+            selectedStudents.forEach((studentId) => {
+                const absent =
+                    document.querySelector(
+                        `input[name="absent-${studentId}"]:checked`
+                    ).value === "true"; // Lấy giá trị absent từ radio button
+                const reason = document.querySelector(
+                    `#log-book-write__reason-${studentId}`
+                ).value;
+
+                // Tạo đối tượng cho mỗi học sinh và thêm vào mảng
+                absentDataArray.push({
+                    log_id: logClassResult.status,
+                    class_id: classId,
+                    student_id: studentId,
+                    absent: absent,
+                    reason: reason,
+                    part: part,
+                    absent_at: convertDateFormat(logAt),
+                });
+            });
+
+            // Gọi API /absent một lần với mảng dữ liệu
+            fetch(url + "absent", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(absentDataArray),
+            })
+                .then(() => {
+                    elements.logBookWrite.reset();
+                    selectedStudents.clear();
+                    document.querySelector(".absent-count").innerHTML =
+                        selectedStudents.size || 0;
+                    document.getElementById("selected-list").innerHTML = "";
+                })
+                .catch((error) => {
+                    alert("Đã có lỗi sảy ra !");
+                    console.error("Có lỗi khi tạo absent:", error);
+                });
+
+            alert(logClassResult.title);
+        })
+        .catch((error) => {
+            alert("Đã có lỗi sảy ra !");
+            console.error("Có lỗi khi tạo log-class:", error);
+        })
+        .finally(() => hideLoadingModal());
+});
+
+// Func lấy api log class
+async function fetchLogClassData(condition) {
+    const { date, classId, part, teacher } = condition;
+    const params = new URLSearchParams({
+        ...(date !== null &&
+            date !== undefined &&
+            date !== "" && { log_at: date }), // Thêm log_at nếu có giá trị hợp lệ
+        ...(classId !== null &&
+            classId !== undefined &&
+            classId !== "" && { class_id: classId }), // Thêm class_id nếu có giá trị hợp lệ
+        ...(part !== null &&
+            part !== undefined &&
+            part !== "" && { part: part }), // Thêm part nếu có giá trị hợp lệ
+        ...(teacher && { teacher: teacher }), // Thêm teacher nếu có giá trị hợp lệ
+    });
+    try {
+        showLoadingModal();
+        const response = await fetch(`${url}log-class?${params.toString()}`);
+        const logClassData = await response.json();
+        hideLoadingModal();
+
+        // Kiểm tra kiểu dữ liệu
+        if (!Array.isArray(logClassData)) {
+            console.error("logClassData không phải là một mảng:", logClassData);
+            return [];
+        }
+        return logClassData;
+    } catch (error) {
+        console.error("Có lỗi sảy ra khi lấy dữ liệu:", error);
+        return [];
+    }
+}
+
+async function showLogBookContent(name) {
+    // Ẩn tất cả các phần tử nội dung
+    elements.logBookToday.style.display = "none";
+    elements.logBookSearch.style.display = "none";
+    elements.logBookWrite.style.display = "none";
+
+    // Hiển thị phần tử tương ứng với nút được nhấn
+    if (name === "today") {
+        elements.logBookToday.style.display = "block";
+        renderLogBook(
+            elements.logBookToday,
+            await fetchLogClassData({
+                date: getTodayDate(),
+                classId: null,
+                part: null,
+                teacher: null,
+            })
+        );
+    } else if (name === "search") {
+        elements.logBookSearch.style.display = "block";
+    } else if (name === "write") {
+        elements.logBookWrite.style.display = "block";
+    }
+}
+
 // Gọi hàm để lấy dữ liệu ban đầu
 fetchClassData();
 fetchClasses();
+renderLogBook(
+    elements.logBookToday,
+    await fetchLogClassData({
+        date: getTodayDate(),
+        classId: null,
+        part: null,
+        teacher: null,
+    })
+);
