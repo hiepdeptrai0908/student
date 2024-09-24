@@ -777,7 +777,6 @@ a:focus {
 }
 
 .log-book-content-heading {
-    margin-bottom: 6px;
     font-weight: 700;
 }
 
@@ -786,6 +785,7 @@ a:focus {
 }
 
 .log-book-content-list-item {
+    margin-top: 8px;
     margin-bottom: 8px;
     margin-left: 4px;
 }
