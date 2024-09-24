@@ -1,6 +1,5 @@
 html {
-    font-size: 75%;
-    max-width: 764px;
+    font-size: 100%;
     margin: auto;
 }
 
@@ -8,15 +7,31 @@ body {
     width: 100%;
     margin: auto;
     padding: 20px 12px;
-    line-height: 20px;
+    line-height: 28px;
     font-family: sans-serif;
     color: #444;
     position: relative;
 }
 
 .wrapper {
+    position: relative;
     display: block;
+    margin: 0 auto;
     margin-bottom: 50px;
+}
+
+.hoa-anh-dao {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    opacity: 0.1;
+}
+
+.contents {
+    width: 100%;
 }
 
 .manager-core-table,
@@ -432,6 +447,8 @@ a:focus {
     width: auto;
     display: flex;
     flex-direction: column;
+    font-size: 14px;
+    line-height: 18px;
 }
 
 .file-items {
@@ -847,20 +864,29 @@ a:focus {
 .suggestions-list {
     position: absolute;
     width: auto;
-    min-width: 200px;
+    min-width: 250px;
     height: auto;
+    max-height: 200px;
+    overflow: scroll;
     border-radius: 8px;
-    margin: -10px auto 0 30px;
-    background: rgb(139, 139, 139);
+    margin-top: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgb(152, 152, 152);
     color: #f7f5f5;
     z-index: 1000;
     padding: 0;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.6);
 }
 
 .suggestions-list li {
     padding: 8px 12px;
     left: 0;
     cursor: pointer;
+}
+
+.suggestions-list li:nth-child(odd) {
+    background-color: rgb(162, 162, 162);
 }
 
 .suggestions-list li:hover {
@@ -893,6 +919,7 @@ a:focus {
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    width: 100%;
 }
 
 .absent-wrapper-item > label {
@@ -962,6 +989,7 @@ input[type="radio"] {
 }
 
 .remove-btn {
+    width: auto;
     background: none;
     border: none;
     color: red;
@@ -1029,50 +1057,4 @@ input[type="radio"] {
 
 .slide-in-right {
     animation-name: slideInRight;
-}
-
-@media only screen and (max-width: 500px) {
-    .file-items {
-        flex-direction: column;
-    }
-    .file-heading {
-        width: 100%;
-        line-height: 20px;
-        margin-bottom: 14px;
-    }
-    .file {
-        width: 100%;
-    }
-    .file-link {
-        width: 100%;
-        margin-left: 8px;
-    }
-    .file-link:first-child {
-        margin-left: 0;
-    }
-    .log-book-content {
-        flex-direction: column;
-    }
-    .log-book-content-wrapper {
-        margin: 4px 0;
-    }
-    .log-book-content-wrapper + .log-book-content-wrapper {
-        margin-left: 0px;
-    }
-    .flatpickr-calendar {
-        width: 40%;
-        min-width: 310px;
-        display: block;
-        transform: translateX(
-            0%
-        ); /* Di chuyển phần tử về bên trái 50% chiều rộng của nó */
-        top: 0; /* Đặt vị trí ở trên cùng */
-        left: 50%; /* Đặt phần tử ở giữa chiều ngang */
-        position: absolute; /* Cần để sử dụng left và transform */
-        right: auto;
-        /* Thêm các thuộc tính khác nếu cần */
-    }
-    .manager-class-log-book {
-        font-size: 11px;
-    }
 }

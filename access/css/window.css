@@ -1,0 +1,109 @@
+@media only screen and (min-width: 1000px) {
+    html {
+        font-size: 100%;
+        margin: auto;
+    }
+
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-bottom: 50px;
+    }
+
+    .form-select-mobile {
+        display: none;
+    }
+
+    .form-select-window {
+        position: fixed;
+        display: flex;
+        align-items: center;
+        flex-direction: column; /* Đảm bảo các nút được xếp theo cột */
+        width: 300px;
+        height: 100vh;
+        top: 0;
+        left: 0;
+        background-color: #0000000e;
+        padding: 20px;
+        gap: 10px; /* Khoảng cách giữa các nút */
+    }
+
+    .logo {
+        position: absolute;
+        width: 250px;
+        height: 250px;
+        top: -60px;
+        object-fit: cover;
+        object-position: top;
+    }
+
+    .btn-option-hoa {
+        position: absolute;
+        width: 300px;
+        left: 0;
+        bottom: 0;
+        object-fit: cover;
+    }
+
+    .contents {
+        width: 850px;
+        position: absolute; /* Đảm bảo vị trí chính xác so với màn hình */
+        left: 50%;
+        top: 0;
+        transform: translateX(
+            calc(-50% + 150px)
+        ); /* Điều chỉnh vị trí sang phải với khoảng cách từ menu */
+        padding: 20px;
+    }
+
+    .contents.centered {
+        position: absolute;
+        top: 0px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 800px;
+        padding: 20px;
+    }
+
+    .btn-options {
+        position: absolute;
+        top: 200px;
+        width: 90%;
+        display: flex;
+        flex-direction: column;
+        gap: 18px; /* Khoảng cách giữa các nút */
+    }
+
+    .btn-option {
+        border: none;
+        text-align: left;
+        background-color: #dddddd;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .btn-option:hover {
+        background-color: #ffef9de1;
+    }
+
+    .btn-option.active {
+        background-color: #ffbb82;
+    }
+
+    .manager-class-log-book {
+        line-height: 18px;
+        font-size: 14px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .delete-btn {
+        width: 34px;
+        height: 34px;
+        position: absolute;
+        bottom: 50%;
+        transform: translateY(50%);
+        right: -40px;
+        background-color: #949494;
+    }
+}

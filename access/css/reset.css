@@ -133,7 +133,16 @@ table {
     width: 20px;
     color: rgb(35, 119, 111);
     text-align: start;
-    margin-left: 4px;
+    margin-left: 2px;
+}
+.fa-clock {
+    margin-left: 0px;
+    margin-right: 2px;
+    width: auto;
+}
+
+i {
+    font-style: italic;
 }
 
 i.white {

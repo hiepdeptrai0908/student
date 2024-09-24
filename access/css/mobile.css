@@ -1,0 +1,109 @@
+@media only screen and (max-width: 600px) {
+    body {
+        width: 100%;
+    }
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 50px;
+    }
+    /* 
+    .contents {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto;
+        padding: 20px;
+    } */
+
+    .form-select-window {
+        display: none;
+    }
+    .file-items {
+        flex-direction: column;
+    }
+    .file-heading {
+        width: 100%;
+        line-height: 20px;
+        margin-bottom: 14px;
+    }
+    .file {
+        width: 100%;
+    }
+    .file-link {
+        width: 100%;
+        margin-left: 8px;
+    }
+    .file-link:first-child {
+        margin-left: 0;
+    }
+    .log-book-content {
+        flex-direction: column;
+    }
+    .log-book-content-wrapper {
+        margin: 4px 0;
+    }
+    .log-book-content-wrapper + .log-book-content-wrapper {
+        margin-left: 0px;
+    }
+    .flatpickr-calendar {
+        width: 40%;
+        min-width: 310px;
+        display: block;
+        transform: translateX(
+            0%
+        ); /* Di chuyển phần tử về bên trái 50% chiều rộng của nó */
+        top: 0; /* Đặt vị trí ở trên cùng */
+        left: 50%; /* Đặt phần tử ở giữa chiều ngang */
+        position: absolute; /* Cần để sử dụng left và transform */
+        right: auto;
+        /* Thêm các thuộc tính khác nếu cần */
+    }
+    .manager-class-log-book {
+        font-size: 12px;
+    }
+
+    .log-book-date-item {
+        font-size: 11.5px;
+    }
+
+    .fa-regular,
+    .fa-solid {
+        width: 20px;
+        color: rgb(35, 119, 111);
+        text-align: start;
+        margin-left: 2px;
+    }
+    .fa-clock {
+        margin-left: 0px;
+        margin-right: 2px;
+        width: auto;
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+    .form-select-window {
+        display: none;
+    }
+    html {
+        font-size: 90%;
+        max-width: 1000px;
+        margin: auto;
+    }
+    body {
+        width: 100%;
+    }
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 50px;
+    }
+}

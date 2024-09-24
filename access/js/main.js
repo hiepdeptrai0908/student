@@ -4,6 +4,9 @@ import url from "../../url.js";
 
 const elements = {
     wrapper: document.querySelector(".wrapper"),
+    mobileOption: document.querySelector(".form-select-mobile"),
+    windowOption: document.querySelector(".form-select-window"),
+    contentElements: document.querySelector(".contents"),
     managerOption: document.getElementById("manager-option"),
     managerCoreTable: document.querySelector(".manager-core-table"),
     managerClass: document.querySelector(".manager-class"),
@@ -15,6 +18,7 @@ const elements = {
     lessonSelectElement: document.getElementById("lesson-select"),
     classnameInputElement: document.getElementById("classname-input"),
     scoreCreatedAtElement: document.getElementById("score-created-at"),
+    modalOverlay: document.querySelector(".modal-overlay"),
     modalOverlay: document.querySelector(".modal-overlay"),
     loginInput: document.querySelector(".modal-login-input"),
     loginBtn: document.querySelector(".btn-login"),
@@ -89,9 +93,12 @@ function handleLogin() {
 
     if (loginInputValue === "HS") {
         elements.modalOverlay.style.display = "none";
+        elements.contentElements.classList.add("centered");
         toggleVisibility(
-            [elements.wrapper],
+            [elements.wrapper, elements.managerCoreTable],
             [
+                elements.mobileOption,
+                elements.windowOption,
                 elements.managerOption,
                 elements.managerClass,
                 elements.managerStudent,
@@ -126,6 +133,44 @@ function handleLogin() {
 function handleChangeLoginInput(event) {
     elements.loginBtn.value = event.target.value.trim().toUpperCase();
 }
+
+// Lấy giá trị từ localStorage và đặt trạng thái 'active' ban đầu
+document.addEventListener("DOMContentLoaded", function () {
+    const savedOptionValue =
+        localStorage.getItem("manager-option-value") || "1";
+
+    // Gọi optionScreen để hiển thị đúng nội dung dựa trên giá trị đã lưu
+    optionScreen(savedOptionValue);
+
+    // Đặt 'active' cho nút tương ứng với giá trị đã lưu
+    document.querySelectorAll(".btn-option").forEach((button) => {
+        const optionValue = button.getAttribute("data-value");
+        if (optionValue === savedOptionValue) {
+            button.classList.add("active");
+        } else {
+            button.classList.remove("active");
+        }
+    });
+});
+
+// Lắng nghe sự kiện nhấn nút cho phiên bản Windows
+document.querySelectorAll(".btn-option").forEach((button) => {
+    button.addEventListener("click", function () {
+        const optionValue = this.getAttribute("data-value");
+
+        // Xóa class 'active' từ tất cả các nút
+        document
+            .querySelectorAll(".btn-option")
+            .forEach((btn) => btn.classList.remove("active"));
+
+        // Thêm class 'active' vào nút hiện tại
+        this.classList.add("active");
+
+        // Gọi hàm xử lý hiển thị và lưu lại lựa chọn
+        optionScreen(optionValue);
+        localStorage.setItem("manager-option-value", optionValue);
+    });
+});
 
 // Xử lý màn hình tùy chọn quản lý
 function optionScreen(

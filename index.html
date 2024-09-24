@@ -38,6 +38,8 @@
 
         <link rel="stylesheet" href="access/css/reset.css" />
         <link rel="stylesheet" href="access/css/style.css" />
+        <link rel="stylesheet" href="access/css/window.css" />
+        <link rel="stylesheet" href="access/css/mobile.css" />
     </head>
     <body>
         <div class="modal-overlay">
@@ -63,489 +65,53 @@
             </div>
         </div>
         <div class="wrapper">
-            <select class="form-select" id="manager-option">
-                <!-- Các tùy chọn bài học -->
+            <img class="hoa-anh-dao" src="access/images/hoa.png" alt="" />
+            <select class="form-select form-select-mobile" id="manager-option">
                 <option value="1">Hiển thị bảng điểm</option>
                 <option value="2">Quản lý lớp học</option>
                 <option value="3">Quản lý học sinh</option>
                 <option value="4">Nhập điểm</option>
                 <option value="5">Download tài liệu</option>
                 <option value="6">Sổ đầu bài</option>
-
-                <!-- Thêm các tùy chọn khác nếu cần -->
             </select>
 
-            <!-- Quản lý bảng điểm -->
-            <div class="manager-core-table">
-                <select
-                    class="add-item-input form-select"
-                    id="screen-score__class-dropdown"
-                    name="classname"
-                    required
-                >
-                    <option value="">-- Chọn Lớp Học --</option>
-                    <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
-                </select>
-
-                <select
-                    class="add-item-input form-select"
-                    id="screen-score__lesson-dropdown"
-                    name="lesson"
-                    required
-                >
-                    <option value="">-- Chọn Bài --</option>
-                    <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
-                </select>
-                <div class="rank">
-                    <div class="rank-item rank-item-max">
-                        <p class="rank-item-title">Điểm cao nhất:</p>
-                    </div>
-                    <div class="rank-item rank-item-min">
-                        <p class="rank-item-title">Điểm thấp nhất:</p>
-                    </div>
-                    <div class="rank-item rank-item-no-test">
-                        <p class="rank-item-title">Chưa kiểm tra:</p>
-                    </div>
+            <div class="form-select-window">
+                <img
+                    class="logo"
+                    src="access/images/logo-dongminh.png"
+                    alt=""
+                />
+                <div class="btn-options">
+                    <button class="btn-option active" data-value="1">
+                        Hiển thị bảng điểm
+                    </button>
+                    <button class="btn-option" data-value="2">
+                        Quản lý lớp học
+                    </button>
+                    <button class="btn-option" data-value="3">
+                        Quản lý học sinh
+                    </button>
+                    <button class="btn-option" data-value="4">Nhập điểm</button>
+                    <button class="btn-option" data-value="5">
+                        Download tài liệu
+                    </button>
+                    <button class="btn-option" data-value="6">
+                        Sổ đầu bài
+                    </button>
                 </div>
-                <hr />
-                <div class="created-at">
-                    Điểm đã được tạo vào lúc:<br />
-                    <span id="score-created-at">
-                        00:00 ngày 00 tháng 00 năm 0000</span
-                    >
-                </div>
-                <div class="table-wrapper">
-                    <div style="text-align: center">
-                        Thang điểm: <b id="show-max-score__table"></b>
-                    </div>
-                    <table
-                        class="table-score table-hover border"
-                        style="width: 100%"
-                        id="student-table"
-                    ></table>
-                </div>
+                <img
+                    class="btn-option-hoa"
+                    src="access/images/cay-hoa.png"
+                    alt=""
+                />
             </div>
 
-            <!-- Quản lý lớp học -->
-            <div class="manager-class">
-                <!-- Bảng hiển thị danh sách lớp học -->
-                <div class="table-class-wrapper">
-                    <table
-                        class="table table-class border"
-                        style="width: 100%"
-                        id="class-table"
-                    >
-                        <thead>
-                            <tr class="table-light">
-                                <th width="30px">STT</th>
-                                <th style="min-width: 90px">Tên Lớp</th>
-                                <th style="min-width: 60px">Sĩ Số</th>
-                                <th style="min-width: 60px">Kiểm Tra</th>
-                                <th style="min-width: 80px">Ngày Tạo</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Dữ liệu sẽ được thêm vào đây bằng JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Form thêm lớp học mới -->
-                <form id="add-class-form">
-                    <h2>Thêm Lớp Học Mới</h2>
-                    <div class="add-item">
-                        <label class="add-item-title" for="add-classname"
-                            >Tên Lớp:</label
-                        >
-                        <input
-                            class="add-item-input"
-                            type="text"
-                            id="add-classname"
-                            name="classname"
-                            value="N5 - 0"
-                            autocomplete="off"
-                            required
-                        />
-                    </div>
-                    <button class="btn btn-success" type="submit">
-                        <i class="fa-regular fa-square-plus white"></i>Thêm
-                    </button>
-                </form>
-                <hr />
-                <!-- Form sửa lớp học -->
-                <form id="edit-class-form">
-                    <h2>Sửa Lớp Học</h2>
-                    <div class="add-item">
-                        <label class="add-item-title" for="old-class-dropdown"
-                            >Tên Lớp Cũ:</label
-                        >
-                        <select
-                            class="add-item-input form-select"
-                            id="old-class-dropdown"
-                            name="classname"
-                            required
-                        >
-                            <option value="">-- Chọn Lớp Học --</option>
-                            <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
-                        </select>
-                    </div>
-                    <div class="add-item">
-                        <label class="add-item-title" for="new-classname"
-                            >Tên Lớp Mới:</label
-                        >
-                        <input
-                            class="add-item-input"
-                            type="text"
-                            id="new-classname"
-                            name="new_classname"
-                            value=""
-                            autocomplete="off"
-                            required
-                        />
-                    </div>
-                    <button class="btn btn-primary" type="submit">
-                        <i class="fa-solid fa-arrows-rotate white"></i>Cập Nhật
-                    </button>
-                </form>
-                <hr />
-                <!-- Form xóa lớp học -->
-                <form id="delete-class-form">
-                    <h2>Xóa Lớp Học</h2>
-                    <div class="add-item">
-                        <label
-                            class="add-item-title"
-                            for="delete-class-dropdown"
-                            >Chọn Lớp Học:</label
-                        >
-                        <select
-                            class="add-item-input form-select"
-                            id="delete-class-dropdown"
-                            name="classname"
-                            required
-                        >
-                            <option value="">-- Chọn Lớp Học --</option>
-                            <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
-                        </select>
-                    </div>
-                    <button class="btn btn-danger" type="submit">
-                        <i class="fa-solid fa-trash-can white"></i>Xóa
-                    </button>
-                </form>
-            </div>
-
-            <!-- Quản lý học sinh -->
-            <div class="manager-student">
-                <!-- Form thêm học sinh -->
-                <form id="add-student-form">
-                    <h2>Thêm Học Sinh Mới</h2>
-
-                    <div class="add-item">
-                        <label class="add-item-title" for="classname"
-                            >Tên Lớp:</label
-                        >
-                        <select
-                            class="add-item-input form-select"
-                            id="old-student-dropdown"
-                            name="classname"
-                            required
-                        >
-                            <option value="">-- Chọn Lớp Học --</option>
-                            <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="add-item-title" for="name"
-                            >Họ & Tên:</label
-                        >
-                        <input
-                            class="add-item-input"
-                            type="text"
-                            id="name"
-                            name="name"
-                            autocomplete="off"
-                            required
-                        />
-                    </div>
-
-                    <button class="btn btn-success" type="submit">
-                        <i class="fa-regular fa-square-plus white"></i>Thêm
-                    </button>
-                </form>
-                <hr />
-
-                <!-- Form sửa điểm -->
-                <form id="update-score-form">
-                    <h2>Sửa Điểm Học Sinh</h2>
-
-                    <div class="add-item">
-                        <label class="add-item-title" for="classname-update"
-                            >Tên Lớp:</label
-                        >
-                        <select
-                            class="add-item-input form-select"
-                            id="update-student-dropdown"
-                            name="classname"
-                            required
-                        >
-                            <option value="">-- Chọn Lớp Học --</option>
-                            <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="add-item-title" for="student-select"
-                            >Họ & Tên:</label
-                        >
-                        <select
-                            class="add-item-input"
-                            id="student-select"
-                            name="student-select"
-                            required
-                        >
-                            <option value="">-- Chọn Học Sinh --</option>
-                            <!-- Options will be added dynamically here -->
-                        </select>
-                    </div>
-
-                    <div class="add-item">
-                        <label class="add-item-title" for="lesson"
-                            >Nội dung kiểm tra:</label
-                        >
-                        <select
-                            name="lesson"
-                            id="lesson"
-                            class="add-item-input form-select"
-                            required
-                        >
-                            <!-- Các option đã được rút gọn -->
-                            <option value="">-- Chọn Bài --</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="add-item-title" for="new-score"
-                            >Điểm Mới: （<i
-                                >Thang điểm:
-                                <b id="show-max-score__update">... đ</b></i
-                            >）</label
-                        >
-                        <input
-                            class="add-item-input"
-                            type="number"
-                            id="new-score"
-                            name="new-score"
-                            autocomplete="off"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label class="add-item-title" for="new-score"
-                            >Chú thích:
-                            <i style="opacity: 0.7"
-                                >(※Lưu ý: Nếu nhập chữ "<span style="color: red"
-                                    >Chưa nộp phạt</span
-                                >" sẽ hiện màu đỏ.)</i
-                            ></label
-                        >
-                        <input
-                            class="add-item-input"
-                            type="text"
-                            id="comment"
-                            name="comment"
-                            autocomplete="off"
-                        />
-                    </div>
-                    <button class="btn btn-primary" type="submit">
-                        <i class="fa-solid fa-arrows-rotate white"></i>Cập Nhật
-                        Điểm
-                    </button>
-                </form>
-                <hr />
-                <!-- Form xóa học sinh -->
-                <form id="delete-student-form">
-                    <h2>Xóa Học Sinh</h2>
-                    <div class="add-item">
-                        <label class="add-item-title" for="delete-classname"
-                            >Tên Lớp:</label
-                        >
-                        <select
-                            class="add-item-input form-select"
-                            id="delete-student-dropdown"
-                            name="classname"
-                            required
-                        >
-                            <option value="">-- Chọn Lớp Học --</option>
-                            <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
-                        </select>
-                    </div>
-                    <div class="add-item">
-                        <label class="add-item-title" for="delete-name"
-                            >Họ & Tên:</label
-                        >
-                        <select
-                            class="add-item-input"
-                            id="delete-student-select"
-                            name="student-select"
-                            required
-                        >
-                            <option value="">-- Chọn Học Sinh --</option>
-                            <!-- Options will be added dynamically here -->
-                        </select>
-                    </div>
-
-                    <button class="btn btn-danger" type="submit">
-                        <i class="fa-solid fa-trash-can white"></i>Xóa
-                    </button>
-                </form>
-                <hr />
-                <!-- Form thông tin học sinh -->
-                <div>
-                    <h2>Bảng điểm cá nhân</h2>
-                    <div class="add-item">
-                        <label
-                            class="add-item-title"
-                            for="table-student-dropdown"
-                            >Tên Lớp:</label
-                        >
-                        <select
-                            class="add-item-input form-select"
-                            id="table-student-dropdown"
-                            name="classname"
-                            required
-                        >
-                            <option value="">-- Chọn Lớp Học --</option>
-                            <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
-                        </select>
-                    </div>
-                    <div class="add-item">
-                        <label class="add-item-title" for="table-student-select"
-                            >Họ & Tên:</label
-                        >
-                        <select
-                            class="add-item-input"
-                            id="table-student-select"
-                            name="student-select"
-                            required
-                        >
-                            <option value="">-- Chọn Học Sinh --</option>
-                            <!-- Options will be added dynamically here -->
-                        </select>
-                    </div>
-                    <div class="table-wrapper">
-                        <div style="text-align: center">
-                            Thang điểm:
-                            <b id="show-max-score__student">... đ</b>
-                        </div>
-                        <table
-                            class="table border"
-                            style="width: 100%"
-                            id="student-score-table"
-                        >
-                            <thead>
-                                <tr class="table-light">
-                                    <th width="30px">STT</th>
-                                    <th width="100px">Nội Dung</th>
-                                    <th width="45px">Thang Điểm</th>
-                                    <th width="45px">Điểm</th>
-                                    <th style="min-width: 110px">Chú Thích</th>
-                                    <th width="120px">Ngày Tạo</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Dữ liệu sẽ được thêm vào đây bằng JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- NHẬP ĐIỂM -->
-            <div class="manager-insert-core">
-                <form id="score-form" method="post">
+            <div class="contents">
+                <!-- Quản lý bảng điểm -->
+                <div class="manager-core-table">
                     <select
                         class="add-item-input form-select"
-                        id="insert-score__class-dropdown"
-                        name="classname"
-                        required
-                    >
-                        <option value="">-- Chọn Lớp Học --</option>
-                        <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
-                    </select>
-                    <select
-                        name="lesson"
-                        id="insert-score__test-content-dropdown"
-                        class="add-item-input form-select"
-                    >
-                        <!-- Các option đã được rút gọn -->
-                        <option value="">-- Chọn nội dung kiểm tra --</option>
-                        <option value="0">Từ vựng</option>
-                        <option value="1">Ngữ pháp</option>
-                        <option value="2">Hán tự</option>
-                        <option value="3">Định kỳ 2 bài: Minano Nihongo</option>
-                        <option value="4">Định kỳ 5 bài: Minano Nihongo</option>
-                        <option value="5">Định kỳ 5 bài: Look And Learn</option>
-                        <option value="6">JLPT thi thử</option>
-                        <option value="7">Làm văn</option>
-                        <!-- Thêm các option khác nếu cần -->
-                    </select>
-                    <div>
-                        <select
-                            name="lesson"
-                            id="insert-score__lesson-dropdown"
-                            class="add-item-input form-select"
-                        >
-                            <!-- Các option đã được rút gọn -->
-                            <option value="">-- Chọn Bài --</option>
-                        </select>
-                        <label class="add-item-title" for="max-score"
-                            >Thang điểm:</label
-                        >
-                        <input
-                            class="add-item-input"
-                            type="number"
-                            id="insert-score__max-score"
-                            name="max-score"
-                            autocomplete="off"
-                            max="180"
-                            value="50"
-                            required
-                        />
-                    </div>
-
-                    <div class="table-wrapper">
-                        <table
-                            class="table border"
-                            style="width: 100%"
-                            id="insert-score__student-table"
-                        >
-                            <thead>
-                                <tr class="table-light">
-                                    <th width="40px">STT</th>
-                                    <th>Họ và Tên</th>
-                                    <th width="100px">Điểm</th>
-                                    <th>Chú thích</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Dữ liệu sẽ được thêm vào đây bằng JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <button
-                        class="btn btn-success"
-                        style="margin-top: 10px"
-                        type="submit"
-                    >
-                        Xác nhận
-                    </button>
-                </form>
-                <hr />
-                <form id="delete-score-lesson">
-                    <h2>Xoá điểm của cả lớp</h2>
-
-                    <select
-                        class="add-item-input form-select"
-                        id="delete-score__class-dropdown"
+                        id="screen-score__class-dropdown"
                         name="classname"
                         required
                     >
@@ -555,834 +121,1326 @@
 
                     <select
                         class="add-item-input form-select"
-                        id="delete-score__lesson-dropdown"
+                        id="screen-score__lesson-dropdown"
                         name="lesson"
                         required
                     >
                         <option value="">-- Chọn Bài --</option>
                         <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
                     </select>
-                    <button class="btn btn-danger" type="submit">
-                        <i class="fa-solid fa-trash-can white"></i>
-                        Xoá điểm
-                    </button>
-                </form>
-            </div>
-            <div class="manager-files">
-                <div class="file-items">
-                    <h2 class="file-heading">Nhập môn tiếng nhật</h2>
-                    <ol class="file">
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/chu_cai/総合_ひらがなとカタカナ.pdf"
-                                target="_blank"
-                                >2 Bảng chữ cái</a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/chu_cai/hiragana_book.pdf"
-                                target="_blank"
-                                >Tập viết bảng Hiragana</a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/chu_cai/katakana_book.pdf"
-                                target="_blank"
-                                >Tập viết bảng Katakana</a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/chu_cai/基本の挨拶.pdf"
-                                target="_blank"
-                                >12 mẫu câu chào hỏi cơ bản</a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/chu_cai/基本の自己紹介.pdf"
-                                target="_blank"
-                                >Giới thiệu bản thân cơ bản</a
-                            >
-                        </li>
-                    </ol>
-                </div>
-
-                <br />
-                <hr />
-                <br />
-                <!-- Bộ Thủ -->
-                <div class="file-items">
-                    <h2 class="file-heading">
-                        Quy Tắc Hán Tự <br />&<br />Bộ Thủ
-                    </h2>
-                    <ol class="file">
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/bo_thu/漢字のロードマップ.pdf"
-                                target="_blank"
-                                >File PDF giới thiệu lộ trình học Hán Tự<br /><span
-                                    style="
-                                        text-transform: none;
-                                        font-style: italic;
-                                    "
-                                    >(Nếu photo cho học sinh thì bỏ đi 2 trang
-                                    cuối)</span
-                                ></a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/bo_thu/PTKSのルール.pdf"
-                                target="_blank"
-                                >Quy tắc PTKS (Phòng Trọ Khách Sạn)
-                            </a>
-                        </li>
-
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/bo_thu/音予測ルール.pdf"
-                                target="_blank"
-                                >Bộ quy tắc đoán âm ONYOMI từ Hán Việt<br /><span
-                                    style="
-                                        text-transform: none;
-                                        font-style: italic;
-                                    "
-                                    >(1 tờ - 1 trang: Không nên photo 2 mặt vì
-                                    khó nhìn)</span
-                                ></a
-                            >
-                        </li>
-
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/bo_thu/140部首.zip"
-                                target="_blank"
-                                onclick="return confirm('Tiến hành tải xuống file tài liệu 140 bộ thủ ?');"
-                                >140 Bộ Thủ</a
-                            >
-                        </li>
-                    </ol>
-                </div>
-
-                <br />
-                <hr />
-                <br />
-
-                <!-- Giáo Án -->
-                <div class="file-items">
-                    <h2 class="file-heading">Giáo Án</h2>
-                    <ol class="file">
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/giao_an/N5のカリキュラム (みんなの日本語初級I).pdf"
-                                target="_blank"
-                                >N5のカリキュラム (みんなの日本語初級I)</a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/giao_an/N4のカリキュラム (みんなの日本語初級II).pdf"
-                                target="_blank"
-                                >N4のカリキュラム (みんなの日本語初級II)</a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/giao_an/N3のカリキュラム (総まとめ).pdf"
-                                target="_blank"
-                                >N3のカリキュラム (総まとめ)</a
-                            >
-                        </li>
-                    </ol>
-                </div>
-
-                <br />
-                <hr />
-                <br />
-
-                <!-- Từ vựng -->
-                <div class="file-items">
-                    <h2 class="file-heading">Kiểm Tra Từ Vựng</h2>
-                    <ol class="file">
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/vocabulary/voca_n5.xlsx"
-                                download="Kiểm Tra Từ Vựng N5"
-                                onclick="return confirm('Tiến hành tải xuống file kiểm tra từ vựng 25 bài N5 ?');"
-                                >File Kiểm Tra Từ Vựng 25 bài N5</a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/vocabulary/voca_n4.xlsx"
-                                download="Kiểm Tra Từ Vựng N4"
-                                onclick="return confirm('Tiến hành tải xuống file kiểm tra từ vựng 25 bài N4 ?');"
-                                >File Kiểm Tra Từ Vựng 25 bài N4</a
-                            >
-                        </li>
-                    </ol>
-                </div>
-
-                <br />
-                <hr />
-                <br />
-                <!-- Ngữ pháp -->
-                <div class="file-items">
-                    <h2 class="file-heading">Kiểm Tra Ngữ Pháp</h2>
-                    <ol class="file">
-                        <li class="file-item">
-                            <a
-                                class="file-link disabled"
-                                href="./access/files/vocabulary/voca_n5.xlsx"
-                                download=""
-                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra ngữ pháp N5 ?');"
-                                >Ngữ Pháp N5</a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link disabled"
-                                href="./access/files/vocabulary/voca_n4.xlsx"
-                                download=""
-                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra ngữ pháp N4 ?');"
-                                >Ngữ Pháp N4</a
-                            >
-                        </li>
-                    </ol>
-                </div>
-
-                <br />
-                <hr />
-                <br />
-                <!-- Viết hán tự từ vựng N5 -->
-                <div class="file-items">
-                    <h2 class="file-heading">
-                        Viết hán tự từ vựng N5<br />MINANO NIHONGO
-                    </h2>
-                    <ol class="file">
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/han_tu_mina/第1課の漢字_みんなの日本語.pdf"
-                                target="_blank"
-                                >Bài 1</a
-                            >
-                            <a
-                                class="file-link"
-                                href="./access/files/han_tu_mina/第2課の漢字_みんなの日本語.pdf"
-                                target="_blank"
-                                >Bài 2</a
-                            >
-                            <a
-                                class="file-link"
-                                href="./access/files/han_tu_mina/第3課の漢字_みんなの日本語.pdf"
-                                target="_blank"
-                                >Bài 3</a
-                            >
-                            <a
-                                class="file-link"
-                                href="./access/files/han_tu_mina/第4課の漢字_みんなの日本語.pdf"
-                                target="_blank"
-                                >Bài 4</a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/han_tu_mina/第5課の漢字_みんなの日本語.pdf"
-                                target="_blank"
-                                >Bài 5</a
-                            >
-                            <a
-                                class="file-link"
-                                href="./access/files/han_tu_mina/第6課の漢字_みんなの日本語.pdf"
-                                target="_blank"
-                                >Bài 6</a
-                            >
-                            <a
-                                class="file-link"
-                                href="./access/files/han_tu_mina/第7課の漢字_みんなの日本語.pdf"
-                                target="_blank"
-                                >Bài 7</a
-                            >
-                            <a
-                                class="file-link"
-                                href="./access/files/han_tu_mina/第8課の漢字_みんなの日本語.pdf"
-                                target="_blank"
-                                >Bài 8</a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/han_tu_mina/第9課の漢字_みんなの日本語.pdf"
-                                target="_blank"
-                                >Bài 9</a
-                            >
-                            <a
-                                class="file-link"
-                                href="./access/files/han_tu_mina/第10課の漢字_みんなの日本語.pdf"
-                                target="_blank"
-                                >Bài 10</a
-                            >
-                            <a
-                                class="file-link"
-                                href="./access/files/han_tu_mina/第11課の漢字_みんなの日本語.pdf"
-                                target="_blank"
-                                >Bài 11</a
-                            >
-                            <a
-                                class="file-link"
-                                href="./access/files/han_tu_mina/第12課の漢字_みんなの日本語.pdf"
-                                target="_blank"
-                                >Bài 12</a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/han_tu_mina/第13課の漢字_みんなの日本語.pdf"
-                                target="_blank"
-                                >Bài 13</a
-                            >
-                            <a
-                                class="file-link"
-                                href="./access/files/han_tu_mina/第14課の漢字_みんなの日本語.pdf"
-                                target="_blank"
-                                >Bài 14</a
-                            >
-                            <a
-                                class="file-link"
-                                href="./access/files/han_tu_mina/第15課の漢字_みんなの日本語.pdf"
-                                target="_blank"
-                                >Bài 15</a
-                            >
-                            <a
-                                class="file-link disabled"
-                                style="visibility: none; opacity: 0"
-                                href="./access/files/han_tu_mina/第16課の漢字_みんなの日本語.pdf"
-                                target="_blank"
-                                >Bài 16</a
-                            >
-                        </li>
-                    </ol>
-                </div>
-
-                <br />
-                <hr />
-                <br />
-                <!-- Look And Learn -->
-                <div class="file-items">
-                    <h2 class="file-heading">Kiểm Tra Look And Learn</h2>
-                    <ol class="file">
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/test_look_and_learn/第１課Look And Learn.pdf"
-                                target="_blank"
-                                >Bài 1</a
-                            >
-                            <a
-                                class="file-link"
-                                href="./access/files/test_look_and_learn/第２課Look And Learn.pdf"
-                                target="_blank"
-                                >Bài 2</a
-                            >
-                            <a
-                                class="file-link"
-                                href="./access/files/test_look_and_learn/第３課Look And Learn.pdf"
-                                target="_blank"
-                                >Bài 3</a
-                            >
-                            <a
-                                class="file-link"
-                                href="./access/files/test_look_and_learn/第４課Look And Learn.pdf"
-                                target="_blank"
-                                >Bài 4</a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/test_look_and_learn/第５課Look And Learn.pdf"
-                                target="_blank"
-                                >Bài 5</a
-                            >
-                            <a
-                                class="file-link"
-                                href="./access/files/test_look_and_learn/第６課Look And Learn.pdf"
-                                target="_blank"
-                                >Bài 6</a
-                            >
-                            <a
-                                class="file-link"
-                                href="./access/files/test_look_and_learn/第７課Look And Learn.pdf"
-                                target="_blank"
-                                >Bài 7</a
-                            >
-                            <a
-                                class="file-link"
-                                href="./access/files/test_look_and_learn/第８課Look And Learn.pdf"
-                                target="_blank"
-                                >Bài 8</a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/test_look_and_learn/第９課Look And Learn.pdf"
-                                target="_blank"
-                                >Bài 9</a
-                            >
-                            <a
-                                class="file-link"
-                                href="./access/files/test_look_and_learn/第10課Look And Learn.pdf"
-                                target="_blank"
-                                >Bài 10</a
-                            >
-                            <a
-                                class="file-link disabled"
-                                href="./access/files/test_look_and_learn/第11課Look And Learn.pdf"
-                                target="_blank"
-                                >Bài 11</a
-                            >
-                            <a
-                                class="file-link disabled"
-                                href="./access/files/test_look_and_learn/第12課Look And Learn.pdf"
-                                target="_blank"
-                                >Bài 12</a
-                            >
-                        </li>
-                    </ol>
-                </div>
-
-                <br />
-                <hr />
-                <br />
-                <!-- 5 Bài Look And Learn -->
-                <div class="file-items">
-                    <h2 class="file-heading">
-                        Kiểm tra định kỳ 5 bài<br />LOOK AND LEARN
-                    </h2>
-                    <ol class="file">
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/test_5bai_look_and_learn/1-5 Look And Learn.pdf"
-                                target="_blank"
-                                >01 - 05</a
-                            >
-                            <a
-                                class="file-link"
-                                href="./access/files/test_5bai_look_and_learn/6-10 Look And Learn.pdf"
-                                target="_blank"
-                                >06 - 10</a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/test_5bai_look_and_learn/11-15 Look And Learn.pdf"
-                                target="_blank"
-                                >11 - 15</a
-                            >
-                            <a
-                                class="file-link"
-                                href="./access/files/test_5bai_look_and_learn/16-20 Look And Learn.pdf"
-                                target="_blank"
-                                >16 - 20</a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/test_5bai_look_and_learn/21-25 Look And Learn.pdf"
-                                target="_blank"
-                                >21 - 25</a
-                            >
-                            <a
-                                class="file-link"
-                                href="./access/files/test_5bai_look_and_learn/26-30 Look And Learn.pdf"
-                                target="_blank"
-                                >26 - 30</a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link"
-                                href="./access/files/test_5bai_look_and_learn/31-32 Look And Learn.pdf"
-                                target="_blank"
-                                >31 - 32</a
-                            >
-                            <a
-                                class="file-link disabled"
-                                style="visibility: none; opacity: 0"
-                                href="./access/files/test_5bai_look_and_learn/31-32 Look And Learn.pdf"
-                                target="_blank"
-                                >hidden</a
-                            >
-                        </li>
-                    </ol>
-                </div>
-
-                <br />
-                <hr />
-                <br />
-                <!-- 5 Bài -->
-                <div class="file-items">
-                    <h2 class="file-heading">
-                        Kiểm tra định kỳ 5 bài<br />MINANO NIHONGO
-                    </h2>
-                    <ol class="file">
-                        <li class="file-item">
-                            <a
-                                class="file-link disabled"
-                                href="./access/files/vocabulary/voca_n5.xlsx"
-                                download=""
-                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra 01 - 05 Minano Nihongo ?');"
-                                >01 - 05</a
-                            >
-                            <a
-                                class="file-link disabled"
-                                href="./access/files/vocabulary/voca_n4.xlsx"
-                                download=""
-                                onclick="return confirm('Tiến hành tải xuống đáp án 01 - 05 Minano Nihongo ?');"
-                                >đáp án 01 - 05</a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link disabled"
-                                href="./access/files/vocabulary/voca_n4.xlsx"
-                                download=""
-                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra 06 - 10 Minano Nihongo ?');"
-                                >06 - 10</a
-                            >
-                            <a
-                                class="file-link disabled"
-                                href="./access/files/vocabulary/voca_n4.xlsx"
-                                download=""
-                                onclick="return confirm('Tiến hành tải xuống đáp án 06 - 10 Minano Nihongo ?');"
-                                >đáp án 06 - 10</a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link disabled"
-                                href="./access/files/vocabulary/voca_n5.xlsx"
-                                download=""
-                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra 11 - 15 Minano Nihongo ?');"
-                                >11 - 15</a
-                            >
-                            <a
-                                class="file-link disabled"
-                                href="./access/files/vocabulary/voca_n4.xlsx"
-                                download=""
-                                onclick="return confirm('Tiến hành tải xuống đáp án 11 - 15 Minano Nihongo ?');"
-                                >đáp án 11 - 15</a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link disabled"
-                                href="./access/files/vocabulary/voca_n4.xlsx"
-                                download=""
-                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra 16 - 20 Minano Nihongo ?');"
-                                >16 - 20</a
-                            >
-                            <a
-                                class="file-link disabled"
-                                href="./access/files/vocabulary/voca_n4.xlsx"
-                                download=""
-                                onclick="return confirm('Tiến hành tải xuống đáp án 16 - 20 Minano Nihongo ?');"
-                                >đáp án 16 - 20</a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link disabled"
-                                href="./access/files/vocabulary/voca_n5.xlsx"
-                                download=""
-                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra 21 - 25 Minano Nihongo ?');"
-                                >21 - 25</a
-                            >
-                            <a
-                                class="file-link disabled"
-                                href="./access/files/vocabulary/voca_n4.xlsx"
-                                download=""
-                                onclick="return confirm('Tiến hành tải xuống đáp án 21 - 25 Minano Nihongo ?');"
-                                >đáp án 21 - 25</a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link disabled"
-                                href="./access/files/vocabulary/voca_n4.xlsx"
-                                download=""
-                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra 26 - 30 Minano Nihongo ?');"
-                                >26 - 30</a
-                            >
-                            <a
-                                class="file-link disabled"
-                                href="./access/files/vocabulary/voca_n4.xlsx"
-                                download=""
-                                onclick="return confirm('Tiến hành tải xuống đáp án 26 - 30 Minano Nihongo ?');"
-                                >đáp án 26 - 30</a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link disabled"
-                                href="./access/files/vocabulary/voca_n5.xlsx"
-                                download=""
-                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra 31 - 35 Minano Nihongo ?');"
-                                >31 - 35</a
-                            >
-                            <a
-                                class="file-link disabled"
-                                href="./access/files/vocabulary/voca_n4.xlsx"
-                                download=""
-                                onclick="return confirm('Tiến hành tải xuống đáp án 31 - 35 Minano Nihongo ?');"
-                                >đáp án 31 - 35</a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link disabled"
-                                href="./access/files/vocabulary/voca_n4.xlsx"
-                                download=""
-                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra 36 - 40 Minano Nihongo ?');"
-                                >36 - 40</a
-                            >
-                            <a
-                                class="file-link disabled"
-                                href="./access/files/vocabulary/voca_n4.xlsx"
-                                download=""
-                                onclick="return confirm('Tiến hành tải xuống đáp án 36 - 40 Minano Nihongo ?');"
-                                >đáp án 36 - 40</a
-                            >
-                        </li>
-                        <li class="file-item">
-                            <a
-                                class="file-link disabled"
-                                href="./access/files/vocabulary/voca_n5.xlsx"
-                                download=""
-                                onclick="return confirm('Tiến hành tải xuống bài kiểm tra 41 - 45 Minano Nihongo ?');"
-                                >41 - 45</a
-                            >
-                            <a
-                                class="file-link disabled"
-                                href="./access/files/vocabulary/voca_n4.xlsx"
-                                download=""
-                                onclick="return confirm('Tiến hành tải xuống đáp án 41 - 45 Minano Nihongo ?');"
-                                >đáp án 41 - 45</a
-                            >
-                        </li>
-                    </ol>
-                </div>
-            </div>
-
-            <!-- Sổ đầu bài -->
-            <div class="manager-class-log-book">
-                <div class="log-book-option">
-                    <button class="log-book-option-btn active" name="today">
-                        <i class="fa-regular fa-calendar-days"></i>Hôm Nay
-                    </button>
-                    <button class="log-book-option-btn" name="search">
-                        <i class="fa-solid fa-magnifying-glass"></i>Tìm kiếm
-                    </button>
-                    <button class="log-book-option-btn" name="write">
-                        <i class="fa-solid fa-pen-nib"></i>Ghi Sổ
-                    </button>
-                </div>
-
-                <!-- TODAY -->
-                <div class="log-book-today"></div>
-
-                <!-- SEARCH -->
-                <div class="log-book-search" style="display: none">
-                    <form id="log-book-search-form">
-                        <div class="log-book-write__date-item">
-                            <label
-                                class="add-item-title"
-                                for="log-book-search__part"
-                                >Buổi học:</label
-                            >
-                            <select
-                                class="add-item-input form-select"
-                                id="log-book-search__part"
-                                name="part"
-                            >
-                                <option value="BUỔI SÁNG">Buổi Sáng</option>
-                                <option value="BUỔI CHIỀU">Buổi Chiều</option>
-                                <option value="BUỔI TỐI">Buổi Tối</option>
-                            </select>
+                    <div class="rank">
+                        <div class="rank-item rank-item-max">
+                            <p class="rank-item-title">Điểm cao nhất:</p>
                         </div>
-                        <div class="log-book-write__date-item">
-                            <label
-                                class="add-item-title"
-                                for="log-book-search__date"
-                                >Ngày học:</label
-                            >
-                            <input
-                                type="date"
-                                id="log-book-search__date"
-                                class="add-item-input date-input"
-                                aria-label="Ngày học"
-                                name="log_at"
-                            />
+                        <div class="rank-item rank-item-min">
+                            <p class="rank-item-title">Điểm thấp nhất:</p>
                         </div>
-                        <div
-                            class="log-book-write__date-item log-book-write__dates"
-                        >
-                            <div class="log-book-write__date-item">
-                                <label
-                                    class="add-item-title"
-                                    for="log-book-search__class-dropdown"
-                                    >Tên Lớp:</label
-                                >
-                                <select
-                                    class="add-item-input form-select"
-                                    id="log-book-search__class-dropdown"
-                                    name="class_id"
-                                >
-                                    <option value="">-- Tất cả --</option>
-                                    <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
-                                </select>
-                            </div>
-                        </div>
-                        <button
-                            id="confirm-log-search-btn"
-                            class="btn btn-success"
-                            style="margin-top: 10px"
-                            type="submit"
-                        >
-                            <i class="fa-solid fa-magnifying-glass"></i>Tìm kiếm
-                        </button>
-                    </form>
-                    <div id="search-results"></div>
-                </div>
-
-                <!-- WRITE -->
-                <form class="log-book-write" style="display: none">
-                    <div class="log-book-write__dates">
-                        <div class="log-book-write__date-item">
-                            <label
-                                class="add-item-title"
-                                for="log-book-write__part"
-                                >Buổi học:</label
-                            >
-                            <select
-                                class="add-item-input form-select"
-                                id="log-book-write__part"
-                                name="part"
-                            >
-                                <option value="">-- Chọn buổi học --</option>
-                                <option value="BUỔI SÁNG">Buổi Sáng</option>
-                                <option value="BUỔI CHIỀU">Buổi Chiều</option>
-                                <option value="BUỔI TỐI">Buổi Tối</option>
-                            </select>
-                        </div>
-                        <div class="log-book-write__date-item">
-                            <label
-                                class="add-item-title log-book-write__date"
-                                for="log-book-write__date"
-                                >Ngày học:</label
-                            >
-                            <input
-                                type="text"
-                                id="log-book-write__date"
-                                class="add-item-input"
-                            />
+                        <div class="rank-item rank-item-no-test">
+                            <p class="rank-item-title">Chưa kiểm tra:</p>
                         </div>
                     </div>
+                    <hr />
+                    <div class="created-at">
+                        Điểm đã được tạo vào lúc:<br />
+                        <span id="score-created-at">
+                            00:00 ngày 00 tháng 00 năm 0000</span
+                        >
+                    </div>
+                    <div class="table-wrapper">
+                        <div style="text-align: center">
+                            Thang điểm: <b id="show-max-score__table"></b>
+                        </div>
+                        <table
+                            class="table-score table-hover border"
+                            style="width: 100%"
+                            id="student-table"
+                        ></table>
+                    </div>
+                </div>
 
-                    <div class="log-book-write__dates">
-                        <div class="log-book-write__date-item">
+                <!-- Quản lý lớp học -->
+                <div class="manager-class">
+                    <!-- Bảng hiển thị danh sách lớp học -->
+                    <div class="table-class-wrapper">
+                        <table
+                            class="table table-class border"
+                            style="width: 100%"
+                            id="class-table"
+                        >
+                            <thead>
+                                <tr class="table-light">
+                                    <th width="30px">STT</th>
+                                    <th style="min-width: 90px">Tên Lớp</th>
+                                    <th style="min-width: 60px">Sĩ Số</th>
+                                    <th style="min-width: 60px">Kiểm Tra</th>
+                                    <th style="min-width: 80px">Ngày Tạo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dữ liệu sẽ được thêm vào đây bằng JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Form thêm lớp học mới -->
+                    <form id="add-class-form">
+                        <h2>Thêm Lớp Học Mới</h2>
+                        <div class="add-item">
+                            <label class="add-item-title" for="add-classname"
+                                >Tên Lớp:</label
+                            >
+                            <input
+                                class="add-item-input"
+                                type="text"
+                                id="add-classname"
+                                name="classname"
+                                value="N5 - 0"
+                                autocomplete="off"
+                                required
+                            />
+                        </div>
+                        <button class="btn btn-success" type="submit">
+                            <i class="fa-regular fa-square-plus white"></i>Thêm
+                        </button>
+                    </form>
+                    <hr />
+                    <!-- Form sửa lớp học -->
+                    <form id="edit-class-form">
+                        <h2>Sửa Lớp Học</h2>
+                        <div class="add-item">
                             <label
                                 class="add-item-title"
-                                for="log-book-write__lesson-dropdown"
-                                >Tên Lớp:</label
+                                for="old-class-dropdown"
+                                >Tên Lớp Cũ:</label
                             >
                             <select
                                 class="add-item-input form-select"
-                                id="log-book-write__lesson-dropdown"
+                                id="old-class-dropdown"
                                 name="classname"
+                                required
                             >
                                 <option value="">-- Chọn Lớp Học --</option>
                                 <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
                             </select>
                         </div>
-                        <div class="log-book-write__date-item">
-                            <label
-                                class="add-item-title"
-                                for="log-book-write__teacher"
-                                >Giáo viên dạy:</label
+                        <div class="add-item">
+                            <label class="add-item-title" for="new-classname"
+                                >Tên Lớp Mới:</label
                             >
                             <input
-                                class="add-item-input form-select"
-                                id="log-book-write__teacher"
-                                name="teacher"
+                                class="add-item-input"
                                 type="text"
+                                id="new-classname"
+                                name="new_classname"
+                                value=""
+                                autocomplete="off"
                                 required
                             />
                         </div>
-                    </div>
-
-                    <label class="add-item-title" for="log-book-write__content"
-                        >Nội dung buổi học:</label
-                    >
-                    <input
-                        id="log-book-write__content"
-                        name="content"
-                        class="add-item-input form-select"
-                        required
-                    />
-
-                    <div class="write-absent">
-                        <div class="absent-counts">
-                            <span class="absent-count-title">Vắng: </span
-                            ><span class="absent-count">0</span>
-                            <i class="fa-solid fa-user-graduate"></i>
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fa-solid fa-arrows-rotate white"></i>Cập
+                            Nhật
+                        </button>
+                    </form>
+                    <hr />
+                    <!-- Form xóa lớp học -->
+                    <form id="delete-class-form">
+                        <h2>Xóa Lớp Học</h2>
+                        <div class="add-item">
+                            <label
+                                class="add-item-title"
+                                for="delete-class-dropdown"
+                                >Chọn Lớp Học:</label
+                            >
+                            <select
+                                class="add-item-input form-select"
+                                id="delete-class-dropdown"
+                                name="classname"
+                                required
+                            >
+                                <option value="">-- Chọn Lớp Học --</option>
+                                <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                            </select>
                         </div>
-                        <input
-                            id="log-book-write__absent"
-                            name="absent"
+                        <button class="btn btn-danger" type="submit">
+                            <i class="fa-solid fa-trash-can white"></i>Xóa
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Quản lý học sinh -->
+                <div class="manager-student">
+                    <!-- Form thêm học sinh -->
+                    <form id="add-student-form">
+                        <h2>Thêm Học Sinh Mới</h2>
+
+                        <div class="add-item">
+                            <label class="add-item-title" for="classname"
+                                >Tên Lớp:</label
+                            >
+                            <select
+                                class="add-item-input form-select"
+                                id="old-student-dropdown"
+                                name="classname"
+                                required
+                            >
+                                <option value="">-- Chọn Lớp Học --</option>
+                                <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="add-item-title" for="name"
+                                >Họ & Tên:</label
+                            >
+                            <input
+                                class="add-item-input"
+                                type="text"
+                                id="name"
+                                name="name"
+                                autocomplete="off"
+                                required
+                            />
+                        </div>
+
+                        <button class="btn btn-success" type="submit">
+                            <i class="fa-regular fa-square-plus white"></i>Thêm
+                        </button>
+                    </form>
+                    <hr />
+
+                    <!-- Form sửa điểm -->
+                    <form id="update-score-form">
+                        <h2>Sửa Điểm Học Sinh</h2>
+
+                        <div class="add-item">
+                            <label class="add-item-title" for="classname-update"
+                                >Tên Lớp:</label
+                            >
+                            <select
+                                class="add-item-input form-select"
+                                id="update-student-dropdown"
+                                name="classname"
+                                required
+                            >
+                                <option value="">-- Chọn Lớp Học --</option>
+                                <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="add-item-title" for="student-select"
+                                >Họ & Tên:</label
+                            >
+                            <select
+                                class="add-item-input"
+                                id="student-select"
+                                name="student-select"
+                                required
+                            >
+                                <option value="">-- Chọn Học Sinh --</option>
+                                <!-- Options will be added dynamically here -->
+                            </select>
+                        </div>
+
+                        <div class="add-item">
+                            <label class="add-item-title" for="lesson"
+                                >Nội dung kiểm tra:</label
+                            >
+                            <select
+                                name="lesson"
+                                id="lesson"
+                                class="add-item-input form-select"
+                                required
+                            >
+                                <!-- Các option đã được rút gọn -->
+                                <option value="">-- Chọn Bài --</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="add-item-title" for="new-score"
+                                >Điểm Mới: （<i
+                                    >Thang điểm:
+                                    <b id="show-max-score__update">... đ</b></i
+                                >）</label
+                            >
+                            <input
+                                class="add-item-input"
+                                type="number"
+                                id="new-score"
+                                name="new-score"
+                                autocomplete="off"
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label class="add-item-title" for="new-score"
+                                >Chú thích:
+                                <i style="opacity: 0.7"
+                                    >(※Lưu ý: Nếu nhập chữ "<span
+                                        style="color: red"
+                                        >Chưa nộp phạt</span
+                                    >" sẽ hiện màu đỏ.)</i
+                                ></label
+                            >
+                            <input
+                                class="add-item-input"
+                                type="text"
+                                id="comment"
+                                name="comment"
+                                autocomplete="off"
+                            />
+                        </div>
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fa-solid fa-arrows-rotate white"></i>Cập
+                            Nhật Điểm
+                        </button>
+                    </form>
+                    <hr />
+                    <!-- Form xóa học sinh -->
+                    <form id="delete-student-form">
+                        <h2>Xóa Học Sinh</h2>
+                        <div class="add-item">
+                            <label class="add-item-title" for="delete-classname"
+                                >Tên Lớp:</label
+                            >
+                            <select
+                                class="add-item-input form-select"
+                                id="delete-student-dropdown"
+                                name="classname"
+                                required
+                            >
+                                <option value="">-- Chọn Lớp Học --</option>
+                                <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                            </select>
+                        </div>
+                        <div class="add-item">
+                            <label class="add-item-title" for="delete-name"
+                                >Họ & Tên:</label
+                            >
+                            <select
+                                class="add-item-input"
+                                id="delete-student-select"
+                                name="student-select"
+                                required
+                            >
+                                <option value="">-- Chọn Học Sinh --</option>
+                                <!-- Options will be added dynamically here -->
+                            </select>
+                        </div>
+
+                        <button class="btn btn-danger" type="submit">
+                            <i class="fa-solid fa-trash-can white"></i>Xóa
+                        </button>
+                    </form>
+                    <hr />
+                    <!-- Form thông tin học sinh -->
+                    <div>
+                        <h2>Bảng điểm cá nhân</h2>
+                        <div class="add-item">
+                            <label
+                                class="add-item-title"
+                                for="table-student-dropdown"
+                                >Tên Lớp:</label
+                            >
+                            <select
+                                class="add-item-input form-select"
+                                id="table-student-dropdown"
+                                name="classname"
+                                required
+                            >
+                                <option value="">-- Chọn Lớp Học --</option>
+                                <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                            </select>
+                        </div>
+                        <div class="add-item">
+                            <label
+                                class="add-item-title"
+                                for="table-student-select"
+                                >Họ & Tên:</label
+                            >
+                            <select
+                                class="add-item-input"
+                                id="table-student-select"
+                                name="student-select"
+                                required
+                            >
+                                <option value="">-- Chọn Học Sinh --</option>
+                                <!-- Options will be added dynamically here -->
+                            </select>
+                        </div>
+                        <div class="table-wrapper">
+                            <div style="text-align: center">
+                                Thang điểm:
+                                <b id="show-max-score__student">... đ</b>
+                            </div>
+                            <table
+                                class="table border"
+                                style="width: 100%"
+                                id="student-score-table"
+                            >
+                                <thead>
+                                    <tr class="table-light">
+                                        <th width="30px">STT</th>
+                                        <th width="100px">Nội Dung</th>
+                                        <th width="45px">Thang Điểm</th>
+                                        <th width="45px">Điểm</th>
+                                        <th style="min-width: 110px">
+                                            Chú Thích
+                                        </th>
+                                        <th width="120px">Ngày Tạo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dữ liệu sẽ được thêm vào đây bằng JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NHẬP ĐIỂM -->
+                <div class="manager-insert-core">
+                    <form id="score-form" method="post">
+                        <select
                             class="add-item-input form-select"
-                            placeholder="Tìm tên học sinh vắng học ..."
-                            autocomplete="off"
-                        />
+                            id="insert-score__class-dropdown"
+                            name="classname"
+                            required
+                        >
+                            <option value="">-- Chọn Lớp Học --</option>
+                            <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                        </select>
+                        <select
+                            name="lesson"
+                            id="insert-score__test-content-dropdown"
+                            class="add-item-input form-select"
+                        >
+                            <!-- Các option đã được rút gọn -->
+                            <option value="">
+                                -- Chọn nội dung kiểm tra --
+                            </option>
+                            <option value="0">Từ vựng</option>
+                            <option value="1">Ngữ pháp</option>
+                            <option value="2">Hán tự</option>
+                            <option value="3">
+                                Định kỳ 2 bài: Minano Nihongo
+                            </option>
+                            <option value="4">
+                                Định kỳ 5 bài: Minano Nihongo
+                            </option>
+                            <option value="5">
+                                Định kỳ 5 bài: Look And Learn
+                            </option>
+                            <option value="6">JLPT thi thử</option>
+                            <option value="7">Làm văn</option>
+                            <!-- Thêm các option khác nếu cần -->
+                        </select>
+                        <div>
+                            <select
+                                name="lesson"
+                                id="insert-score__lesson-dropdown"
+                                class="add-item-input form-select"
+                            >
+                                <!-- Các option đã được rút gọn -->
+                                <option value="">-- Chọn Bài --</option>
+                            </select>
+                            <label class="add-item-title" for="max-score"
+                                >Thang điểm:</label
+                            >
+                            <input
+                                class="add-item-input"
+                                type="number"
+                                id="insert-score__max-score"
+                                name="max-score"
+                                autocomplete="off"
+                                max="180"
+                                value="50"
+                                required
+                            />
+                        </div>
+
+                        <div class="table-wrapper">
+                            <table
+                                class="table border"
+                                style="width: 100%"
+                                id="insert-score__student-table"
+                            >
+                                <thead>
+                                    <tr class="table-light">
+                                        <th width="40px">STT</th>
+                                        <th>Họ và Tên</th>
+                                        <th width="100px">Điểm</th>
+                                        <th>Chú thích</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dữ liệu sẽ được thêm vào đây bằng JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <button
+                            class="btn btn-success"
+                            style="margin-top: 10px"
+                            type="submit"
+                        >
+                            Xác nhận
+                        </button>
+                    </form>
+                    <hr />
+                    <form id="delete-score-lesson">
+                        <h2>Xoá điểm của cả lớp</h2>
+
+                        <select
+                            class="add-item-input form-select"
+                            id="delete-score__class-dropdown"
+                            name="classname"
+                            required
+                        >
+                            <option value="">-- Chọn Lớp Học --</option>
+                            <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                        </select>
+
+                        <select
+                            class="add-item-input form-select"
+                            id="delete-score__lesson-dropdown"
+                            name="lesson"
+                            required
+                        >
+                            <option value="">-- Chọn Bài --</option>
+                            <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                        </select>
+                        <button class="btn btn-danger" type="submit">
+                            <i class="fa-solid fa-trash-can white"></i>
+                            Xoá điểm
+                        </button>
+                    </form>
+                </div>
+                <div class="manager-files">
+                    <div class="file-items">
+                        <h2 class="file-heading">Nhập môn tiếng nhật</h2>
+                        <ol class="file">
+                            <li class="file-item">
+                                <a
+                                    class="file-link"
+                                    href="./access/files/chu_cai/総合_ひらがなとカタカナ.pdf"
+                                    target="_blank"
+                                    >2 Bảng chữ cái</a
+                                >
+                            </li>
+                            <li class="file-item">
+                                <a
+                                    class="file-link"
+                                    href="./access/files/chu_cai/hiragana_book.pdf"
+                                    target="_blank"
+                                    >Tập viết bảng Hiragana</a
+                                >
+                            </li>
+                            <li class="file-item">
+                                <a
+                                    class="file-link"
+                                    href="./access/files/chu_cai/katakana_book.pdf"
+                                    target="_blank"
+                                    >Tập viết bảng Katakana</a
+                                >
+                            </li>
+                            <li class="file-item">
+                                <a
+                                    class="file-link"
+                                    href="./access/files/chu_cai/基本の挨拶.pdf"
+                                    target="_blank"
+                                    >12 mẫu câu chào hỏi cơ bản</a
+                                >
+                            </li>
+                            <li class="file-item">
+                                <a
+                                    class="file-link"
+                                    href="./access/files/chu_cai/基本の自己紹介.pdf"
+                                    target="_blank"
+                                    >Giới thiệu bản thân cơ bản</a
+                                >
+                            </li>
+                        </ol>
                     </div>
 
-                    <ul id="suggestions-list" class="suggestions-list"></ul>
-                    <ol id="selected-list" class="selected-list"></ol>
+                    <br />
+                    <hr />
+                    <br />
+                    <!-- Bộ Thủ -->
+                    <div class="file-items">
+                        <h2 class="file-heading">
+                            Quy Tắc Hán Tự <br />&<br />Bộ Thủ
+                        </h2>
+                        <ol class="file">
+                            <li class="file-item">
+                                <a
+                                    class="file-link"
+                                    href="./access/files/bo_thu/漢字のロードマップ.pdf"
+                                    target="_blank"
+                                    >File PDF giới thiệu lộ trình học Hán Tự<br /><span
+                                        style="
+                                            text-transform: none;
+                                            font-style: italic;
+                                        "
+                                        >(Nếu photo cho học sinh thì bỏ đi 2
+                                        trang cuối)</span
+                                    ></a
+                                >
+                            </li>
+                            <li class="file-item">
+                                <a
+                                    class="file-link"
+                                    href="./access/files/bo_thu/PTKSのルール.pdf"
+                                    target="_blank"
+                                    >Quy tắc PTKS (Phòng Trọ Khách Sạn)
+                                </a>
+                            </li>
 
-                    <button
-                        id="confirm-log-class-btn"
-                        class="btn btn-success"
-                        style="margin-top: 10px"
-                        type="submit"
-                    >
-                        Xác nhận
-                    </button>
-                </form>
+                            <li class="file-item">
+                                <a
+                                    class="file-link"
+                                    href="./access/files/bo_thu/音予測ルール.pdf"
+                                    target="_blank"
+                                    >Bộ quy tắc đoán âm ONYOMI từ Hán Việt<br /><span
+                                        style="
+                                            text-transform: none;
+                                            font-style: italic;
+                                        "
+                                        >(1 tờ - 1 trang: Không nên photo 2 mặt
+                                        vì khó nhìn)</span
+                                    ></a
+                                >
+                            </li>
+
+                            <li class="file-item">
+                                <a
+                                    class="file-link"
+                                    href="./access/files/bo_thu/140部首.zip"
+                                    target="_blank"
+                                    onclick="return confirm('Tiến hành tải xuống file tài liệu 140 bộ thủ ?');"
+                                    >140 Bộ Thủ</a
+                                >
+                            </li>
+                        </ol>
+                    </div>
+
+                    <br />
+                    <hr />
+                    <br />
+
+                    <!-- Giáo Án -->
+                    <div class="file-items">
+                        <h2 class="file-heading">Giáo Án</h2>
+                        <ol class="file">
+                            <li class="file-item">
+                                <a
+                                    class="file-link"
+                                    href="./access/files/giao_an/N5のカリキュラム (みんなの日本語初級I).pdf"
+                                    target="_blank"
+                                    >N5のカリキュラム (みんなの日本語初級I)</a
+                                >
+                            </li>
+                            <li class="file-item">
+                                <a
+                                    class="file-link"
+                                    href="./access/files/giao_an/N4のカリキュラム (みんなの日本語初級II).pdf"
+                                    target="_blank"
+                                    >N4のカリキュラム (みんなの日本語初級II)</a
+                                >
+                            </li>
+                            <li class="file-item">
+                                <a
+                                    class="file-link"
+                                    href="./access/files/giao_an/N3のカリキュラム (総まとめ).pdf"
+                                    target="_blank"
+                                    >N3のカリキュラム (総まとめ)</a
+                                >
+                            </li>
+                        </ol>
+                    </div>
+
+                    <br />
+                    <hr />
+                    <br />
+
+                    <!-- Từ vựng -->
+                    <div class="file-items">
+                        <h2 class="file-heading">Kiểm Tra Từ Vựng</h2>
+                        <ol class="file">
+                            <li class="file-item">
+                                <a
+                                    class="file-link"
+                                    href="./access/files/vocabulary/voca_n5.xlsx"
+                                    download="Kiểm Tra Từ Vựng N5"
+                                    onclick="return confirm('Tiến hành tải xuống file kiểm tra từ vựng 25 bài N5 ?');"
+                                    >File Kiểm Tra Từ Vựng 25 bài N5</a
+                                >
+                            </li>
+                            <li class="file-item">
+                                <a
+                                    class="file-link"
+                                    href="./access/files/vocabulary/voca_n4.xlsx"
+                                    download="Kiểm Tra Từ Vựng N4"
+                                    onclick="return confirm('Tiến hành tải xuống file kiểm tra từ vựng 25 bài N4 ?');"
+                                    >File Kiểm Tra Từ Vựng 25 bài N4</a
+                                >
+                            </li>
+                        </ol>
+                    </div>
+
+                    <br />
+                    <hr />
+                    <br />
+                    <!-- Ngữ pháp -->
+                    <div class="file-items">
+                        <h2 class="file-heading">Kiểm Tra Ngữ Pháp</h2>
+                        <ol class="file">
+                            <li class="file-item">
+                                <a
+                                    class="file-link disabled"
+                                    href="./access/files/vocabulary/voca_n5.xlsx"
+                                    download=""
+                                    onclick="return confirm('Tiến hành tải xuống bài kiểm tra ngữ pháp N5 ?');"
+                                    >Ngữ Pháp N5</a
+                                >
+                            </li>
+                            <li class="file-item">
+                                <a
+                                    class="file-link disabled"
+                                    href="./access/files/vocabulary/voca_n4.xlsx"
+                                    download=""
+                                    onclick="return confirm('Tiến hành tải xuống bài kiểm tra ngữ pháp N4 ?');"
+                                    >Ngữ Pháp N4</a
+                                >
+                            </li>
+                        </ol>
+                    </div>
+
+                    <br />
+                    <hr />
+                    <br />
+                    <!-- Viết hán tự từ vựng N5 -->
+                    <div class="file-items">
+                        <h2 class="file-heading">
+                            Viết hán tự từ vựng N5<br />MINANO NIHONGO
+                        </h2>
+                        <ol class="file">
+                            <li class="file-item">
+                                <a
+                                    class="file-link"
+                                    href="./access/files/han_tu_mina/第1課の漢字_みんなの日本語.pdf"
+                                    target="_blank"
+                                    >Bài 1</a
+                                >
+                                <a
+                                    class="file-link"
+                                    href="./access/files/han_tu_mina/第2課の漢字_みんなの日本語.pdf"
+                                    target="_blank"
+                                    >Bài 2</a
+                                >
+                                <a
+                                    class="file-link"
+                                    href="./access/files/han_tu_mina/第3課の漢字_みんなの日本語.pdf"
+                                    target="_blank"
+                                    >Bài 3</a
+                                >
+                                <a
+                                    class="file-link"
+                                    href="./access/files/han_tu_mina/第4課の漢字_みんなの日本語.pdf"
+                                    target="_blank"
+                                    >Bài 4</a
+                                >
+                            </li>
+                            <li class="file-item">
+                                <a
+                                    class="file-link"
+                                    href="./access/files/han_tu_mina/第5課の漢字_みんなの日本語.pdf"
+                                    target="_blank"
+                                    >Bài 5</a
+                                >
+                                <a
+                                    class="file-link"
+                                    href="./access/files/han_tu_mina/第6課の漢字_みんなの日本語.pdf"
+                                    target="_blank"
+                                    >Bài 6</a
+                                >
+                                <a
+                                    class="file-link"
+                                    href="./access/files/han_tu_mina/第7課の漢字_みんなの日本語.pdf"
+                                    target="_blank"
+                                    >Bài 7</a
+                                >
+                                <a
+                                    class="file-link"
+                                    href="./access/files/han_tu_mina/第8課の漢字_みんなの日本語.pdf"
+                                    target="_blank"
+                                    >Bài 8</a
+                                >
+                            </li>
+                            <li class="file-item">
+                                <a
+                                    class="file-link"
+                                    href="./access/files/han_tu_mina/第9課の漢字_みんなの日本語.pdf"
+                                    target="_blank"
+                                    >Bài 9</a
+                                >
+                                <a
+                                    class="file-link"
+                                    href="./access/files/han_tu_mina/第10課の漢字_みんなの日本語.pdf"
+                                    target="_blank"
+                                    >Bài 10</a
+                                >
+                                <a
+                                    class="file-link"
+                                    href="./access/files/han_tu_mina/第11課の漢字_みんなの日本語.pdf"
+                                    target="_blank"
+                                    >Bài 11</a
+                                >
+                                <a
+                                    class="file-link"
+                                    href="./access/files/han_tu_mina/第12課の漢字_みんなの日本語.pdf"
+                                    target="_blank"
+                                    >Bài 12</a
+                                >
+                            </li>
+                            <li class="file-item">
+                                <a
+                                    class="file-link"
+                                    href="./access/files/han_tu_mina/第13課の漢字_みんなの日本語.pdf"
+                                    target="_blank"
+                                    >Bài 13</a
+                                >
+                                <a
+                                    class="file-link"
+                                    href="./access/files/han_tu_mina/第14課の漢字_みんなの日本語.pdf"
+                                    target="_blank"
+                                    >Bài 14</a
+                                >
+                                <a
+                                    class="file-link"
+                                    href="./access/files/han_tu_mina/第15課の漢字_みんなの日本語.pdf"
+                                    target="_blank"
+                                    >Bài 15</a
+                                >
+                                <a
+                                    class="file-link disabled"
+                                    style="visibility: none; opacity: 0"
+                                    href="./access/files/han_tu_mina/第16課の漢字_みんなの日本語.pdf"
+                                    target="_blank"
+                                    >Bài 16</a
+                                >
+                            </li>
+                        </ol>
+                    </div>
+
+                    <br />
+                    <hr />
+                    <br />
+                    <!-- Look And Learn -->
+                    <div class="file-items">
+                        <h2 class="file-heading">Kiểm Tra Look And Learn</h2>
+                        <ol class="file">
+                            <li class="file-item">
+                                <a
+                                    class="file-link"
+                                    href="./access/files/test_look_and_learn/第１課Look And Learn.pdf"
+                                    target="_blank"
+                                    >Bài 1</a
+                                >
+                                <a
+                                    class="file-link"
+                                    href="./access/files/test_look_and_learn/第２課Look And Learn.pdf"
+                                    target="_blank"
+                                    >Bài 2</a
+                                >
+                                <a
+                                    class="file-link"
+                                    href="./access/files/test_look_and_learn/第３課Look And Learn.pdf"
+                                    target="_blank"
+                                    >Bài 3</a
+                                >
+                                <a
+                                    class="file-link"
+                                    href="./access/files/test_look_and_learn/第４課Look And Learn.pdf"
+                                    target="_blank"
+                                    >Bài 4</a
+                                >
+                            </li>
+                            <li class="file-item">
+                                <a
+                                    class="file-link"
+                                    href="./access/files/test_look_and_learn/第５課Look And Learn.pdf"
+                                    target="_blank"
+                                    >Bài 5</a
+                                >
+                                <a
+                                    class="file-link"
+                                    href="./access/files/test_look_and_learn/第６課Look And Learn.pdf"
+                                    target="_blank"
+                                    >Bài 6</a
+                                >
+                                <a
+                                    class="file-link"
+                                    href="./access/files/test_look_and_learn/第７課Look And Learn.pdf"
+                                    target="_blank"
+                                    >Bài 7</a
+                                >
+                                <a
+                                    class="file-link"
+                                    href="./access/files/test_look_and_learn/第８課Look And Learn.pdf"
+                                    target="_blank"
+                                    >Bài 8</a
+                                >
+                            </li>
+                            <li class="file-item">
+                                <a
+                                    class="file-link"
+                                    href="./access/files/test_look_and_learn/第９課Look And Learn.pdf"
+                                    target="_blank"
+                                    >Bài 9</a
+                                >
+                                <a
+                                    class="file-link"
+                                    href="./access/files/test_look_and_learn/第10課Look And Learn.pdf"
+                                    target="_blank"
+                                    >Bài 10</a
+                                >
+                                <a
+                                    class="file-link disabled"
+                                    href="./access/files/test_look_and_learn/第11課Look And Learn.pdf"
+                                    target="_blank"
+                                    >Bài 11</a
+                                >
+                                <a
+                                    class="file-link disabled"
+                                    href="./access/files/test_look_and_learn/第12課Look And Learn.pdf"
+                                    target="_blank"
+                                    >Bài 12</a
+                                >
+                            </li>
+                        </ol>
+                    </div>
+
+                    <br />
+                    <hr />
+                    <br />
+                    <!-- 5 Bài Look And Learn -->
+                    <div class="file-items">
+                        <h2 class="file-heading">
+                            Kiểm tra định kỳ 5 bài<br />LOOK AND LEARN
+                        </h2>
+                        <ol class="file">
+                            <li class="file-item">
+                                <a
+                                    class="file-link"
+                                    href="./access/files/test_5bai_look_and_learn/1-5 Look And Learn.pdf"
+                                    target="_blank"
+                                    >01 - 05</a
+                                >
+                                <a
+                                    class="file-link"
+                                    href="./access/files/test_5bai_look_and_learn/6-10 Look And Learn.pdf"
+                                    target="_blank"
+                                    >06 - 10</a
+                                >
+                            </li>
+                            <li class="file-item">
+                                <a
+                                    class="file-link"
+                                    href="./access/files/test_5bai_look_and_learn/11-15 Look And Learn.pdf"
+                                    target="_blank"
+                                    >11 - 15</a
+                                >
+                                <a
+                                    class="file-link"
+                                    href="./access/files/test_5bai_look_and_learn/16-20 Look And Learn.pdf"
+                                    target="_blank"
+                                    >16 - 20</a
+                                >
+                            </li>
+                            <li class="file-item">
+                                <a
+                                    class="file-link"
+                                    href="./access/files/test_5bai_look_and_learn/21-25 Look And Learn.pdf"
+                                    target="_blank"
+                                    >21 - 25</a
+                                >
+                                <a
+                                    class="file-link"
+                                    href="./access/files/test_5bai_look_and_learn/26-30 Look And Learn.pdf"
+                                    target="_blank"
+                                    >26 - 30</a
+                                >
+                            </li>
+                            <li class="file-item">
+                                <a
+                                    class="file-link"
+                                    href="./access/files/test_5bai_look_and_learn/31-32 Look And Learn.pdf"
+                                    target="_blank"
+                                    >31 - 32</a
+                                >
+                                <a
+                                    class="file-link disabled"
+                                    style="visibility: none; opacity: 0"
+                                    href="./access/files/test_5bai_look_and_learn/31-32 Look And Learn.pdf"
+                                    target="_blank"
+                                    >hidden</a
+                                >
+                            </li>
+                        </ol>
+                    </div>
+
+                    <br />
+                    <hr />
+                    <br />
+                    <!-- 5 Bài -->
+                    <div class="file-items">
+                        <h2 class="file-heading">
+                            Kiểm tra định kỳ 5 bài<br />MINANO NIHONGO
+                        </h2>
+                        <ol class="file">
+                            <li class="file-item">
+                                <a
+                                    class="file-link disabled"
+                                    href="./access/files/vocabulary/voca_n5.xlsx"
+                                    download=""
+                                    onclick="return confirm('Tiến hành tải xuống bài kiểm tra 01 - 05 Minano Nihongo ?');"
+                                    >01 - 05</a
+                                >
+                                <a
+                                    class="file-link disabled"
+                                    href="./access/files/vocabulary/voca_n4.xlsx"
+                                    download=""
+                                    onclick="return confirm('Tiến hành tải xuống đáp án 01 - 05 Minano Nihongo ?');"
+                                    >đáp án 01 - 05</a
+                                >
+                            </li>
+                            <li class="file-item">
+                                <a
+                                    class="file-link disabled"
+                                    href="./access/files/vocabulary/voca_n4.xlsx"
+                                    download=""
+                                    onclick="return confirm('Tiến hành tải xuống bài kiểm tra 06 - 10 Minano Nihongo ?');"
+                                    >06 - 10</a
+                                >
+                                <a
+                                    class="file-link disabled"
+                                    href="./access/files/vocabulary/voca_n4.xlsx"
+                                    download=""
+                                    onclick="return confirm('Tiến hành tải xuống đáp án 06 - 10 Minano Nihongo ?');"
+                                    >đáp án 06 - 10</a
+                                >
+                            </li>
+                            <li class="file-item">
+                                <a
+                                    class="file-link disabled"
+                                    href="./access/files/vocabulary/voca_n5.xlsx"
+                                    download=""
+                                    onclick="return confirm('Tiến hành tải xuống bài kiểm tra 11 - 15 Minano Nihongo ?');"
+                                    >11 - 15</a
+                                >
+                                <a
+                                    class="file-link disabled"
+                                    href="./access/files/vocabulary/voca_n4.xlsx"
+                                    download=""
+                                    onclick="return confirm('Tiến hành tải xuống đáp án 11 - 15 Minano Nihongo ?');"
+                                    >đáp án 11 - 15</a
+                                >
+                            </li>
+                            <li class="file-item">
+                                <a
+                                    class="file-link disabled"
+                                    href="./access/files/vocabulary/voca_n4.xlsx"
+                                    download=""
+                                    onclick="return confirm('Tiến hành tải xuống bài kiểm tra 16 - 20 Minano Nihongo ?');"
+                                    >16 - 20</a
+                                >
+                                <a
+                                    class="file-link disabled"
+                                    href="./access/files/vocabulary/voca_n4.xlsx"
+                                    download=""
+                                    onclick="return confirm('Tiến hành tải xuống đáp án 16 - 20 Minano Nihongo ?');"
+                                    >đáp án 16 - 20</a
+                                >
+                            </li>
+                            <li class="file-item">
+                                <a
+                                    class="file-link disabled"
+                                    href="./access/files/vocabulary/voca_n5.xlsx"
+                                    download=""
+                                    onclick="return confirm('Tiến hành tải xuống bài kiểm tra 21 - 25 Minano Nihongo ?');"
+                                    >21 - 25</a
+                                >
+                                <a
+                                    class="file-link disabled"
+                                    href="./access/files/vocabulary/voca_n4.xlsx"
+                                    download=""
+                                    onclick="return confirm('Tiến hành tải xuống đáp án 21 - 25 Minano Nihongo ?');"
+                                    >đáp án 21 - 25</a
+                                >
+                            </li>
+                            <li class="file-item">
+                                <a
+                                    class="file-link disabled"
+                                    href="./access/files/vocabulary/voca_n4.xlsx"
+                                    download=""
+                                    onclick="return confirm('Tiến hành tải xuống bài kiểm tra 26 - 30 Minano Nihongo ?');"
+                                    >26 - 30</a
+                                >
+                                <a
+                                    class="file-link disabled"
+                                    href="./access/files/vocabulary/voca_n4.xlsx"
+                                    download=""
+                                    onclick="return confirm('Tiến hành tải xuống đáp án 26 - 30 Minano Nihongo ?');"
+                                    >đáp án 26 - 30</a
+                                >
+                            </li>
+                            <li class="file-item">
+                                <a
+                                    class="file-link disabled"
+                                    href="./access/files/vocabulary/voca_n5.xlsx"
+                                    download=""
+                                    onclick="return confirm('Tiến hành tải xuống bài kiểm tra 31 - 35 Minano Nihongo ?');"
+                                    >31 - 35</a
+                                >
+                                <a
+                                    class="file-link disabled"
+                                    href="./access/files/vocabulary/voca_n4.xlsx"
+                                    download=""
+                                    onclick="return confirm('Tiến hành tải xuống đáp án 31 - 35 Minano Nihongo ?');"
+                                    >đáp án 31 - 35</a
+                                >
+                            </li>
+                            <li class="file-item">
+                                <a
+                                    class="file-link disabled"
+                                    href="./access/files/vocabulary/voca_n4.xlsx"
+                                    download=""
+                                    onclick="return confirm('Tiến hành tải xuống bài kiểm tra 36 - 40 Minano Nihongo ?');"
+                                    >36 - 40</a
+                                >
+                                <a
+                                    class="file-link disabled"
+                                    href="./access/files/vocabulary/voca_n4.xlsx"
+                                    download=""
+                                    onclick="return confirm('Tiến hành tải xuống đáp án 36 - 40 Minano Nihongo ?');"
+                                    >đáp án 36 - 40</a
+                                >
+                            </li>
+                            <li class="file-item">
+                                <a
+                                    class="file-link disabled"
+                                    href="./access/files/vocabulary/voca_n5.xlsx"
+                                    download=""
+                                    onclick="return confirm('Tiến hành tải xuống bài kiểm tra 41 - 45 Minano Nihongo ?');"
+                                    >41 - 45</a
+                                >
+                                <a
+                                    class="file-link disabled"
+                                    href="./access/files/vocabulary/voca_n4.xlsx"
+                                    download=""
+                                    onclick="return confirm('Tiến hành tải xuống đáp án 41 - 45 Minano Nihongo ?');"
+                                    >đáp án 41 - 45</a
+                                >
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Sổ đầu bài -->
+                <div class="manager-class-log-book">
+                    <div class="log-book-option">
+                        <button class="log-book-option-btn active" name="today">
+                            <i class="fa-regular fa-calendar-days"></i>Hôm Nay
+                        </button>
+                        <button class="log-book-option-btn" name="search">
+                            <i class="fa-solid fa-magnifying-glass"></i>Tìm kiếm
+                        </button>
+                        <button class="log-book-option-btn" name="write">
+                            <i class="fa-solid fa-pen-nib"></i>Ghi Sổ
+                        </button>
+                    </div>
+
+                    <!-- TODAY -->
+                    <div class="log-book-today"></div>
+
+                    <!-- SEARCH -->
+                    <div class="log-book-search" style="display: none">
+                        <form id="log-book-search-form">
+                            <div class="log-book-write__date-item">
+                                <label
+                                    class="add-item-title"
+                                    for="log-book-search__part"
+                                    >Buổi học:</label
+                                >
+                                <select
+                                    class="add-item-input form-select"
+                                    id="log-book-search__part"
+                                    name="part"
+                                >
+                                    <option value="BUỔI SÁNG">Buổi Sáng</option>
+                                    <option value="BUỔI CHIỀU">
+                                        Buổi Chiều
+                                    </option>
+                                    <option value="BUỔI TỐI">Buổi Tối</option>
+                                </select>
+                            </div>
+                            <div class="log-book-write__date-item">
+                                <label
+                                    class="add-item-title"
+                                    for="log-book-search__date"
+                                    >Ngày học:</label
+                                >
+                                <input
+                                    type="date"
+                                    id="log-book-search__date"
+                                    class="add-item-input date-input"
+                                    aria-label="Ngày học"
+                                    name="log_at"
+                                />
+                            </div>
+                            <div
+                                class="log-book-write__date-item log-book-write__dates"
+                            >
+                                <div class="log-book-write__date-item">
+                                    <label
+                                        class="add-item-title"
+                                        for="log-book-search__class-dropdown"
+                                        >Tên Lớp:</label
+                                    >
+                                    <select
+                                        class="add-item-input form-select"
+                                        id="log-book-search__class-dropdown"
+                                        name="class_id"
+                                    >
+                                        <option value="">-- Tất cả --</option>
+                                        <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                                    </select>
+                                </div>
+                            </div>
+                            <button
+                                id="confirm-log-search-btn"
+                                class="btn btn-success"
+                                style="margin-top: 10px"
+                                type="submit"
+                            >
+                                <i class="fa-solid fa-magnifying-glass"></i>Tìm
+                                kiếm
+                            </button>
+                        </form>
+                        <div id="search-results"></div>
+                    </div>
+
+                    <!-- WRITE -->
+                    <form class="log-book-write" style="display: none">
+                        <div class="log-book-write__dates">
+                            <div class="log-book-write__date-item">
+                                <label
+                                    class="add-item-title"
+                                    for="log-book-write__part"
+                                    >Buổi học:</label
+                                >
+                                <select
+                                    class="add-item-input form-select"
+                                    id="log-book-write__part"
+                                    name="part"
+                                >
+                                    <option value="">
+                                        -- Chọn buổi học --
+                                    </option>
+                                    <option value="BUỔI SÁNG">Buổi Sáng</option>
+                                    <option value="BUỔI CHIỀU">
+                                        Buổi Chiều
+                                    </option>
+                                    <option value="BUỔI TỐI">Buổi Tối</option>
+                                </select>
+                            </div>
+                            <div class="log-book-write__date-item">
+                                <label
+                                    class="add-item-title log-book-write__date"
+                                    for="log-book-write__date"
+                                    >Ngày học:</label
+                                >
+                                <input
+                                    type="text"
+                                    id="log-book-write__date"
+                                    class="add-item-input"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="log-book-write__dates">
+                            <div class="log-book-write__date-item">
+                                <label
+                                    class="add-item-title"
+                                    for="log-book-write__lesson-dropdown"
+                                    >Tên Lớp:</label
+                                >
+                                <select
+                                    class="add-item-input form-select"
+                                    id="log-book-write__lesson-dropdown"
+                                    name="classname"
+                                >
+                                    <option value="">-- Chọn Lớp Học --</option>
+                                    <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                                </select>
+                            </div>
+                            <div class="log-book-write__date-item">
+                                <label
+                                    class="add-item-title"
+                                    for="log-book-write__teacher"
+                                    >Giáo viên dạy:</label
+                                >
+                                <input
+                                    class="add-item-input form-select"
+                                    id="log-book-write__teacher"
+                                    name="teacher"
+                                    type="text"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <label
+                            class="add-item-title"
+                            for="log-book-write__content"
+                            >Nội dung buổi học:</label
+                        >
+                        <input
+                            id="log-book-write__content"
+                            name="content"
+                            class="add-item-input form-select"
+                            required
+                        />
+
+                        <div class="write-absent">
+                            <div class="absent-counts">
+                                <span class="absent-count-title">Vắng: </span
+                                ><span class="absent-count">0</span>
+                                <i class="fa-solid fa-user-graduate"></i>
+                            </div>
+                            <input
+                                id="log-book-write__absent"
+                                name="absent"
+                                class="add-item-input form-select"
+                                placeholder="Tìm tên học sinh vắng học ..."
+                                autocomplete="off"
+                            />
+                        </div>
+
+                        <ul id="suggestions-list" class="suggestions-list"></ul>
+                        <ol id="selected-list" class="selected-list"></ol>
+
+                        <button
+                            id="confirm-log-class-btn"
+                            class="btn btn-success"
+                            style="margin-top: 10px"
+                            type="submit"
+                        >
+                            Xác nhận
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
 
