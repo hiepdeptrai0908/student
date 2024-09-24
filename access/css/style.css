@@ -962,14 +962,14 @@ input[type="radio"] {
 }
 
 .delete-btn {
-    width: 40px;
-    height: 40px;
+    width: 34px;
+    height: 34px;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    right: -25px;
+    right: -17px;
     padding: 10px;
-    background-color: #d9d9d9be;
+    background-color: #d9d9d9;
     border-radius: 8px;
     border: none;
     display: flex;
@@ -977,10 +977,12 @@ input[type="radio"] {
     align-items: center;
     cursor: pointer;
     transition: 0.3s;
+    opacity: 0.7;
 }
 
 .delete-btn:hover {
     background-color: #d6d5d5;
+    opacity: 1;
 }
 .delete-btn:hover i {
     color: red;
