@@ -24,6 +24,11 @@
             crossorigin="anonymous"
             referrerpolicy="no-referrer"
         />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+        />
+
         <!-- Thêm CSS của Flatpickr -->
         <link
             rel="stylesheet"
@@ -1384,6 +1389,51 @@
         ></script>
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
         <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/vi.js"></script>
+        <script>
+            // Hàm hiện modal loading
+            function showLoadingModal() {
+                const loadingModal = document.getElementById("loadingModal");
+                loadingModal.style.display = "flex";
+            }
+
+            // Hàm để ẩn modal loading
+            function hideLoadingModal() {
+                const loadingModal = document.getElementById("loadingModal");
+                loadingModal.style.display = "none";
+            }
+            // Xoá log
+            function handleDeleteClick(event, url, className) {
+                event.preventDefault(); // Ngăn chặn hành vi mặc định của nút
+
+                // Thêm xác nhận trước khi gửi yêu cầu DELETE
+                const isConfirmed = confirm(
+                    `Bạn có chắc chắn muốn xóa bản ghi ${"lớp " + className}?`
+                );
+                if (!isConfirmed) {
+                    return; // Nếu người dùng không nhấn OK, ngừng thực hiện
+                }
+
+                console.log(url); // Hiển thị URL trên console
+
+                // Gọi DELETE API
+                showLoadingModal();
+                fetch(url, {
+                    method: "DELETE",
+                })
+                    .then((response) => response.json())
+                    .then((message) => {
+                        hideLoadingModal();
+                        window.location.reload(); // Tải lại trang sau khi xóa thành công
+                        document.querySelector(".modal-overlay").style.display =
+                            "none";
+                        alert(message.title); // Hiển thị thông báo nếu cần
+                    })
+                    .catch((error) => {
+                        console.error("Error:", error);
+                        alert("Có lỗi xảy ra!");
+                    });
+            }
+        </script>
         <script type="module" src="/access/js/custom.js"></script>
         <script type="module" src="/access/js/main.js"></script>
     </body>

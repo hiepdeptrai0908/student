@@ -424,7 +424,7 @@ async function showCoreTable(data) {
             newSpan.className = "rank-item-name rank-item-name__no-test";
             document.querySelector(".rank-item-no-test").appendChild(newSpan);
         }
-    }, 500);
+    }, timeOut);
 }
 
 function handleChangeLessonScreen(e) {
@@ -1017,9 +1017,9 @@ elements.logBookWriteDropdown.addEventListener("change", async function () {
         await fetch(url + `class/${classId}/students`)
             .then((response) => response.json())
             .then((data) => {
+                hideLoadingModal();
                 studentDataInClass = data;
-            })
-            .finally(() => hideLoadingModal());
+            });
     } else {
         studentDataInClass = [];
     }
@@ -1472,6 +1472,7 @@ function renderLesson(classId) {
             .then((response) => response.json())
             .then((datas) => {
                 setTimeout(() => {
+                    hideLoadingModal();
                     // Xóa các tùy chọn cũ
                     elements.deleteScoreLessonDropdown.innerHTML =
                         '<option value="">-- Chọn Bài --</option>';
@@ -1512,8 +1513,7 @@ function renderLesson(classId) {
             })
             .catch((error) => {
                 console.error("Error fetching lessons:", error);
-            })
-            .finally(() => hideLoadingModal());
+            });
     } else {
         // Nếu không có lớp học nào được chọn, reset dropdown bài học
         elements.deleteScoreLessonDropdown.innerHTML =
@@ -1551,6 +1551,7 @@ elements.deleteScoreLesson.addEventListener("submit", function (event) {
             })
                 .then((response) => response.text())
                 .then((message) => {
+                    hideLoadingModal();
                     renderLesson(classId);
                     alert(message); // Thông báo thành công nếu xoá điểm thành công
                     // Thực hiện các hành động tiếp theo nếu cần, ví dụ như làm mới bảng điểm
@@ -1558,8 +1559,7 @@ elements.deleteScoreLesson.addEventListener("submit", function (event) {
                 .catch((error) => {
                     console.error("Có lỗi:", error); // Log lỗi nếu có lỗi xảy ra trong quá trình xoá
                     alert("Đã xảy ra lỗi khi xoá điểm !"); // Thông báo lỗi cho người dùng
-                })
-                .finally(() => hideLoadingModal());
+                });
         }
     } else {
         // Nếu lớp học hoặc bài học chưa được chọn, yêu cầu người dùng chọn trước khi xoá
@@ -1582,7 +1582,6 @@ document
     .addEventListener("change", updateValueLessonDropdown);
 
 /** CLASS LOG BOOK - Sổ đầu bài */
-
 /** TODAY LOG BOOK */
 function renderLogBook(element, logInfo) {
     // Xóa nội dung cũ nếu cần
@@ -1607,6 +1606,7 @@ function renderLogBook(element, logInfo) {
 
     logInfo.forEach((log, index) => {
         const {
+            log_id,
             classname: className,
             student_count: studentCount,
             teacher,
@@ -1736,6 +1736,11 @@ function renderLogBook(element, logInfo) {
                             </div>
                         </div>
                     </div>
+                    <button class="delete-btn" onclick="handleDeleteClick(event, '${
+                        url + "log-class/" + log_id
+                    }', '${className}')">
+                        <i class="fa-regular fa-trash-can error"></i>
+                    </button>
                 </div>    
             `;
 
@@ -1980,6 +1985,7 @@ async function fetchClassLogData() {
         )
             .then((response) => response.json())
             .then((data) => {
+                hideLoadingModal();
                 const logClass = data[0]; // Giả định chỉ có một kết quả
 
                 // Điền thông tin giáo viên
@@ -2008,8 +2014,7 @@ async function fetchClassLogData() {
             .catch((error) => {
                 console.error("Có lỗi xảy ra khi gọi API:", error);
                 alert("Đã có lỗi xảy ra, vui lòng liên hệ quản trị viên !");
-            })
-            .finally(() => hideLoadingModal());
+            });
     } else {
         // Điền thông tin giáo viên
         teacherElement.value = "";
@@ -2098,6 +2103,7 @@ elements.logBookWrite.addEventListener("submit", function (event) {
                 body: JSON.stringify(absentDataArray),
             })
                 .then(() => {
+                    hideLoadingModal();
                     elements.logBookWrite.reset();
                     selectedStudents.clear();
                     document.querySelector(".absent-count").innerHTML =
@@ -2114,8 +2120,7 @@ elements.logBookWrite.addEventListener("submit", function (event) {
         .catch((error) => {
             alert("Đã có lỗi sảy ra !");
             console.error("Có lỗi khi tạo log-class:", error);
-        })
-        .finally(() => hideLoadingModal());
+        });
 });
 
 // Func lấy api log class
