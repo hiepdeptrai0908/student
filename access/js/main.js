@@ -234,15 +234,21 @@ function handleLessonName(lessonNumber) {
     } else if (lessonNumber >= 200 && lessonNumber < 300) {
         return `Hán Tự Bài ${lessonNumber - 200}`;
     } else if (lessonNumber >= 300 && lessonNumber < 400) {
-        return `Minano Nihongo: Bài ${lessonNumber - 300 - 4} → Bài ${
+        return `Minano Nihongo: Bài ${lessonNumber - 300 - 1} → Bài ${
             lessonNumber - 300
         }`;
-    } else if (lessonNumber >= 400 && lessonNumber < 500) {
-        return `Look And Learn: Bài ${lessonNumber - 400 - 4} → Bài ${
-            lessonNumber - 400
+    } else if (lessonNumber >= 500 && lessonNumber < 600) {
+        return `Minano Nihongo: Bài ${lessonNumber - 500 - 4} → Bài ${
+            lessonNumber - 500
         }`;
     } else if (lessonNumber >= 500 && lessonNumber < 600) {
-        return `JLPT Lần ${lessonNumber - 500}`;
+        return `Look And Learn: Bài ${lessonNumber - 500 - 4} → Bài ${
+            lessonNumber - 500
+        }`;
+    } else if (lessonNumber >= 600 && lessonNumber < 700) {
+        return `JLPT Lần ${lessonNumber - 600}`;
+    } else if (lessonNumber >= 700 && lessonNumber < 800) {
+        return `Bài văn số ${lessonNumber - 700}`;
     }
 }
 
@@ -1280,23 +1286,37 @@ document
             }
             lessonDropdown.innerHTML += options;
         } else if (selectedValue === 3) {
-            for (let i = 1; i <= 50; i += 5) {
-                options += `<option value="${i + 4 + 300}">${handleLessonName(
-                    i + 4 + 300
+            for (let i = 1; i <= 50; i += 2) {
+                options += `<option value="${i + 1 + 300}">${handleLessonName(
+                    i + 1 + 300
                 )}</option>`;
             }
             lessonDropdown.innerHTML += options;
         } else if (selectedValue === 4) {
-            for (let i = 1; i <= 30; i += 5) {
+            for (let i = 1; i <= 50; i += 5) {
                 options += `<option value="${i + 4 + 400}">${handleLessonName(
                     i + 4 + 400
                 )}</option>`;
             }
             lessonDropdown.innerHTML += options;
         } else if (selectedValue === 5) {
+            for (let i = 1; i <= 30; i += 5) {
+                options += `<option value="${i + 4 + 500}">${handleLessonName(
+                    i + 4 + 500
+                )}</option>`;
+            }
+            lessonDropdown.innerHTML += options;
+        } else if (selectedValue === 6) {
             for (let i = 1; i <= 5; i++) {
-                options += `<option value="${i + 500}">${handleLessonName(
-                    i + 500
+                options += `<option value="${i + 600}">${handleLessonName(
+                    i + 600
+                )}</option>`;
+            }
+            lessonDropdown.innerHTML += options;
+        } else if (selectedValue === 7) {
+            for (let i = 1; i <= 25; i++) {
+                options += `<option value="${i + 700}">${handleLessonName(
+                    i + 700
                 )}</option>`;
             }
             lessonDropdown.innerHTML += options;
