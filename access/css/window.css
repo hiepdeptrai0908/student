@@ -107,4 +107,10 @@
         right: -40px;
         background-color: #949494;
     }
+    .table-wrapper__score-student {
+        line-height: 20px;
+    }
+    .score-table-window {
+        width: 100px;
+    }
 }

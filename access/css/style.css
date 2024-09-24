@@ -329,11 +329,11 @@ button {
 }
 
 .rank-item-name__max {
-    color: green;
+    color: #1f884f;
 }
 
 .rank-item-name__min {
-    color: red;
+    color: #d30000;
 }
 
 .rank-item-name__no-test {
@@ -390,6 +390,8 @@ button {
 
 .table {
     margin-bottom: 0;
+    font-size: 14px;
+    line-height: 22px;
 }
 
 .table-light {
@@ -408,7 +410,7 @@ td:first-child {
     width: 30px;
 }
 td {
-    height: 40px;
+    height: 45px;
 }
 
 th,

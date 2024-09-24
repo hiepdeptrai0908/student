@@ -111,6 +111,7 @@ body {
 ol,
 ul {
     list-style: none;
+    list-style-type: none;
 }
 blockquote,
 q {
@@ -150,11 +151,11 @@ i.white {
 }
 
 .warning {
-    color: rgba(255, 230, 0, 0.885);
+    color: rgba(186, 168, 0, 0.885);
 }
 
 .success {
-    color: deepskyblue;
+    color: rgb(0, 203, 139);
 }
 
 .flatpickr-calendar {

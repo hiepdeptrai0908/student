@@ -356,8 +356,8 @@ async function showCoreTable(data) {
         const thead = document.createElement("thead");
         thead.innerHTML = `
             <tr class="table-light">
-                <th>STT</th>
-                <th>Họ và Tên</th>
+                <th width="40px">STT</th>
+                <th style="max-width: 250px;">Họ và Tên</th>
                 <th width="45px">Điểm</th>
                 <th width="45px">Sai</th>
                 <th>Chú thích</th>
@@ -392,11 +392,13 @@ async function showCoreTable(data) {
                     }</td>
                     <td class=${classes}>${item.score}</td>
                     <td>${item.error}</td>
-                    <td style="font-style:italic; color:#333; font-size:10px; text-align:left;" ${
+                    <td style="font-style:italic; color:#333; font-size:12px; text-align:left;" ${
                         item.comment == "Chưa đóng phạt" ||
                         item.comment == "chưa đóng phạt" ||
                         item.comment == "Chưa đóng tiền" ||
-                        item.comment == "chưa đóng tiền"
+                        item.comment == "chưa đóng tiền" ||
+                        item.comment == "Vắng" ||
+                        item.comment == "vắng"
                             ? `class="error"`
                             : `class=""`
                     }>${item.comment}</td>
@@ -447,14 +449,14 @@ async function showCoreTable(data) {
         datas.forEach((item) => {
             if (item.score === maxScore && item.score !== 0) {
                 const newSpan = document.createElement("span");
-                newSpan.textContent = `・🥇 ${item.name} （ ${item.score} điểm ）`;
+                newSpan.textContent = `🥇 ${item.name} （ ${item.score} điểm ）`;
                 newSpan.className = "rank-item-name rank-item-name__max";
                 document.querySelector(".rank-item-max").appendChild(newSpan);
             }
 
             if (item.score === minScore && minScore !== 0) {
                 const newSpan = document.createElement("span");
-                newSpan.textContent = `・💸 ${item.name} （ ${item.score} điểm ）`;
+                newSpan.textContent = `💸 ${item.name} （ ${item.score} điểm ）`;
                 newSpan.className = "rank-item-name rank-item-name__min";
                 document.querySelector(".rank-item-min").appendChild(newSpan);
             }
@@ -462,7 +464,7 @@ async function showCoreTable(data) {
             if (item.score === 0 && maxScore !== 0) {
                 countNoTest += 1;
                 const newSpan = document.createElement("span");
-                newSpan.textContent = `・🤷‍♂️ ${item.name}`;
+                newSpan.textContent = `🤷‍♂️ ${item.name}`;
                 newSpan.className = "rank-item-name rank-item-name__no-test";
                 document
                     .querySelector(".rank-item-no-test")
@@ -1254,11 +1256,13 @@ async function renderTableScoreStudent(
                     <td width="100px">${handleLessonName(score.lesson)}</td>
                     <td width="45px">${score.max_score}</td>
                     <td width="45px">${score.score}</td>
-                    <td style="font-style:italic; color:#333; font-size:10px; text-align:left;" ${
+                    <td style="font-style:italic; color:#333; font-size:12px; text-align:left;" ${
                         score.comment == "Chưa đóng phạt" ||
                         score.comment == "chưa đóng phạt" ||
                         score.comment == "Chưa đóng tiền" ||
-                        score.comment == "chưa đóng tiền"
+                        score.comment == "chưa đóng tiền" ||
+                        score.comment == "Vắng" ||
+                        score.comment == "vắng"
                             ? `class="error"`
                             : `class=""`
                     }>${score.comment}</td>

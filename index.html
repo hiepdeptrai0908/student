@@ -83,19 +83,27 @@
                 />
                 <div class="btn-options">
                     <button class="btn-option active" data-value="1">
+                        <i class="fa-solid fa-table-list"></i>
                         Hiển thị bảng điểm
                     </button>
                     <button class="btn-option" data-value="2">
+                        <i class="fa-solid fa-school"></i>
                         Quản lý lớp học
                     </button>
                     <button class="btn-option" data-value="3">
+                        <i class="fa-solid fa-user-graduate"></i>
                         Quản lý học sinh
                     </button>
-                    <button class="btn-option" data-value="4">Nhập điểm</button>
+                    <button class="btn-option" data-value="4">
+                        <i class="fa-solid fa-pen-nib"></i>
+                        Nhập điểm
+                    </button>
                     <button class="btn-option" data-value="5">
+                        <i class="fa-solid fa-folder"></i>
                         Download tài liệu
                     </button>
                     <button class="btn-option" data-value="6">
+                        <i class="fa-solid fa-book-open"></i>
                         Sổ đầu bài
                     </button>
                 </div>
@@ -130,13 +138,24 @@
                     </select>
                     <div class="rank">
                         <div class="rank-item rank-item-max">
-                            <p class="rank-item-title">Điểm cao nhất:</p>
+                            <p class="rank-item-title">
+                                <i class="fa-solid fa-ranking-star success"></i>
+                                Điểm cao nhất:
+                            </p>
                         </div>
                         <div class="rank-item rank-item-min">
-                            <p class="rank-item-title">Điểm thấp nhất:</p>
+                            <p class="rank-item-title">
+                                <i class="fa-solid fa-ranking-star error"></i>
+                                Điểm thấp nhất:
+                            </p>
                         </div>
                         <div class="rank-item rank-item-no-test">
-                            <p class="rank-item-title">Chưa kiểm tra:</p>
+                            <p class="rank-item-title">
+                                <i
+                                    class="fa-solid fa-triangle-exclamation warning"
+                                ></i>
+                                Chưa kiểm tra:
+                            </p>
                         </div>
                     </div>
                     <hr />
@@ -148,6 +167,7 @@
                     </div>
                     <div class="table-wrapper">
                         <div style="text-align: center">
+                            <i class="fa-solid fa-ranking-star"></i>
                             Thang điểm: <b id="show-max-score__table"></b>
                         </div>
                         <table
@@ -297,8 +317,9 @@
                         </div>
 
                         <div>
-                            <label class="add-item-title" for="name"
-                                >Họ & Tên:</label
+                            <label class="add-item-title" for="name">
+                                <i class="fa-solid fa-user-graduate"></i>
+                                Họ & Tên:</label
                             >
                             <input
                                 class="add-item-input"
@@ -340,8 +361,9 @@
                         </div>
 
                         <div>
-                            <label class="add-item-title" for="student-select"
-                                >Họ & Tên:</label
+                            <label class="add-item-title" for="student-select">
+                                <i class="fa-solid fa-user-graduate"></i>
+                                Họ & Tên:</label
                             >
                             <select
                                 class="add-item-input"
@@ -355,8 +377,9 @@
                         </div>
 
                         <div class="add-item">
-                            <label class="add-item-title" for="lesson"
-                                >Nội dung kiểm tra:</label
+                            <label class="add-item-title" for="lesson">
+                                <i class="fa-solid fa-book-open"></i>
+                                Nội dung kiểm tra:</label
                             >
                             <select
                                 name="lesson"
@@ -369,8 +392,9 @@
                             </select>
                         </div>
                         <div>
-                            <label class="add-item-title" for="new-score"
-                                >Điểm Mới: （<i
+                            <label class="add-item-title" for="new-score">
+                                <i class="fa-solid fa-pencil"></i>
+                                Điểm Mới: （<i
                                     >Thang điểm:
                                     <b id="show-max-score__update">... đ</b></i
                                 >）</label
@@ -385,8 +409,9 @@
                             />
                         </div>
                         <div>
-                            <label class="add-item-title" for="new-score"
-                                >Chú thích:
+                            <label class="add-item-title" for="new-score">
+                                <i class="fa-regular fa-comment-dots"></i>
+                                Chú thích:
                                 <i style="opacity: 0.7"
                                     >(※Lưu ý: Nếu nhập chữ "<span
                                         style="color: red"
@@ -430,8 +455,9 @@
                             </select>
                         </div>
                         <div class="add-item">
-                            <label class="add-item-title" for="delete-name"
-                                >Họ & Tên:</label
+                            <label class="add-item-title" for="delete-name">
+                                <i class="fa-solid fa-user-graduate"></i>
+                                Họ & Tên:</label
                             >
                             <select
                                 class="add-item-input"
@@ -456,7 +482,9 @@
                             <label
                                 class="add-item-title"
                                 for="table-student-dropdown"
-                                >Tên Lớp:</label
+                            >
+                                <i class="fa-solid fa-school"></i>
+                                Tên Lớp:</label
                             >
                             <select
                                 class="add-item-input form-select"
@@ -472,7 +500,9 @@
                             <label
                                 class="add-item-title"
                                 for="table-student-select"
-                                >Họ & Tên:</label
+                            >
+                                <i class="fa-solid fa-user-graduate"></i>
+                                Họ & Tên:</label
                             >
                             <select
                                 class="add-item-input"
@@ -485,21 +515,27 @@
                             </select>
                         </div>
                         <div class="table-wrapper">
-                            <div style="text-align: center">
-                                Thang điểm:
-                                <b id="show-max-score__student">... đ</b>
-                            </div>
                             <table
-                                class="table border"
+                                class="table border table-wrapper__score-student"
                                 style="width: 100%"
                                 id="student-score-table"
                             >
                                 <thead>
                                     <tr class="table-light">
                                         <th width="30px">STT</th>
-                                        <th width="100px">Nội Dung</th>
-                                        <th width="45px">Thang Điểm</th>
-                                        <th width="45px">Điểm</th>
+                                        <th width="200px">Nội Dung</th>
+                                        <th
+                                            class="score-table-window"
+                                            width="70px"
+                                        >
+                                            Thang Điểm
+                                        </th>
+                                        <th
+                                            class="score-table-window"
+                                            width="70px"
+                                        >
+                                            Điểm
+                                        </th>
                                         <th style="min-width: 110px">
                                             Chú Thích
                                         </th>
@@ -560,8 +596,9 @@
                                 <!-- Các option đã được rút gọn -->
                                 <option value="">-- Chọn Bài --</option>
                             </select>
-                            <label class="add-item-title" for="max-score"
-                                >Thang điểm:</label
+                            <label class="add-item-title" for="max-score">
+                                <i class="fa-solid fa-ranking-star"></i>
+                                Thang điểm:</label
                             >
                             <input
                                 class="add-item-input"
