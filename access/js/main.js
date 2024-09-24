@@ -282,7 +282,7 @@ function handleLessonName(lessonNumber) {
         return `Minano Nihongo: Bài ${lessonNumber - 300 - 1} → Bài ${
             lessonNumber - 300
         }`;
-    } else if (lessonNumber >= 500 && lessonNumber < 600) {
+    } else if (lessonNumber >= 400 && lessonNumber < 500) {
         return `Minano Nihongo: Bài ${lessonNumber - 500 - 4} → Bài ${
             lessonNumber - 500
         }`;
