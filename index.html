@@ -186,8 +186,9 @@
                     <form id="add-class-form">
                         <h2>Thêm Lớp Học Mới</h2>
                         <div class="add-item">
-                            <label class="add-item-title" for="add-classname"
-                                >Tên Lớp:</label
+                            <label class="add-item-title" for="add-classname">
+                                <i class="fa-solid fa-school"></i>
+                                Tên Lớp:</label
                             >
                             <input
                                 class="add-item-input"
@@ -211,7 +212,9 @@
                             <label
                                 class="add-item-title"
                                 for="old-class-dropdown"
-                                >Tên Lớp Cũ:</label
+                            >
+                                <i class="fa-solid fa-school"></i>
+                                Tên Lớp Cũ:</label
                             >
                             <select
                                 class="add-item-input form-select"
@@ -224,8 +227,9 @@
                             </select>
                         </div>
                         <div class="add-item">
-                            <label class="add-item-title" for="new-classname"
-                                >Tên Lớp Mới:</label
+                            <label class="add-item-title" for="new-classname">
+                                <i class="fa-solid fa-school"></i>
+                                Tên Lớp Mới:</label
                             >
                             <input
                                 class="add-item-input"
@@ -250,7 +254,9 @@
                             <label
                                 class="add-item-title"
                                 for="delete-class-dropdown"
-                                >Chọn Lớp Học:</label
+                            >
+                                <i class="fa-solid fa-school"></i>
+                                Chọn Lớp Học:</label
                             >
                             <select
                                 class="add-item-input form-select"
@@ -275,8 +281,9 @@
                         <h2>Thêm Học Sinh Mới</h2>
 
                         <div class="add-item">
-                            <label class="add-item-title" for="classname"
-                                >Tên Lớp:</label
+                            <label class="add-item-title" for="classname">
+                                <i class="fa-solid fa-school"></i>
+                                Tên Lớp:</label
                             >
                             <select
                                 class="add-item-input form-select"
@@ -314,8 +321,12 @@
                         <h2>Sửa Điểm Học Sinh</h2>
 
                         <div class="add-item">
-                            <label class="add-item-title" for="classname-update"
-                                >Tên Lớp:</label
+                            <label
+                                class="add-item-title"
+                                for="classname-update"
+                            >
+                                <i class="fa-solid fa-school"></i>
+                                Tên Lớp:</label
                             >
                             <select
                                 class="add-item-input form-select"
@@ -401,8 +412,12 @@
                     <form id="delete-student-form">
                         <h2>Xóa Học Sinh</h2>
                         <div class="add-item">
-                            <label class="add-item-title" for="delete-classname"
-                                >Tên Lớp:</label
+                            <label
+                                class="add-item-title"
+                                for="delete-classname"
+                            >
+                                <i class="fa-solid fa-school"></i>
+                                Tên Lớp:</label
                             >
                             <select
                                 class="add-item-input form-select"
@@ -1271,7 +1286,9 @@
                                 <label
                                     class="add-item-title"
                                     for="log-book-search__part"
-                                    >Buổi học:</label
+                                >
+                                    <i class="fa-solid fa-clock"></i>
+                                    Buổi học:</label
                                 >
                                 <select
                                     class="add-item-input form-select"
@@ -1285,20 +1302,7 @@
                                     <option value="BUỔI TỐI">Buổi Tối</option>
                                 </select>
                             </div>
-                            <div class="log-book-write__date-item">
-                                <label
-                                    class="add-item-title"
-                                    for="log-book-search__date"
-                                    >Ngày học:</label
-                                >
-                                <input
-                                    type="date"
-                                    id="log-book-search__date"
-                                    class="add-item-input date-input"
-                                    aria-label="Ngày học"
-                                    name="log_at"
-                                />
-                            </div>
+
                             <div
                                 class="log-book-write__date-item log-book-write__dates"
                             >
@@ -1306,7 +1310,9 @@
                                     <label
                                         class="add-item-title"
                                         for="log-book-search__class-dropdown"
-                                        >Tên Lớp:</label
+                                    >
+                                        <i class="fa-solid fa-school"></i>
+                                        Tên lớp:</label
                                     >
                                     <select
                                         class="add-item-input form-select"
@@ -1317,6 +1323,22 @@
                                         <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
                                     </select>
                                 </div>
+                            </div>
+                            <div class="log-book-write__date-item">
+                                <label
+                                    class="add-item-title"
+                                    for="log-book-search__date"
+                                >
+                                    <i class="fa-regular fa-calendar-days"></i>
+                                    Ngày học:</label
+                                >
+                                <input
+                                    type="date"
+                                    id="log-book-search__date"
+                                    class="add-item-input date-input"
+                                    aria-label="Ngày học"
+                                    name="log_at"
+                                />
                             </div>
                             <button
                                 id="confirm-log-search-btn"
@@ -1338,7 +1360,9 @@
                                 <label
                                     class="add-item-title"
                                     for="log-book-write__part"
-                                    >Buổi học:</label
+                                >
+                                    <i class="fa-solid fa-clock"></i>
+                                    Buổi học:</label
                                 >
                                 <select
                                     class="add-item-input form-select"
@@ -1359,7 +1383,9 @@
                                 <label
                                     class="add-item-title log-book-write__date"
                                     for="log-book-write__date"
-                                    >Ngày học:</label
+                                >
+                                    <i class="fa-regular fa-calendar-days"></i>
+                                    Ngày học:</label
                                 >
                                 <input
                                     type="text"
@@ -1374,7 +1400,9 @@
                                 <label
                                     class="add-item-title"
                                     for="log-book-write__lesson-dropdown"
-                                    >Tên Lớp:</label
+                                >
+                                    <i class="fa-solid fa-school"></i>
+                                    Tên lớp:</label
                                 >
                                 <select
                                     class="add-item-input form-select"
@@ -1389,7 +1417,11 @@
                                 <label
                                     class="add-item-title"
                                     for="log-book-write__teacher"
-                                    >Giáo viên dạy:</label
+                                >
+                                    <i
+                                        class="fa-solid fa-person-chalkboard"
+                                    ></i>
+                                    Giáo viên:</label
                                 >
                                 <input
                                     class="add-item-input form-select"
@@ -1404,7 +1436,9 @@
                         <label
                             class="add-item-title"
                             for="log-book-write__content"
-                            >Nội dung buổi học:</label
+                        >
+                            <i class="fa-solid fa-book-open"></i>
+                            Nội dung buổi học:</label
                         >
                         <input
                             id="log-book-write__content"

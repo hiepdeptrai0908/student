@@ -621,10 +621,11 @@ a:focus {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 30px;
-    height: 30px;
-    border-top: 1.5px solid #00ff15;
-    border-right: 1.5px solid #00ff15;
+    width: 35px;
+    height: 35px;
+    border: 1.5px solid transparent; /* Mặc định là trong suốt cho tất cả */
+    border-top-color: #00ff15; /* Cạnh trên có màu xanh lá */
+    border-bottom-color: #00ff15;
     border-radius: 50%;
     animation: animateD 1.5s linear infinite;
 }
@@ -638,10 +639,11 @@ a:focus {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 30px;
-    height: 30px;
-    border-top: 1.5px solid red;
-    border-right: 1.5px solid red;
+    width: 35px;
+    height: 35px;
+    border: 1.5px solid transparent; /* Mặc định là trong suốt cho tất cả */
+    border-top-color: red; /* Cạnh trên có màu xanh lá */
+    border-bottom-color: red;
     border-radius: 50%;
     animation: animateD 1.5s linear infinite;
     transform: translate(-50%, -50%);
