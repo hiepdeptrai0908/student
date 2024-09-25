@@ -898,7 +898,6 @@ async function fetchScoreData(class_id, student_id, lesson) {
         setTimeout(() => {
             hideLoadingModal();
             elements.showMaxScoreUpdate.textContent = `${data[0].max_score} đ`;
-            elements.showMaxScoreStudent.textContent = `${data[0].max_score} đ`;
             document.getElementById("new-score").max =
                 data[0].max_score || "50";
             document.getElementById("new-score").value = data[0].score || "";
