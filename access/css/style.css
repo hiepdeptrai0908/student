@@ -832,14 +832,11 @@ a:focus {
     opacity: 0.8;
 }
 
-.log-book-write__dates {
+.log-book-write__dates,
+.log-book-search__dates {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-#log-book-write__date {
-    width: 100%;
 }
 
 .log-book-write__date-item {
@@ -853,11 +850,19 @@ a:focus {
     flex-direction: column;
 }
 
-.log-book-write__date-item:first-child {
+.log-book-search__dates {
+    background-color: rgb(234, 234, 234);
+    padding: 16px 16px 0 16px;
+    border-radius: 10px;
+}
+
+.log-book-write__date-item:first-child,
+.log-book-search__dates > .log-book-write__date-item {
     margin-right: 10px;
 }
 
-.log-book-write__dates > .log-book-write__date-item:last-child {
+.log-book-write__dates > .log-book-write__date-item:last-child,
+.log-book-search__dates > .log-book-write__date-item:last-child {
     margin-right: 0;
 }
 

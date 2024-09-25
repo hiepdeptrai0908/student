@@ -1319,63 +1319,73 @@
                     <!-- SEARCH -->
                     <div class="log-book-search" style="display: none">
                         <form id="log-book-search-form">
-                            <div class="log-book-write__date-item">
-                                <label
-                                    class="add-item-title"
-                                    for="log-book-search__part"
-                                >
-                                    <i class="fa-solid fa-clock"></i>
-                                    Buổi học:</label
-                                >
-                                <select
-                                    class="add-item-input form-select"
-                                    id="log-book-search__part"
-                                    name="part"
-                                >
-                                    <option value="BUỔI SÁNG">Buổi Sáng</option>
-                                    <option value="BUỔI CHIỀU">
-                                        Buổi Chiều
-                                    </option>
-                                    <option value="BUỔI TỐI">Buổi Tối</option>
-                                </select>
-                            </div>
-
-                            <div
-                                class="log-book-write__date-item log-book-write__dates"
-                            >
+                            <div class="log-book-search__dates">
                                 <div class="log-book-write__date-item">
                                     <label
                                         class="add-item-title"
-                                        for="log-book-search__class-dropdown"
+                                        for="log-book-search__part"
                                     >
-                                        <i class="fa-solid fa-school"></i>
-                                        Tên lớp:</label
+                                        <i class="fa-solid fa-clock"></i>
+                                        Buổi học:</label
                                     >
                                     <select
                                         class="add-item-input form-select"
-                                        id="log-book-search__class-dropdown"
-                                        name="class_id"
+                                        id="log-book-search__part"
+                                        name="part"
                                     >
-                                        <option value="">-- Tất cả --</option>
-                                        <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                                        <option value="BUỔI SÁNG">
+                                            Buổi Sáng
+                                        </option>
+                                        <option value="BUỔI CHIỀU">
+                                            Buổi Chiều
+                                        </option>
+                                        <option value="BUỔI TỐI">
+                                            Buổi Tối
+                                        </option>
                                     </select>
                                 </div>
-                            </div>
-                            <div class="log-book-write__date-item">
-                                <label
-                                    class="add-item-title"
-                                    for="log-book-search__date"
+
+                                <div
+                                    class="log-book-write__date-item log-book-write__dates"
                                 >
-                                    <i class="fa-regular fa-calendar-days"></i>
-                                    Ngày học:</label
-                                >
-                                <input
-                                    type="date"
-                                    id="log-book-search__date"
-                                    class="add-item-input date-input"
-                                    aria-label="Ngày học"
-                                    name="log_at"
-                                />
+                                    <div class="log-book-write__date-item">
+                                        <label
+                                            class="add-item-title"
+                                            for="log-book-search__class-dropdown"
+                                        >
+                                            <i class="fa-solid fa-school"></i>
+                                            Tên lớp:</label
+                                        >
+                                        <select
+                                            class="add-item-input form-select"
+                                            id="log-book-search__class-dropdown"
+                                            name="class_id"
+                                        >
+                                            <option value="">
+                                                -- Tất cả --
+                                            </option>
+                                            <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="log-book-write__date-item">
+                                    <label
+                                        class="add-item-title"
+                                        for="log-book-search__date"
+                                    >
+                                        <i
+                                            class="fa-regular fa-calendar-days"
+                                        ></i>
+                                        Ngày học:</label
+                                    >
+                                    <input
+                                        type="date"
+                                        id="log-book-search__date"
+                                        class="add-item-input date-input"
+                                        aria-label="Ngày học"
+                                        name="log_at"
+                                    />
+                                </div>
                             </div>
                             <button
                                 id="confirm-log-search-btn"
@@ -1383,8 +1393,10 @@
                                 style="margin-top: 10px"
                                 type="submit"
                             >
-                                <i class="fa-solid fa-magnifying-glass"></i>Tìm
-                                kiếm
+                                <i
+                                    class="fa-solid fa-magnifying-glass white"
+                                ></i
+                                >Tìm kiếm
                             </button>
                         </form>
                         <div id="search-results"></div>
@@ -1427,7 +1439,7 @@
                                 <input
                                     type="text"
                                     id="log-book-write__date"
-                                    class="add-item-input"
+                                    class="add-item-input date-input"
                                 />
                             </div>
                         </div>

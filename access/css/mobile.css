@@ -106,4 +106,13 @@
         margin-right: 2px;
         width: auto;
     }
+    .date-input {
+        width: 100% !important;
+    }
+    .log-book-search__dates {
+        flex-direction: column;
+    }
+    .log-book-search__dates > .log-book-write__date-item {
+        margin-right: 0;
+    }
 }
