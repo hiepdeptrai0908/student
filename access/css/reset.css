@@ -159,11 +159,11 @@ i.white {
 }
 
 .flatpickr-calendar {
-    width: 40%;
+    width: 310px;
     min-width: 310px;
     display: block;
     transform: translateX(
-        -110%
+        0%
     ); /* Di chuyển phần tử về bên trái 50% chiều rộng của nó */
     top: 0; /* Đặt vị trí ở trên cùng */
     left: auto; /* Đặt phần tử ở giữa chiều ngang */
