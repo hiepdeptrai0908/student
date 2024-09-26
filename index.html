@@ -66,6 +66,8 @@
         </div>
         <div class="wrapper">
             <img class="hoa-anh-dao" src="access/images/hoa.png" alt="" />
+
+            <!-- Mobide option -->
             <select class="form-select form-select-mobile" id="manager-option">
                 <option value="1">Hiển thị bảng điểm</option>
                 <option value="2">Quản lý lớp học</option>
@@ -73,8 +75,10 @@
                 <option value="4">Nhập điểm</option>
                 <option value="5">Download tài liệu</option>
                 <option value="6">Sổ đầu bài</option>
+                <option value="7">Xếp hạng</option>
             </select>
 
+            <!-- Window sidebar -->
             <div class="form-select-window">
                 <img
                     class="logo"
@@ -105,6 +109,10 @@
                     <button class="btn-option" data-value="6">
                         <i class="fa-solid fa-book-open"></i>
                         Sổ đầu bài
+                    </button>
+                    <button class="btn-option" data-value="7">
+                        <i class="fa-solid fa-ranking-star"></i>
+                        Xếp hạng
                     </button>
                 </div>
                 <img
@@ -1523,6 +1531,131 @@
                             Xác nhận
                         </button>
                     </form>
+                </div>
+
+                <!-- Xếp hạng -->
+                <div class="manager-rank">
+                    <div class="manager-rank-class">
+                        <h1>Thông Số Chung</h1>
+                        <table
+                            class="table manager-rank-table manager-rank-table-class"
+                        >
+                            <thead>
+                                <tr>
+                                    <th scope="col">STT</th>
+                                    <th scope="col">Tên Lớp</th>
+                                    <th scope="col">Điểm Trung&nbsp;Bình</th>
+                                    <th scope="col">Số Lần Vắng</th>
+                                    <th scope="col">Sổ Đầu Bài</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>01</td>
+                                    <td>N5 - 08</td>
+                                    <td>92 % (20 bài)</td>
+                                    <td>70 buổi</td>
+                                    <td>20 bản ghi</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="rank-select">
+                        <label class="add-item-title" for="rank-select-class">
+                            <i class="fa-solid fa-school"></i>
+                            Chọn lớp học
+                        </label>
+                        <select
+                            class="add-item-input form-select"
+                            id="rank-select-class"
+                            name="class_id"
+                        >
+                            <option value="">-- Tất cả --</option>
+                            <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                        </select>
+                    </div>
+                    <div class="rank-content">
+                        <div class="content-wrapper">
+                            <div class="rank-options">
+                                <button class="rank-option-btn" data-value="1">
+                                    Vắng Học
+                                </button>
+                                <button class="rank-option-btn" data-value="2">
+                                    Điểm Số
+                                </button>
+                            </div>
+
+                            <!-- BẢNG VẮNG HỌC -->
+                            <table
+                                class="manager-rank-table manager-rank-table__absent"
+                                id="manager-rank-table__absent"
+                            >
+                                <tbody>
+                                    <tr>
+                                        <td
+                                            colspan="6"
+                                            style="text-align: center"
+                                        >
+                                            <div class="no-data">
+                                                <img
+                                                    class="default-message"
+                                                    src="access/images/search.jpg"
+                                                    alt="Mời chọn chức năng"
+                                                />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <!-- BẢNG ĐIỂM SỐ -->
+                            <table
+                                class="manager-rank-table manager-rank-table__score"
+                                id="manager-rank-table__score"
+                            ></table>
+                        </div>
+                    </div>
+
+                    <!-- Chi tiết vắng -->
+                    <div class="absent-detail" id="absent-detail">
+                        <div
+                            class="absent-detail-info absent-detail-info-heading"
+                        >
+                            Chi tiết ngày nghỉ
+                        </div>
+                        <div class="absent-detail-info">
+                            <i class="fa-solid fa-user-graduate"></i>
+                            <span id="absent-detail-student-name"></span>
+                        </div>
+                        <div class="absent-detail-info">
+                            <i class="fa-solid fa-school"></i>
+                            <span id="absent-detail-class-name"></span>
+                        </div>
+                        <table
+                            class="manager-rank-table manager-rank-table__absent-detail"
+                        ></table>
+                    </div>
+
+                    <!-- Chi tiết điểm -->
+                    <div class="score-detail" id="score-detail">
+                        <div
+                            class="absent-detail-info absent-detail-info-heading"
+                        >
+                            Chi tiết bảng điểm
+                        </div>
+                        <div class="absent-detail-info">
+                            <i class="fa-solid fa-user-graduate"></i>
+                            <span id="score-detail-student-name"></span>
+                        </div>
+                        <div class="absent-detail-info">
+                            <i class="fa-solid fa-school"></i>
+                            <span id="score-detail-class-name"></span>
+                        </div>
+                        <table
+                            class="manager-rank-table manager-rank-table__score manager-rank-table__score-detail"
+                        ></table>
+                    </div>
                 </div>
             </div>
         </div>

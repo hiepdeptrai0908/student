@@ -14,6 +14,7 @@ const elements = {
     managerInsertCore: document.querySelector(".manager-insert-core"),
     managerFiles: document.querySelector(".manager-files"),
     managerClassLogBook: document.querySelector(".manager-class-log-book"),
+    managerRank: document.querySelector(".manager-rank"),
     studentCountElement: document.getElementById("student-count"),
     lessonSelectElement: document.getElementById("lesson-select"),
     classnameInputElement: document.getElementById("classname-input"),
@@ -64,6 +65,9 @@ const elements = {
         "#log-book-search__class-dropdown"
     ),
     logBookSearchForm: document.querySelector("#log-book-search-form"),
+
+    // RANK //////////////////////////////////////////////////////////////////
+    rankSelectClass: document.querySelector("#rank-select-class"),
 };
 
 const tableWrapper = document.querySelector("table");
@@ -89,6 +93,19 @@ function toggleVisibility(elementsToShow, elementsToHide) {
 
 // Xử lý đăng nhập
 function handleLogin() {
+    elements.modalOverlay.style.display = "none";
+    toggleVisibility(
+        [elements.wrapper, elements.managerOption, elements.managerCoreTable],
+        [
+            elements.managerClass,
+            elements.managerStudent,
+            elements.managerInsertCore,
+            elements.managerFiles,
+            elements.managerClassLogBook,
+            elements.managerRank,
+        ]
+    );
+    return optionScreen();
     const loginInputValue = elements.loginBtn.value.trim().toUpperCase();
 
     if (loginInputValue === "HS") {
@@ -105,6 +122,7 @@ function handleLogin() {
                 elements.managerInsertCore,
                 elements.managerFiles,
                 elements.managerClassLogBook,
+                elements.managerRank,
             ]
         );
     } else if (["ADMINN"].includes(loginInputValue)) {
@@ -121,6 +139,7 @@ function handleLogin() {
                 elements.managerInsertCore,
                 elements.managerFiles,
                 elements.managerClassLogBook,
+                elements.managerRank,
             ]
         );
         optionScreen();
@@ -183,6 +202,7 @@ function optionScreen(
         4: [elements.managerInsertCore],
         5: [elements.managerFiles],
         6: [elements.managerClassLogBook],
+        7: [elements.managerRank],
     };
 
     elements.managerOption.value = optionValue;
@@ -197,6 +217,7 @@ function optionScreen(
                     elements.managerInsertCore,
                     elements.managerFiles,
                     elements.managerClassLogBook,
+                    elements.managerRank,
                 ].filter((el) => !optionMap[key].includes(el))
             );
         }
@@ -636,6 +657,15 @@ async function fetchClasses() {
                 .join("");
         // Log book search - class dropdown
         elements.logBookSearchClassDropdown.innerHTML =
+            '<option value="">-- Tất cả --</option>' +
+            data
+                .map(
+                    (item) =>
+                        `<option value="${item.id}">${item.classname}</option>`
+                )
+                .join("");
+        // Rank select - class dropdown
+        elements.rankSelectClass.innerHTML =
             '<option value="">-- Tất cả --</option>' +
             data
                 .map(
@@ -1711,7 +1741,7 @@ function renderLogBook(element, logInfo) {
 
         // Create the HTML structure
         const logBookHtml = `
-                <div class="log-book-today-class ${classes}">
+                <div class="log-book-today-class ${classes}" style="animation-delay: 0.${index}s;">
                     <div class="log-book-today-class-item">
                         <div class="log-book-heading">
                             <p class="log-book-heading-item">
@@ -2224,6 +2254,519 @@ async function fetchLogClassData(condition) {
     }
 }
 
+// Lấy tất cả các nút trong div .rank-options
+const buttons = document.querySelectorAll(".rank-option-btn");
+
+// Lấy các bảng
+const absentTable = document.querySelector(".manager-rank-table__absent");
+const scoreTable = document.querySelector(".manager-rank-table__score");
+const absentDetailTable = document.querySelector("#absent-detail");
+const scoreDetailTable = document.querySelector("#score-detail");
+const defaultMessage = document.getElementById("default-message");
+
+// Lặp qua tất cả các nút và gắn sự kiện click
+buttons.forEach((button) => {
+    button.addEventListener("click", function () {
+        // Xóa lớp 'active' khỏi tất cả các nút
+        buttons.forEach((btn) => btn.classList.remove("active"));
+
+        // Thêm lớp 'active' cho nút được nhấn
+        this.classList.add("active");
+
+        // Gọi API tương ứng
+        fetchStatistics();
+    });
+});
+
+// Gắn sự kiện change cho dropdown
+document
+    .querySelector("#rank-select-class")
+    .addEventListener("change", function () {
+        fetchStatistics();
+    });
+
+// Hàm gọi API tương ứng với nút đang active
+function fetchStatistics() {
+    const classId = document.querySelector("#rank-select-class").value; // Lấy classId từ select
+    const activeButton = document.querySelector(".rank-option-btn.active"); // Lấy nút đang active
+
+    absentDetailTable.style.display = "none";
+    scoreDetailTable.style.display = "none";
+
+    // Ẩn/hiện bảng dựa trên giá trị số
+    if (activeButton) {
+        const value = activeButton.getAttribute("data-value");
+
+        if (value === "1") {
+            absentTable.classList.remove("hidden");
+            scoreTable.classList.add("hidden");
+            fetchAbsenceStatistics(classId);
+        } else if (value === "2") {
+            scoreTable.classList.remove("hidden");
+            absentTable.classList.add("hidden");
+            fetchScoreStatistics(classId);
+        }
+    }
+
+    const rankContent = document.querySelector(".rank-content");
+    rankContent.style.display = "flex"; // Hiển thị bảng
+    rankContent.scrollIntoView({ behavior: "smooth" }); // Cuộn xuống
+}
+
+// Hàm để gọi API và render bảng Vắng Học
+function fetchAbsenceStatistics(classId) {
+    let path = url + `absence-statistics`;
+    if (classId) {
+        path += `?classId=${classId}`;
+    }
+
+    showLoadingModal();
+    fetch(path)
+        .then((response) => {
+            if (!response.ok)
+                throw new Error(
+                    "Network response was not ok " + response.statusText
+                );
+            return response.json();
+        })
+        .then((data) => {
+            hideLoadingModal();
+            const absentContainer = document.querySelector(
+                "#manager-rank-table__absent"
+            );
+            absentContainer.innerHTML = ""; // Xóa nội dung cũ
+
+            if (data.length === 0) {
+                absentContainer.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center;">
+                            <div class="no-data">
+                                <img class="no-data-img" src="access/images/no-data.jpeg" alt="No Data" style="animation: fadeIn 1s forwards;" />
+                            </div>
+                        </td>
+                    </tr>`;
+                return;
+            }
+
+            let tableHTML = `
+                <table class="manager-rank-table manager-rank-table__absent">
+                    <thead>
+                        <colgroup class="colgroup">
+                            <col style="width: 5%; max-width: 30px" />
+                            <col style="width: 25%" />
+                            <col style="width: 15%" />
+                            <col style="width: 15%" />
+                            <col style="width: 10%" />
+                            <col style="width: 15%" />
+                            <col style="width: 15%" />
+                        </colgroup>
+                        <tr>
+                            <th scope="col" style="min-width: 30px"></th>
+                            <th scope="col">Họ & Tên</th>
+                            <th scope="col">Tên Lớp</th>
+                            <th scope="col">Vắng</th>
+                            <th scope="col">Có Phép</th>
+                            <th scope="col">Không Phép</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            data.forEach((item, index) => {
+                tableHTML += `
+                    <tr>
+                        <td>${
+                            index + 1 < 10 ? "0" + (index + 1) : index + 1
+                        }</td>
+                        <td>${item.student_name}</td>
+                        <td>${item.classname}</td>
+                        <td>${item.total_absent} buổi</td>
+                        <td>${item.absent_true} buổi</td>
+                        <td>${item.absent_false} buổi</td>
+                        <td><button class="rank-table-detail-btn rank-table-absent-detail-btn" data-class-id="${
+                            item.class_id
+                        }" data-student-id="${
+                    item.student_id
+                }">Chi tiết</button></td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `</tbody></table>`;
+            absentContainer.innerHTML = tableHTML;
+        })
+        .catch((error) =>
+            console.error(
+                "There was a problem with the fetch operation:",
+                error
+            )
+        );
+}
+
+// Hàm để gọi API và render bảng Điểm Số
+function fetchScoreStatistics(classId) {
+    let path = url + `score-statistics`;
+    if (classId) {
+        path += `?classId=${classId}`;
+    }
+
+    showLoadingModal();
+    fetch(path)
+        .then((response) => {
+            if (!response.ok)
+                throw new Error(
+                    "Network response was not ok " + response.statusText
+                );
+            return response.json();
+        })
+        .then((data) => {
+            hideLoadingModal();
+            const scoreContainer = document.querySelector(
+                "#manager-rank-table__score"
+            );
+            scoreContainer.innerHTML = ""; // Xóa nội dung cũ
+
+            if (data.length === 0) {
+                scoreContainer.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center;">
+                            <div class="no-data">
+                                <img class="no-data-img" src="access/images/no-data.jpeg" alt="No Data" style="animation: fadeIn 1s forwards;" />
+                            </div>
+                        </td>
+                    </tr>`;
+                return;
+            }
+
+            // Thêm tiêu đề cho bảng Điểm Số
+            let tableHTML = `
+                <table class="manager-rank-table manager-rank-table__score">
+                    <thead>
+                        <colgroup class="colgroup">
+                            <col style="width: 5.5%; max-width: 30px" />
+                            <col style="width: 35%" />
+                            <col style="width: 15%" />
+                            <col style="width: 15%" />
+                            <col style="width: 20%" />
+                            <col style="width: 20%" />
+                        </colgroup>
+                        <tr>
+                            <th scope="col" style="min-width: 30px"></th>
+                            <th scope="col">Họ & Tên</th>
+                            <th scope="col">Tên Lớp</th>
+                            <th scope="col">Kiểm Tra</th>
+                            <th scope="col">Điểm Trung&nbsp;Bình</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            data.forEach((item, index) => {
+                const averageScore =
+                    item.average_score_percent !== undefined
+                        ? item.average_score_percent === 100 ||
+                          item.average_score_percent === 0
+                            ? `${item.average_score_percent} %`
+                            : item.average_score_percent.toFixed(2) + " %" // Làm tròn nếu không phải 0 hoặc 100
+                        : "N/A";
+
+                tableHTML += `
+                    <tr>
+                        <td>${
+                            index + 1 < 10 ? "0" + (index + 1) : index + 1
+                        }</td>
+                        <td>${item.student_name}</td>
+                        <td>${item.classname}</td>
+                        <td>${item.total_count_lesson} Bài</td>
+                        <td>${averageScore}</td>
+                        <td><button class="rank-table-detail-btn rank-table-score-detail-btn" data-class-id="${
+                            item.class_id
+                        }" data-student-id="${
+                    item.student_id
+                }">chi tiết</button></td>
+                    </tr>
+                `;
+            });
+            tableHTML += `</tbody></table>`;
+            scoreContainer.innerHTML = tableHTML;
+        })
+        .catch((error) =>
+            console.error(
+                "There was a problem with the fetch operation:",
+                error
+            )
+        );
+}
+
+// DETAIL ABSENT
+// Hàm để gọi API và render bảng chi tiết vắng học
+function fetchAbsentRecords(classId, studentId) {
+    absentDetailTable.style.display = "flex";
+    scoreDetailTable.style.display = "none";
+    let path = url + `records`;
+    if (classId) {
+        path += `?classId=${classId}`;
+    }
+    if (studentId) {
+        path += `&studentId=${studentId}`;
+    }
+
+    showLoadingModal();
+    fetch(path)
+        .then((response) => {
+            if (!response.ok)
+                throw new Error(
+                    "Network response was not ok " + response.statusText
+                );
+            return response.json();
+        })
+        .then((data) => {
+            hideLoadingModal();
+
+            // Cập nhật tên học sinh và lớp học
+            document.querySelector("#absent-detail-student-name").textContent =
+                data[0]?.student_name || "Tên học sinh";
+            document.querySelector(
+                "#absent-detail-class-name"
+            ).textContent = `Lớp: ${data[0]?.classname || "Không xác định"}`;
+
+            // Xóa nội dung cũ của bảng
+            const tableBody = document.querySelector(
+                ".manager-rank-table__absent-detail"
+            );
+            tableBody.innerHTML = "";
+
+            if (data.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="text-align: center;">
+                            Không có dữ liệu vắng học
+                        </td>
+                    </tr>`;
+                return;
+            }
+
+            // Tạo phần tiêu đề bảng
+            let tableHTML = `
+                <thead>
+                    <colgroup class="colgroup">
+                        <col style="width: 5%" />
+                        <col style="width: 30%" />
+                        <col style="width: 15%" />
+                        <col style="width: 15%" />
+                        <col style="width: auto; text-align: left" />
+                    </colgroup>
+                    <tr>
+                        <th scope="col" style="min-width: 30px"></th>
+                        <th scope="col">Ngày Vắng</th>
+                        <th scope="col">Buổi Học</th>
+                        <th scope="col">Vắng</th>
+                        <th scope="col">Lý do</th>
+                    </tr>
+                </thead>
+                <tbody>
+            `;
+
+            // Render dữ liệu mới vào bảng
+            data.forEach((item, index) => {
+                const absentType = item.absent ? "Có phép" : "Không phép";
+                tableHTML += `
+                    <tr>
+                        <td>${
+                            index + 1 < 10 ? "0" + (index + 1) : index + 1
+                        }</td>
+                        <td>${formatShortDateTime(item.absent_at)}</td>
+                        <td>${item.part}</td>
+                        <td>${absentType}</td>
+                        <td>${item.reason || "Không có lý do"}</td>
+                    </tr>
+                `;
+            });
+
+            // Đóng bảng
+            tableHTML += `</tbody>`;
+            tableBody.innerHTML = tableHTML;
+
+            const absentDetail = document.querySelector("#absent-detail");
+            absentDetail.style.display = "flex"; // Hiển thị bảng
+            absentDetail.scrollIntoView({ behavior: "smooth" }); // Cuộn xuống
+        })
+        .catch((error) => {
+            console.error(
+                "There was a problem with the fetch operation:",
+                error
+            );
+        });
+}
+
+// SCORE DETAIL
+// Hàm chung để gọi API và xử lý dữ liệu
+function fetchScoreRecords(classId, studentId) {
+    absentDetailTable.style.display = "none";
+    scoreDetailTable.style.display = "flex";
+    // Xác định đường dẫn API
+    const path = `${url}${studentId}/scores?classId=${classId}`;
+
+    // Hiển thị modal loading
+    showLoadingModal();
+    fetch(path)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(
+                    "Network response was not ok " + response.statusText
+                );
+            }
+            return response.json();
+        })
+        .then((data) => {
+            hideLoadingModal(); // Ẩn modal loading
+
+            // Render bảng chi tiết điểm
+            document.querySelector("#score-detail-student-name").textContent =
+                data[0]?.student_name || "Tên học sinh";
+            document.querySelector(
+                "#score-detail-class-name"
+            ).textContent = `Lớp: ${data[0]?.classname || "Không xác định"}`;
+
+            // Xóa nội dung cũ của bảng
+            const scoreTableBody = document.querySelector(
+                ".manager-rank-table__score-detail"
+            );
+            if (scoreTableBody) {
+                scoreTableBody.innerHTML = "";
+            } else {
+                return;
+            }
+
+            // Thêm tiêu đề cho bảng
+            const tableHeaderHTML = `
+                <colgroup class="colgroup">
+                    <col style="width: 5%" />
+                    <col style="width: auto" />
+                    <col style="width: 15%" />
+                    <col style="width: 15%" />
+                    <col style="width: 15%" />
+                </colgroup>
+                <tr>
+                    <th scope="col" style="min-width: 30px"></th>
+                    <th scope="col">Tên Bài Kiểm Tra</th>
+                    <th scope="col">Thang Điểm</th>
+                    <th scope="col">Điểm</th>
+                    <th scope="col">Tỷ lệ đúng</th>
+                </tr>
+            `;
+            scoreTableBody.innerHTML += tableHeaderHTML;
+
+            if (data.length === 0) {
+                scoreTableBody.innerHTML += `
+                    <tr>
+                        <td colspan="5" style="text-align: center;">
+                            Không có dữ liệu điểm
+                        </td>
+                    </tr>`;
+            } else {
+                data.forEach((item, index) => {
+                    const scorePercentage =
+                        item.score_percentage === 100 ||
+                        item.score_percentage === 0
+                            ? `${item.score_percentage} %` // Hiển thị nguyên giá trị nếu là 0 hoặc 100
+                            : `${item.score_percentage.toFixed(2)} %`; // Làm tròn nếu không phải 0 hoặc 100
+
+                    const rowHTML = `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${handleLessonName(item.lesson)}</td>
+                            <td>${item.max_score}</td>
+                            <td>${item.score}</td>
+                            <td>${scorePercentage}</td> <!-- Hiển thị tỷ lệ đúng -->
+                        </tr>
+                    `;
+                    scoreTableBody.innerHTML += rowHTML;
+                });
+            }
+
+            // Hiển thị bảng và cuộn xuống
+            const scoreDetail = document.querySelector("#score-detail");
+            scoreDetail.style.display = "flex"; // Hiển thị bảng
+            scoreDetail.scrollIntoView({ behavior: "smooth" }); // Cuộn xuống
+        })
+        .catch((error) => {
+            hideLoadingModal(); // Đảm bảo ẩn modal loading nếu có lỗi
+            console.error(
+                "There was a problem with the fetch operation:",
+                error
+            );
+        });
+}
+
+// Gán sự kiện click cho nút "Chi tiết" absent
+document.addEventListener("click", function (event) {
+    if (event.target.matches(".rank-table-absent-detail-btn")) {
+        const button = event.target;
+        const classId = button.getAttribute("data-class-id");
+        const studentId = button.getAttribute("data-student-id");
+
+        // Gọi hàm fetchAbsentRecords khi nhấn nút "Chi tiết"
+        fetchAbsentRecords(classId, studentId);
+    }
+});
+
+// Gán sự kiện click cho nút "Chi tiết" score
+document.addEventListener("click", function (event) {
+    if (event.target.matches(".rank-table-score-detail-btn")) {
+        const button = event.target;
+        const classId = button.getAttribute("data-class-id");
+        const studentId = button.getAttribute("data-student-id");
+
+        // Gọi hàm fetchAbsentRecords khi nhấn nút "Chi tiết"
+        fetchScoreRecords(classId, studentId);
+    }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    fetch(url + "statistics")
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(
+                    "Network response was not ok " + response.statusText
+                );
+            }
+            return response.json();
+        })
+        .then((data) => {
+            const tbody = document.querySelector(".manager-rank-table tbody");
+            tbody.innerHTML = ""; // Xóa nội dung cũ
+
+            data.forEach((item, index) => {
+                const averageScore =
+                    item.average_score_percent === 100 ||
+                    item.average_score_percent === 0
+                        ? `${item.average_score_percent} %` // Hiển thị nguyên giá trị nếu là 0 hoặc 100
+                        : `${item.average_score_percent.toFixed(2)} %`; // Làm tròn nếu không phải 0 hoặc 100
+
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${index + 1 < 10 ? "0" + (index + 1) : index + 1}</td>
+                    <td>${item.classname}</td>
+                    <td>${averageScore} <br />（ ${
+                    item.total_lessons
+                } bài kiểm tra ）</td>
+                    <td>${item.total_absent} lần</td>
+                    <td>${item.total_log_class} bản ghi</td>
+                `;
+                tbody.appendChild(row);
+            });
+        })
+        .catch((error) =>
+            console.error(
+                "There was a problem with the fetch operation:",
+                error
+            )
+        );
+});
+
 async function showLogBookContent(name) {
     // Ẩn tất cả các phần tử nội dung
     elements.logBookToday.style.display = "none";
@@ -2261,3 +2804,6 @@ renderLogBook(
         teacher: null,
     })
 );
+
+// Khởi tạo: Ẩn bảng điểm số và chỉ hiển thị bảng vắng học
+scoreTable.classList.add("hidden");
