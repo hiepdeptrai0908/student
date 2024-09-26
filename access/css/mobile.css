@@ -285,5 +285,6 @@
     }
     .rank-content::before {
         width: 400%;
+        height: 400%;
     }
 }
