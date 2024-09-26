@@ -1284,6 +1284,7 @@ input[type="radio"] {
     border: none;
     border-bottom: solid 1px #bababa;
     text-align: center;
+
     padding: 4px;
     padding-left: 8px;
 }
@@ -1300,6 +1301,10 @@ input[type="radio"] {
     animation-duration: 0.5s;
     animation-fill-mode: forwards; /* Giữ lại trạng thái cuối */
     animation-name: slideInLeft;
+}
+
+.manager-rank-table__score td:last-child {
+    text-align: right;
 }
 
 .manager-rank-table td:first-child,

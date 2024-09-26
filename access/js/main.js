@@ -93,19 +93,6 @@ function toggleVisibility(elementsToShow, elementsToHide) {
 
 // Xử lý đăng nhập
 function handleLogin() {
-    elements.modalOverlay.style.display = "none";
-    toggleVisibility(
-        [elements.wrapper, elements.managerOption, elements.managerCoreTable],
-        [
-            elements.managerClass,
-            elements.managerStudent,
-            elements.managerInsertCore,
-            elements.managerFiles,
-            elements.managerClassLogBook,
-            elements.managerRank,
-        ]
-    );
-    return optionScreen();
     const loginInputValue = elements.loginBtn.value.trim().toUpperCase();
 
     if (loginInputValue === "HS") {
@@ -2352,7 +2339,7 @@ function fetchAbsenceStatistics(classId) {
                 <table class="manager-rank-table manager-rank-table__absent">
                     <thead>
                         <colgroup class="colgroup">
-                            <col style="width: 5%; max-width: 30px" />
+                            <col style="width: 6%; max-width: 30px" />
                             <col style="width: 25%" />
                             <col style="width: 15%" />
                             <col style="width: 15%" />
@@ -2444,7 +2431,7 @@ function fetchScoreStatistics(classId) {
                 <table class="manager-rank-table manager-rank-table__score">
                     <thead>
                         <colgroup class="colgroup">
-                            <col style="width: 5.5%; max-width: 30px" />
+                            <col style="width: 6.5%; max-width: 30px" />
                             <col style="width: 35%" />
                             <col style="width: 15%" />
                             <col style="width: 15%" />
