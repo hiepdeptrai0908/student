@@ -218,14 +218,14 @@
     .manager-rank-table__score th:last-child,
     .manager-rank-table__score td:last-child {
         /* width: 60px; */
-        text-align: center;
+        text-align: right;
         /* display: none; */
     }
 
     .manager-rank-table__score-detail th:last-child,
     .manager-rank-table__score-detail td:last-child {
         /* width: 60px; */
-        text-align: right;
+        text-align: center;
         /* display: none; */
     }
 
