@@ -218,6 +218,13 @@
     .manager-rank-table__score th:last-child,
     .manager-rank-table__score td:last-child {
         /* width: 60px; */
+        text-align: center;
+        /* display: none; */
+    }
+
+    .manager-rank-table__score-detail th:last-child,
+    .manager-rank-table__score-detail td:last-child {
+        /* width: 60px; */
         text-align: right;
         /* display: none; */
     }
@@ -239,7 +246,7 @@
 
         font-size: 14px;
         float: right;
-        left: 75%;
+        left: 70%;
         width: 200px;
         text-align: center;
     }
@@ -275,5 +282,8 @@
     .manager-rank-table__absent-detail th:nth-child(4),
     .manager-rank-table__absent-detail td:nth-child(4) {
         width: 70px;
+    }
+    .rank-content::before {
+        width: 400%;
     }
 }
