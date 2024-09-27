@@ -236,8 +236,10 @@
         font-size: 14px;
         float: right;
         left: 80%;
+        /* top: 0; */
         width: 200px;
-        text-align: center;
+        text-align: left;
+        background-color: transparent;
     }
 
     .score-detail-info-heading {
@@ -286,5 +288,9 @@
     .rank-content::before {
         width: 1000px;
         height: 1000px;
+    }
+
+    .manager-rank-table-class__mobile {
+        display: none;
     }
 }

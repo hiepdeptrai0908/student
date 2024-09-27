@@ -2407,9 +2407,10 @@ window.addEventListener("load", function () {
             }
         }
 
+        const rankSelect = document.querySelector(".rank-select");
         const rankContent = document.querySelector(".rank-content");
         rankContent.style.display = "flex"; // Hiển thị bảng
-        rankContent.scrollIntoView({ behavior: "smooth" }); // Cuộn xuống
+        rankSelect.scrollIntoView({ behavior: "smooth" }); // Cuộn xuống
     }
 
     // Hàm để gọi API và render bảng Vắng Học
@@ -2859,9 +2860,9 @@ window.addEventListener("load", function () {
                             index + 1 < 10 ? "0" + (index + 1) : index + 1
                         }</td>
                         <td>${item.classname}</td>
-                        <td>${averageScore} <br />（ ${
+                        <td>${averageScore} <br /><span class="manager-rank-table-class__mobile">（ ${
                         item.total_lessons
-                    } bài kiểm tra ）</td>
+                    } bài kiểm tra ）</span></td>
                         <td>${item.total_absent} lần</td>
                         <td>${item.total_log_class} bản ghi</td>
                     `;
