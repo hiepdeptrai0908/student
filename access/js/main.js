@@ -2094,8 +2094,6 @@ window.addEventListener("load", function () {
     }
 
     function removeStudentFromSelected(id) {
-        console.log("Before removal:", selectedStudents);
-
         // Gọi hàm để xóa hoàn toàn sinh viên
         removeStudentCompletely(id);
 
@@ -2925,6 +2923,4 @@ window.addEventListener("load", function () {
 
     // Gọi hàm khởi tạo
     initLogBook();
-
-    console.log("Tất cả tài nguyên đã được tải!");
 });
