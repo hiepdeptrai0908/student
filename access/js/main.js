@@ -1970,9 +1970,23 @@ window.addEventListener("load", function () {
                 return;
             }
 
+            function removeVietnameseTones(str) {
+                return str
+                    .normalize("NFD") // Chuẩn hóa chuỗi về dạng ký tự kết hợp
+                    .replace(/[\u0300-\u036f]/g, "") // Loại bỏ các dấu tổ hợp
+                    .replace(/đ/g, "d") // Đổi ký tự 'đ' thành 'd'
+                    .replace(/Đ/g, "D"); // Đổi ký tự 'Đ' thành 'D'
+            }
+
+            // Cập nhật code để không phân biệt dấu
             if (query.length > 0) {
+                const normalizedQuery = removeVietnameseTones(
+                    query.toLowerCase()
+                );
                 const filteredStudents = studentDataInClass.filter((student) =>
-                    student.name.toLowerCase().includes(query)
+                    removeVietnameseTones(student.name.toLowerCase()).includes(
+                        normalizedQuery
+                    )
                 );
 
                 filteredStudents.forEach((student) => {
@@ -2001,16 +2015,16 @@ window.addEventListener("load", function () {
         if (!selectedStudents.has(id)) {
             selectedStudents.add(id);
 
-            // Lưu thông tin học sinh trước khi xóa
-            const student = studentDataInClass.find(
-                (student) => student.id === parseInt(id)
-            );
-            if (student) {
-                studentToRemoved.push(student); // Thêm học sinh vào mảng
-                studentDataInClass = studentDataInClass.filter(
-                    (student) => student.id !== parseInt(id)
-                );
-            }
+            // // Lưu thông tin học sinh trước khi xóa
+            // const student = studentDataInClass.find(
+            //     (student) => student.id === parseInt(id)
+            // );
+            // if (student) {
+            //     studentToRemoved.push(student); // Thêm học sinh vào mảng
+            //     studentDataInClass = studentDataInClass.filter(
+            //         (student) => student.id !== parseInt(id)
+            //     );
+            // }
 
             const selectedList = document.getElementById("selected-list");
             const listItem = document.createElement("li");
@@ -2065,15 +2079,15 @@ window.addEventListener("load", function () {
         selectedStudents.delete(id);
         absentCount = absentCount - 1;
 
-        // Xóa sinh viên khỏi studentDataInClass
-        studentDataInClass = studentDataInClass.filter(
-            (student) => student.id !== id
-        );
+        // // Xóa sinh viên khỏi studentDataInClass
+        // studentDataInClass = studentDataInClass.filter(
+        //     (student) => student.id !== id
+        // );
 
-        // Xóa sinh viên khỏi studentToRemoved
-        studentToRemoved = studentToRemoved.filter(
-            (student) => student.id !== id
-        );
+        // // Xóa sinh viên khỏi studentToRemoved
+        // studentToRemoved = studentToRemoved.filter(
+        //     (student) => student.id !== id
+        // );
 
         // Cập nhật lại số lượng học sinh vắng
         updateAbsentCount(absentCount);
