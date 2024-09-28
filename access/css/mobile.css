@@ -293,4 +293,8 @@
     .manager-rank-table-class__mobile {
         display: none;
     }
+
+    .manager-student-options {
+        grid-template-columns: repeat(2, 1fr); /* Cũng giữ 2 cột trên di động */
+    }
 }

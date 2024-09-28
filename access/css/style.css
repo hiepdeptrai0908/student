@@ -35,13 +35,6 @@ body {
     width: 100%;
 }
 
-.manager-core-table,
-.manager-class,
-.manager-insert-core,
-.manager-student {
-    padding-bottom: 40px;
-}
-
 h1 {
     text-transform: uppercase;
     font-weight: 700;
@@ -132,6 +125,136 @@ button {
 
 #manager-option {
     margin-bottom: 20px;
+}
+
+.manager-core-table,
+.manager-class,
+.manager-insert-core,
+.manager-student {
+    padding-bottom: 40px;
+}
+
+.table-class-wrapper {
+    background-color: whitesmoke;
+    padding: 14px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.table-class-wrapper-heading,
+.list-student-table-heading {
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: 700;
+}
+
+.list-students {
+    background-color: whitesmoke;
+    padding: 14px;
+    border-radius: 12px;
+    margin: 20px 0;
+}
+
+.list-student-select {
+    display: flex;
+    justify-content: start;
+    align-items: baseline;
+}
+
+#list-student-select-class {
+    width: 200px;
+    margin: 10px 0 20px 14px;
+}
+
+.list-student-table {
+    width: 100%;
+}
+
+.list-student-table th {
+    font-weight: 700;
+}
+
+.list-student-table td,
+#class-table {
+    opacity: 0; /* Khởi tạo opacity là 0 */
+    animation-duration: 0.4s;
+    animation-fill-mode: forwards; /* Giữ lại trạng thái cuối */
+    animation-name: slideInRight;
+}
+
+.list-student-table th:nth-child(2),
+.list-student-table td:nth-child(2) {
+    text-align: left;
+}
+
+#scroll-to-top-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+    width: 40px;
+    height: 40px;
+    transform: translateX(120px);
+    background-color: #ff9d0017;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px !important;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0px 1px 5px #333;
+    transition: 1s;
+    z-index: 10000;
+}
+
+#scroll-to-top-btn i {
+    color: red;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    position: relative;
+    top: 1px;
+}
+
+#scrollToTopBtn:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.manager-class-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Tạo 2 cột bằng nhau */
+    gap: 10px; /* Khoảng cách giữa các phần tử */
+}
+
+.manager-student-options {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Tạo 2 cột bằng nhau */
+    gap: 10px; /* Khoảng cách giữa các phần tử */
+}
+
+.manager-student-options-btn,
+.manager-class-options-btn {
+    border: solid 1px #ffcc00;
+    background-color: transparent;
+    width: 100%;
+    transition: all 0.3s;
+    overflow: hidden;
+    letter-spacing: 0px;
+    letter-spacing: 0px;
+}
+
+.manager-student-options-btn.active,
+.manager-class-options-btn.active {
+    background-color: #ffe1bd;
+    font-weight: 700 !important;
+}
+
+.manager-student-form,
+.manager-class-form {
+    opacity: 0; /* Khởi tạo opacity là 0 */
+    animation-duration: 0.4s;
+    animation-fill-mode: forwards; /* Giữ lại trạng thái cuối */
+    animation-name: slideInRight;
 }
 
 .error {
@@ -669,12 +792,14 @@ a:focus {
 
 .log-book-option {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
+    gap: 10px;
     margin-bottom: 20px;
 }
 
-.log-book-option-btn {
+.log-book-option-btn,
+.manager-student-options-btn {
     border: solid 1px #ffcc00;
     background-color: transparent;
     color: #333;
@@ -686,12 +811,8 @@ a:focus {
     letter-spacing: 0.8px;
 }
 
-.log-book-option-btn:nth-child(2) {
-    margin-right: 10px;
-    margin-left: 10px;
-}
-
-.log-book-option-btn.active {
+.log-book-option-btn.active,
+.manager-student-options-btn.active {
     background-color: #ffe1bd;
     font-weight: 700 !important;
 }

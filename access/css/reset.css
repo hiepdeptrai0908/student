@@ -191,3 +191,6 @@ i.white {
 .flatpickr-calendar.arrowTop:after {
     bottom: 100%;
 }
+input {
+    caret-color: red;
+}

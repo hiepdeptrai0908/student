@@ -190,6 +190,9 @@
                 <div class="manager-class">
                     <!-- Bảng hiển thị danh sách lớp học -->
                     <div class="table-class-wrapper">
+                        <div class="table-class-wrapper-heading">
+                            Danh sách lớp học
+                        </div>
                         <table
                             class="table table-class border"
                             style="width: 100%"
@@ -210,8 +213,32 @@
                         </table>
                     </div>
 
+                    <div class="manager-class-options">
+                        <button
+                            class="manager-class-options-btn active"
+                            data-form="add-class-form"
+                        >
+                            <i class="fa-solid fa-file-circle-plus"></i>
+                            Thêm lớp
+                        </button>
+                        <button
+                            class="manager-class-options-btn"
+                            data-form="edit-class-form"
+                        >
+                            <i class="fa-solid fa-wrench"></i>
+                            Sửa lớp
+                        </button>
+                        <button
+                            class="manager-class-options-btn"
+                            data-form="delete-class-form"
+                        >
+                            <i class="fa-solid fa-file-circle-minus"></i>
+                            Xoá lớp
+                        </button>
+                    </div>
+
                     <!-- Form thêm lớp học mới -->
-                    <form id="add-class-form">
+                    <form id="add-class-form" class="manager-class-form">
                         <h2>Thêm Lớp Học Mới</h2>
                         <div class="add-item">
                             <label class="add-item-title" for="add-classname">
@@ -229,12 +256,12 @@
                             />
                         </div>
                         <button class="btn btn-success" type="submit">
-                            <i class="fa-regular fa-square-plus white"></i>Thêm
+                            <i class="fa-solid fa-file-circle-plus white"></i
+                            >Xác nhận
                         </button>
                     </form>
-                    <hr />
                     <!-- Form sửa lớp học -->
-                    <form id="edit-class-form">
+                    <form id="edit-class-form" class="manager-class-form">
                         <h2>Sửa Lớp Học</h2>
                         <div class="add-item">
                             <label
@@ -269,14 +296,13 @@
                                 required
                             />
                         </div>
-                        <button class="btn btn-primary" type="submit">
-                            <i class="fa-solid fa-arrows-rotate white"></i>Cập
-                            Nhật
+                        <button class="btn btn-success" type="submit">
+                            <i class="fa-solid fa-wrench white"></i>
+                            Cập Nhật
                         </button>
                     </form>
-                    <hr />
                     <!-- Form xóa lớp học -->
-                    <form id="delete-class-form">
+                    <form id="delete-class-form" class="manager-class-form">
                         <h2>Xóa Lớp Học</h2>
                         <div class="add-item">
                             <label
@@ -304,8 +330,38 @@
 
                 <!-- Quản lý học sinh -->
                 <div class="manager-student">
+                    <div class="manager-student-options">
+                        <button
+                            class="manager-student-options-btn active"
+                            data-form="add-student-form"
+                        >
+                            <i class="fa-solid fa-user-plus"></i>
+                            Thêm học sinh
+                        </button>
+                        <button
+                            class="manager-student-options-btn"
+                            data-form="update-score-form"
+                        >
+                            <i class="fa-solid fa-wrench"></i>
+                            Sửa điểm
+                        </button>
+                        <button
+                            class="manager-student-options-btn"
+                            data-form="delete-student-form"
+                        >
+                            <i class="fa-solid fa-user-minus"></i>
+                            Xoá học sinh
+                        </button>
+                        <button
+                            class="manager-student-options-btn"
+                            data-form="show-score-info"
+                        >
+                            <i class="fa-solid fa-table-list"></i>
+                            Bảng điểm
+                        </button>
+                    </div>
                     <!-- Form thêm học sinh -->
-                    <form id="add-student-form">
+                    <form id="add-student-form" class="manager-student-form">
                         <h2>Thêm Học Sinh Mới</h2>
 
                         <div class="add-item">
@@ -330,7 +386,7 @@
                                 Họ & Tên:</label
                             >
                             <input
-                                class="add-item-input"
+                                class="add-item-input add-student-input"
                                 type="text"
                                 id="name"
                                 name="name"
@@ -340,13 +396,13 @@
                         </div>
 
                         <button class="btn btn-success" type="submit">
-                            <i class="fa-regular fa-square-plus white"></i>Thêm
+                            <i class="fa-solid fa-user-plus white"></i>
+                            Xác nhận
                         </button>
                     </form>
-                    <hr />
 
                     <!-- Form sửa điểm -->
-                    <form id="update-score-form">
+                    <form id="update-score-form" class="manager-student-form">
                         <h2>Sửa Điểm Học Sinh</h2>
 
                         <div class="add-item">
@@ -436,13 +492,13 @@
                             />
                         </div>
                         <button class="btn btn-primary" type="submit">
-                            <i class="fa-solid fa-arrows-rotate white"></i>Cập
-                            Nhật Điểm
+                            <i class="fa-solid fa-arrows-rotate white"></i>
+                            Cập Nhật Điểm
                         </button>
                     </form>
-                    <hr />
+
                     <!-- Form xóa học sinh -->
-                    <form id="delete-student-form">
+                    <form id="delete-student-form" class="manager-student-form">
                         <h2>Xóa Học Sinh</h2>
                         <div class="add-item">
                             <label
@@ -482,9 +538,9 @@
                             <i class="fa-solid fa-trash-can white"></i>Xóa
                         </button>
                     </form>
-                    <hr />
+
                     <!-- Form thông tin học sinh -->
-                    <div>
+                    <div id="show-score-info" class="manager-student-form">
                         <h2>Bảng điểm cá nhân</h2>
                         <div class="add-item">
                             <label
@@ -555,6 +611,29 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                    <div class="list-students">
+                        <div class="list-student-table-heading">
+                            Danh sách học sinh
+                        </div>
+                        <div class="list-student-select">
+                            <label
+                                class="add-item-title"
+                                for="list-student-select-class"
+                            >
+                                <i class="fa-solid fa-filter"></i>
+                                Lọc theo lớp học
+                            </label>
+                            <select
+                                class="add-item-input form-select"
+                                id="list-student-select-class"
+                                name="class_id"
+                            >
+                                <option value="">-- Tất cả --</option>
+                                <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                            </select>
+                        </div>
+                        <table class="list-student-table"></table>
                     </div>
                 </div>
 
@@ -1620,7 +1699,7 @@
                         <div
                             class="absent-detail-info absent-detail-info-heading"
                         >
-                            Chi tiết ngày nghỉ
+                            Chi tiết ngày vắng
                         </div>
                         <div class="absent-detail-info">
                             <i class="fa-solid fa-user-graduate"></i>
@@ -1656,6 +1735,9 @@
                     </div>
                 </div>
             </div>
+            <button id="scroll-to-top-btn">
+                <i class="fa-solid fa-arrow-up"></i>
+            </button>
         </div>
 
         <script

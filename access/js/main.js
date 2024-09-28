@@ -40,6 +40,9 @@ window.addEventListener("load", function () {
         deleteScoreClassDropdown: document.getElementById(
             "delete-score__class-dropdown"
         ),
+        listStudentClassDropdown: document.getElementById(
+            "list-student-select-class"
+        ),
         deleteScoreLessonDropdown: document.getElementById(
             "delete-score__lesson-dropdown"
         ),
@@ -145,22 +148,20 @@ window.addEventListener("load", function () {
     }
 
     // Lấy giá trị từ localStorage và đặt trạng thái 'active' ban đầu
-    document.addEventListener("DOMContentLoaded", function () {
-        const savedOptionValue =
-            localStorage.getItem("manager-option-value") || "1";
+    const savedOptionValue =
+        localStorage.getItem("manager-option-value") || "1";
 
-        // Gọi optionScreen để hiển thị đúng nội dung dựa trên giá trị đã lưu
-        optionScreen(savedOptionValue);
+    // Gọi optionScreen để hiển thị đúng nội dung dựa trên giá trị đã lưu
+    optionScreen(savedOptionValue);
 
-        // Đặt 'active' cho nút tương ứng với giá trị đã lưu
-        document.querySelectorAll(".btn-option").forEach((button) => {
-            const optionValue = button.getAttribute("data-value");
-            if (optionValue === savedOptionValue) {
-                button.classList.add("active");
-            } else {
-                button.classList.remove("active");
-            }
-        });
+    // Đặt 'active' cho nút tương ứng với giá trị đã lưu
+    document.querySelectorAll(".btn-option").forEach((button) => {
+        const optionValue = button.getAttribute("data-value");
+        if (optionValue === savedOptionValue) {
+            button.classList.add("active");
+        } else {
+            button.classList.remove("active");
+        }
     });
 
     // Lắng nghe sự kiện nhấn nút cho phiên bản Windows
@@ -186,6 +187,9 @@ window.addEventListener("load", function () {
     function optionScreen(
         optionValue = localStorage.getItem("manager-option-value") || "1"
     ) {
+        if (optionValue == "3") {
+            loadStudents();
+        }
         if (optionValue === "7") {
             getAllStatistics();
         }
@@ -532,39 +536,32 @@ window.addEventListener("load", function () {
     });
 
     // CHỨC NĂNG QUẢN LÝ LỚP HỌC
-    // Lấy dữ liệu lớp học và hiển thị ra table class
-    async function fetchClassData() {
-        try {
-            showLoadingModal();
-            const response = await fetch(url + "class");
-            const data = await response.json();
-            setTimeout(() => {
-                hideLoadingModal();
-                const tbody = document.querySelector("#class-table tbody");
-                tbody.innerHTML = data
-                    .map((item, index) => {
-                        const createdAt = new Date(item.created_at);
-                        const formattedDate = `${String(
-                            createdAt.getDate()
-                        ).padStart(2, "0")}-${String(
-                            createdAt.getMonth() + 1
-                        ).padStart(2, "0")}-${createdAt.getFullYear()}`;
-                        return `
-                        <tr>
-                            <td>${String(index + 1).padStart(2, "0")}</td>
-                            <td>${item.classname}</td>
-                            <td>${item.student_count}</td>
-                            <td>${item.lesson_count} bài</td>
-                            <td>${formattedDate}</td>
-                        </tr>
-                    `;
-                    })
-                    .join("");
-            }, timeOut);
-        } catch (error) {
-            console.error("Có lỗi xảy ra khi lấy dữ liệu:", error);
-        }
-    }
+    const managerClassOptionButtons = document.querySelectorAll(
+        ".manager-class-options-btn"
+    );
+    const managerClassOptionForms = document.querySelectorAll(
+        ".manager-class-form"
+    );
+
+    managerClassOptionButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            managerClassOptionForms.forEach(
+                (form) => (form.style.display = "none")
+            ); // Ẩn tất cả các form
+            document.getElementById(button.dataset.form).style.display =
+                "block"; // Hiển thị form tương ứng
+            managerClassOptionButtons.forEach((btn) =>
+                btn.classList.remove("active")
+            ); // Bỏ class active của các nút khác
+            button.classList.add("active"); // Thêm class active cho nút được nhấn
+        });
+    });
+
+    // Mặc định ẩn các form trừ form đầu tiên
+    managerClassOptionForms.forEach((form) => (form.style.display = "none"));
+    document.getElementById(
+        managerClassOptionButtons[0].dataset.form
+    ).style.display = "block";
 
     // Lấy danh sách lớp học để điền vào dropdown
     async function fetchClasses() {
@@ -677,6 +674,40 @@ window.addEventListener("load", function () {
                             `<option value="${item.id}">${item.classname}</option>`
                     )
                     .join("");
+            // List students select - class dropdown
+            elements.listStudentClassDropdown.innerHTML =
+                '<option value="">-- Tất cả --</option>' +
+                data
+                    .map(
+                        (item) =>
+                            `<option value="${item.id}">${item.classname}</option>`
+                    )
+                    .join("");
+
+            // Cập nhật bảng thông tin class
+            const tbody = document.querySelector("#class-table tbody");
+            tbody.innerHTML = data
+                .map((item, index) => {
+                    const createdAt = new Date(item.created_at);
+                    const formattedDate = `${String(
+                        createdAt.getDate()
+                    ).padStart(2, "0")}-${String(
+                        createdAt.getMonth() + 1
+                    ).padStart(2, "0")}-${createdAt.getFullYear()}`;
+                    return `
+                                    <tr>
+                                        <td>${String(index + 1).padStart(
+                                            2,
+                                            "0"
+                                        )}</td>
+                                        <td>${item.classname}</td>
+                                        <td>${item.student_count}</td>
+                                        <td>${item.lesson_count} bài</td>
+                                        <td>${formattedDate}</td>
+                                    </tr>
+                                `;
+                })
+                .join("");
         } catch (error) {
             console.error("Có lỗi xảy ra khi lấy dữ liệu:", error);
         }
@@ -706,7 +737,6 @@ window.addEventListener("load", function () {
                     hideLoadingModal();
                     alert(message);
                 }, timeOut);
-                fetchClassData();
                 fetchClasses();
             } catch (error) {
                 console.error("Có lỗi xảy ra khi thêm lớp học mới:", error);
@@ -731,7 +761,6 @@ window.addEventListener("load", function () {
                 alert(message);
                 document.getElementById("edit-class-form").reset();
             }, timeOut);
-            fetchClassData();
             fetchClasses();
         } catch (error) {
             console.error("Có lỗi xảy ra khi cập nhật lớp học:", error);
@@ -786,7 +815,6 @@ window.addEventListener("load", function () {
                             hideLoadingModal();
                             alert(message);
                         }, timeOut);
-                        fetchClassData();
                         fetchClasses();
                     } catch (error) {
                         console.error("Có lỗi xảy ra khi xóa lớp học:", error);
@@ -798,6 +826,34 @@ window.addEventListener("load", function () {
         });
 
     // STUDENT MANAGER
+
+    const managerStudentOptionButtons = document.querySelectorAll(
+        ".manager-student-options-btn"
+    );
+    const managerStudentOptionForms = document.querySelectorAll(
+        ".manager-student-form"
+    );
+
+    managerStudentOptionButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            managerStudentOptionForms.forEach(
+                (form) => (form.style.display = "none")
+            ); // Ẩn tất cả các form
+            document.getElementById(button.dataset.form).style.display =
+                "block"; // Hiển thị form tương ứng
+            managerStudentOptionButtons.forEach((btn) =>
+                btn.classList.remove("active")
+            ); // Bỏ class active của các nút khác
+            button.classList.add("active"); // Thêm class active cho nút được nhấn
+        });
+    });
+
+    // Mặc định ẩn các form trừ form đầu tiên
+    managerStudentOptionForms.forEach((form) => (form.style.display = "none"));
+    document.getElementById(
+        managerStudentOptionButtons[0].dataset.form
+    ).style.display = "block";
+
     const inputField = document.getElementById("name");
     const inputNameTeacher = document.getElementById("log-book-write__teacher");
 
@@ -841,13 +897,10 @@ window.addEventListener("load", function () {
             setTimeout(() => {
                 hideLoadingModal();
                 alert(result);
-                document.getElementById("add-student-form").reset();
+                elements.oldStudentDropdown.value = classId;
+                document.querySelector(".add-student-input").value = "";
             }, timeOut);
-
-            fetchClassData();
-            fetchClasses();
-            // Thực hiện các hành động sau khi thêm thành công, ví dụ: cập nhật danh sách học sinh
-            // fetchStudents(); // Nếu có hàm fetchStudents để lấy danh sách học sinh
+            loadStudents();
         } catch (error) {
             console.error("Có lỗi xảy ra khi thêm học sinh:", error);
             alert("Có lỗi xảy ra khi thêm học sinh.");
@@ -860,10 +913,7 @@ window.addEventListener("load", function () {
         .addEventListener("submit", function (event) {
             event.preventDefault(); // Ngăn không cho form gửi yêu cầu HTTP mặc định
 
-            const classDropdown = document.getElementById(
-                "old-student-dropdown"
-            );
-            const classId = classDropdown.value;
+            const classId = elements.oldStudentDropdown.value;
             const name = document.getElementById("name").value.trim();
 
             if (classId && name) {
@@ -1010,7 +1060,6 @@ window.addEventListener("load", function () {
                 document.getElementById("comment").value = "";
             }, timeOut);
             handleClearTable();
-            fetchClassData();
         } catch (error) {
             console.error("Có lỗi xảy ra khi cập nhật điểm:", error);
             alert("Có lỗi xảy ra khi cập nhật điểm.");
@@ -1183,8 +1232,7 @@ window.addEventListener("load", function () {
                 hideLoadingModal();
                 alert(result);
             }, timeOut);
-            fetchClassData();
-            fetchClasses();
+            loadStudents();
             document.getElementById("delete-student-form").reset();
             // Thực hiện các hành động sau khi xóa thành công, ví dụ: làm mới dữ liệu hoặc thông báo
         } catch (error) {
@@ -1238,14 +1286,15 @@ window.addEventListener("load", function () {
             }
         });
     // Cập nhật bảng
-    const tbody = document
+    const tbodyStudentScoreTable = document
         .getElementById("student-score-table")
         .getElementsByTagName("tbody")[0];
     const row = document.createElement("tr");
     row.innerHTML = `
                         <td colspan="6" class="text-center">Chưa chọn học sinh</td>
                     `;
-    tbody.appendChild(row);
+    tbodyStudentScoreTable.appendChild(row);
+
     async function renderTableScoreStudent(
         classId = elements.tableStudentDropdown.value,
         studentId = elements.tableStudentDropdown.value
@@ -1342,7 +1391,59 @@ window.addEventListener("load", function () {
             }
         });
 
-    // Nhập điểm
+    // DANH SÁCH HỌC SINH
+    // Hàm gọi API để lấy danh sách học sinh
+    async function fetchStudents(classId) {
+        showLoadingModal();
+        let path = url + "students"; // Mặc định là không có classId
+        if (classId) {
+            path += `?classId=${classId}`;
+        }
+
+        const response = await fetch(path);
+        const students = await response.json();
+        hideLoadingModal();
+        return students;
+    }
+
+    // Hàm render danh sách học sinh vào bảng
+    function renderStudents(students) {
+        const table = document.querySelector(".list-student-table");
+        // Xóa các hàng cũ trong bảng (trừ hàng tiêu đề)
+        table.innerHTML = `
+            <tr>
+                <th>STT</th>
+                <th>Họ và Tên</th>
+                <th>Lớp Học</th>
+                <th>Ngày Tham Gia</th>
+            </tr>
+        `;
+
+        students.forEach((student, index) => {
+            const row = document.createElement("tr");
+            row.style.animationDelay = `0.${index}s`;
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${student.name}</td>
+                <td>${student.classname}</td>
+                <td>${formatShortDateTime(student.created_at)}</td>
+            `;
+            table.appendChild(row);
+        });
+    }
+
+    // Hàm chính để gọi API và render danh sách
+    async function loadStudents() {
+        const classIdSelect = elements.listStudentClassDropdown;
+        const classId = classIdSelect.value;
+        const students = await fetchStudents(classId);
+        renderStudents(students);
+    }
+
+    // Lắng nghe sự kiện thay đổi lớp học để lọc học sinh
+    elements.listStudentClassDropdown.addEventListener("change", loadStudents);
+
+    // NHẬP ĐIỂM
     let insertMaxScore = document.getElementById(
         "insert-score__max-score"
     ).value;
@@ -2905,7 +3006,6 @@ window.addEventListener("load", function () {
     // Hàm khởi tạo dữ liệu
     async function initLogBook() {
         try {
-            await fetchClassData(); // Gọi hàm lấy dữ liệu lớp
             await fetchClasses(); // Gọi hàm lấy các lớp
             const logClassData = await fetchLogClassData({
                 date: getTodayDate(),
