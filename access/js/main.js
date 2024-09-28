@@ -929,7 +929,7 @@ window.addEventListener("load", function () {
     async function fetchStudentsByClass(classId) {
         try {
             showLoadingModal();
-            const response = await fetch(`${url}class/${classId}/students`);
+            const response = await fetch(`${url}students?classId=${classId}`);
             const students = await response.json();
             setTimeout(() => {
                 hideLoadingModal();
@@ -1158,13 +1158,12 @@ window.addEventListener("load", function () {
 
     let selectedStudents = new Set();
     let studentDataInClass = []; // Danh sách sinh viên trong lớp
-    let studentToRemoved = []; // Danh sách sinh viên bị xóa
     // Xử lý khi chọn lớp học để viết sổ đầu bài
     elements.logBookWriteDropdown.addEventListener("change", async function () {
         const classId = this.value;
         if (classId) {
             showLoadingModal();
-            await fetch(url + `class/${classId}/students`)
+            await fetch(url + `students?classId=${classId}`)
                 .then((response) => response.json())
                 .then((data) => {
                     hideLoadingModal();
@@ -1178,8 +1177,10 @@ window.addEventListener("load", function () {
     // Hàm để lấy danh sách học sinh của lớp học từ API và cập nhật vào dropdown
     async function fetchStudentsForDeletion(classId) {
         try {
-            const response = await fetch(url + `class/${classId}/students`);
+            showLoadingModal();
+            const response = await fetch(url + `students?classId=${classId}`);
             const students = await response.json();
+            hideLoadingModal();
 
             const studentSelect = document.getElementById(
                 "delete-student-select"
@@ -1285,16 +1286,6 @@ window.addEventListener("load", function () {
                     '<option value="">-- Chọn Học Sinh --</option>'; // Xóa các tùy chọn hiện tại
             }
         });
-    // Cập nhật bảng
-    const tbodyStudentScoreTable = document
-        .getElementById("student-score-table")
-        .getElementsByTagName("tbody")[0];
-    const row = document.createElement("tr");
-    row.innerHTML = `
-                        <td colspan="6" class="text-center">Chưa chọn học sinh</td>
-                    `;
-    tbodyStudentScoreTable.appendChild(row);
-
     async function renderTableScoreStudent(
         classId = elements.tableStudentDropdown.value,
         studentId = elements.tableStudentDropdown.value
@@ -1315,20 +1306,32 @@ window.addEventListener("load", function () {
         const scores = await response.json();
         setTimeout(() => {
             hideLoadingModal();
-            // Lấy phần thân của bảng
-            const tbody = document
-                .getElementById("student-score-table")
-                .getElementsByTagName("tbody")[0];
 
-            // Xóa tất cả các hàng cũ trước khi thêm dữ liệu mới
-            tbody.innerHTML = "";
+            // Lấy bảng
+            const table = document.getElementById("student-score-table");
+
+            // Tạo phần thead (tiêu đề bảng)
+            const thead = document.createElement("thead");
+            thead.innerHTML = `
+                    <tr class="table-light">
+                        <th width="30px">STT</th>
+                        <th width="200px">Nội Dung</th>
+                        <th class="score-table-window" width="70px">Thang Điểm</th>
+                        <th class="score-table-window" width="70px">Điểm</th>
+                        <th style="min-width: 110px">Chú Thích</th>
+                        <th width="120px">Ngày Tạo</th>
+                    </tr>
+                `;
+
+            // Tạo phần tbody (nội dung bảng)
+            const tbody = document.createElement("tbody");
 
             if (scores.length === 0) {
                 // Hiển thị thông báo khi không có dữ liệu
                 const row = document.createElement("tr");
                 row.innerHTML = `
-                    <td colspan="6" class="text-center">Chưa có bảng điểm</td>
-                `;
+                        <td colspan="6" class="text-center">Chưa có bảng điểm</td>
+                    `;
                 tbody.appendChild(row);
             } else {
                 scores.forEach((score, index) => {
@@ -1355,29 +1358,36 @@ window.addEventListener("load", function () {
                     ).padStart(2, "0")}-${String(
                         createdAt.getMonth() + 1
                     ).padStart(2, "0")}-${createdAt.getFullYear()}`;
+
+                    // Thêm hàng dữ liệu
                     row.innerHTML = `
-                        <td>${formattedIndex}</td>
-                        <td width="100px">${handleLessonName(score.lesson)}</td>
-                        <td width="45px">${score.max_score}</td>
-                        <td width="45px">${score.score}</td>
-                        <td style="font-style:italic; color:#333; font-size:12px; text-align:left;" ${
-                            score.comment == "Chưa đóng phạt" ||
-                            score.comment == "chưa đóng phạt" ||
-                            score.comment == "Chưa đóng tiền" ||
-                            score.comment == "chưa đóng tiền" ||
-                            score.comment == "Vắng" ||
-                            score.comment == "vắng"
-                                ? `class="error"`
-                                : `class=""`
-                        }>${score.comment}</td>
-                        <td width="120px">${formattedDate}</td>
-                    `;
+                            <td>${formattedIndex}</td>
+                            <td width="100px">${handleLessonName(
+                                score.lesson
+                            )}</td>
+                            <td width="45px">${score.max_score}</td>
+                            <td width="45px">${score.score}</td>
+                            <td style="font-style:italic; color:#333; font-size:12px; text-align:left;" ${
+                                score.comment.match(
+                                    /Chưa đóng phạt|chưa đóng phạt|Chưa đóng tiền|chưa đóng tiền|Vắng|vắng/
+                                )
+                                    ? `class="error"`
+                                    : `class=""`
+                            }>${score.comment}</td>
+                            <td width="120px">${formattedDate}</td>
+                        `;
                     tbody.appendChild(row);
                 });
             }
+
+            // Xóa nội dung cũ và chèn thead, tbody mới
+            table.innerHTML = "";
+            table.appendChild(thead);
+            table.appendChild(tbody);
         }, timeOut);
     }
 
+    // Gọi hàm khi cần thay đổi lớp học hoặc học sinh
     document
         .getElementById("table-student-select")
         .addEventListener("change", async function () {
@@ -1563,8 +1573,10 @@ window.addEventListener("load", function () {
         }
 
         // Gửi yêu cầu API để lấy danh sách học sinh theo lớp
-        const response = await fetch(`${url}class/${classId}/students`);
+        showLoadingModal();
+        const response = await fetch(`${url}students?classId=${classId}`);
         const students = await response.json();
+        hideLoadingModal();
 
         // Lấy bảng tbody và xóa các hàng hiện tại
         const tbody = document

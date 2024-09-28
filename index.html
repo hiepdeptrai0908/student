@@ -476,11 +476,17 @@
                             <label class="add-item-title" for="new-score">
                                 <i class="fa-regular fa-comment-dots"></i>
                                 Chú thích:
-                                <i style="opacity: 0.7"
-                                    >(※Lưu ý: Nếu nhập chữ "<span
+                                <i
+                                    style="
+                                        opacity: 0.7;
+                                        font-size: 70%;
+                                        font-style: italic;
+                                    "
+                                    >(※ Lưu ý: Nếu nhập chữ "<span
                                         style="color: red"
                                         >Chưa nộp phạt</span
-                                    >" sẽ hiện màu đỏ.)</i
+                                    >", "<span style="color: red">Vắng</span>"
+                                    sẽ hiện màu đỏ.)</i
                                 ></label
                             >
                             <input
@@ -541,7 +547,7 @@
 
                     <!-- Form thông tin học sinh -->
                     <div id="show-score-info" class="manager-student-form">
-                        <h2>Bảng điểm cá nhân</h2>
+                        <h2>Bảng điểm học sinh</h2>
                         <div class="add-item">
                             <label
                                 class="add-item-title"
@@ -583,33 +589,7 @@
                                 class="table border table-wrapper__score-student"
                                 style="width: 100%"
                                 id="student-score-table"
-                            >
-                                <thead>
-                                    <tr class="table-light">
-                                        <th width="30px">STT</th>
-                                        <th width="200px">Nội Dung</th>
-                                        <th
-                                            class="score-table-window"
-                                            width="70px"
-                                        >
-                                            Thang Điểm
-                                        </th>
-                                        <th
-                                            class="score-table-window"
-                                            width="70px"
-                                        >
-                                            Điểm
-                                        </th>
-                                        <th style="min-width: 110px">
-                                            Chú Thích
-                                        </th>
-                                        <th width="120px">Ngày Tạo</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Dữ liệu sẽ được thêm vào đây bằng JavaScript -->
-                                </tbody>
-                            </table>
+                            ></table>
                         </div>
                     </div>
                     <div class="list-students">
