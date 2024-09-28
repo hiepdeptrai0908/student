@@ -148,6 +148,36 @@ button {
     font-weight: 700;
 }
 
+.table-wrapper {
+    padding: 14px;
+    width: 100%;
+    background-color: rgb(255, 246, 239) !important;
+    border-radius: 10px;
+    line-height: 20px;
+}
+
+.table-wrapper__score-student th:nth-child(1),
+.table-wrapper__score-student td:nth-child(1) {
+    background-color: transparent;
+    background-color: rgb(255, 226, 204) !important;
+}
+
+.table-wrapper__score-student th:nth-child(3),
+.table-wrapper__score-student td:nth-child(3),
+.table-wrapper__score-student th:nth-child(4),
+.table-wrapper__score-student td:nth-child(4) {
+    max-width: 60px;
+}
+
+.table-wrapper__score-student th {
+    font-weight: 700;
+    background-color: rgb(255, 226, 204) !important;
+}
+
+.table-wrapper__score-student {
+    width: 100%;
+}
+
 .list-students {
     background-color: whitesmoke;
     padding: 14px;
@@ -155,23 +185,46 @@ button {
     margin: 20px 0;
 }
 
-.list-student-select {
+.list-students-filter {
     display: flex;
-    justify-content: start;
-    align-items: baseline;
+    justify-content: start; /* Sử dụng space-between để các phần tử có không gian đều nhau */
+    align-items: end;
+    gap: 10px;
+    margin: 10px 0;
 }
 
-#list-student-select-class {
-    width: 200px;
-    margin: 10px 0 20px 14px;
+.list-student-select-item {
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    flex: 1;
+}
+
+.list-student-select-item-lable {
+    width: 100%;
+    height: auto;
+    font-size: 76%;
 }
 
 .list-student-table {
+    line-height: 20px;
     width: 100%;
 }
 
 .list-student-table th {
+    margin: auto 0;
     font-weight: 700;
+}
+
+.list-student-table th:nth-child(4) {
+    /* text-align: left; */
+}
+
+/* Điều chỉnh style của các icon */
+.fa-solid {
+    margin-left: 14px;
+    margin-right: 2px;
+    transition: transform 0.3s ease;
 }
 
 .list-student-table td,
@@ -185,6 +238,16 @@ button {
 .list-student-table th:nth-child(2),
 .list-student-table td:nth-child(2) {
     text-align: left;
+}
+
+.list-student-table th,
+.list-student-table th:nth-child(1),
+.list-student-table td:nth-child(1) {
+    background-color: rgb(233, 233, 233);
+}
+
+.date-space-mobile {
+    display: inline !important;
 }
 
 #scroll-to-top-btn {
@@ -408,6 +471,22 @@ button {
     to {
         transform: translateX(0);
         opacity: 1;
+    }
+}
+
+@keyframes bounce {
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
     }
 }
 

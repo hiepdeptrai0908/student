@@ -188,7 +188,7 @@ window.addEventListener("load", function () {
         optionValue = localStorage.getItem("manager-option-value") || "1"
     ) {
         if (optionValue == "3") {
-            loadStudents();
+            initStudentList();
         }
         if (optionValue === "7") {
             getAllStatistics();
@@ -289,7 +289,7 @@ window.addEventListener("load", function () {
         const year = date.getFullYear();
         const dayOfWeek = daysOfWeek[date.getDay()]; // Lấy tên ngày trong tuần từ mảng
 
-        return `${dayOfWeek} ${day} - ${month} - ${year}`;
+        return `${dayOfWeek}<span class="date-space-mobile" style="display:none"><br /></span> ${day} - ${month} - ${year}`;
     }
 
     // Format tên bài học
@@ -900,7 +900,7 @@ window.addEventListener("load", function () {
                 elements.oldStudentDropdown.value = classId;
                 document.querySelector(".add-student-input").value = "";
             }, timeOut);
-            loadStudents();
+            initStudentList();
         } catch (error) {
             console.error("Có lỗi xảy ra khi thêm học sinh:", error);
             alert("Có lỗi xảy ra khi thêm học sinh.");
@@ -1233,7 +1233,7 @@ window.addEventListener("load", function () {
                 hideLoadingModal();
                 alert(result);
             }, timeOut);
-            loadStudents();
+            initStudentList();
             document.getElementById("delete-student-form").reset();
             // Thực hiện các hành động sau khi xóa thành công, ví dụ: làm mới dữ liệu hoặc thông báo
         } catch (error) {
@@ -1313,13 +1313,13 @@ window.addEventListener("load", function () {
             // Tạo phần thead (tiêu đề bảng)
             const thead = document.createElement("thead");
             thead.innerHTML = `
-                    <tr class="table-light">
-                        <th width="30px">STT</th>
-                        <th width="200px">Nội Dung</th>
-                        <th class="score-table-window" width="70px">Thang Điểm</th>
-                        <th class="score-table-window" width="70px">Điểm</th>
-                        <th style="min-width: 110px">Chú Thích</th>
-                        <th width="120px">Ngày Tạo</th>
+                    <tr>
+                        <th>STT</th>
+                        <th>Nội Dung</th>
+                        <th class="score-table-window">Thang Điểm</th>
+                        <th class="score-table-window">Điểm</th>
+                        <th>Chú Thích</th>
+                        <th>Ngày Tạo</th>
                     </tr>
                 `;
 
@@ -1340,33 +1340,12 @@ window.addEventListener("load", function () {
                     const formattedIndex = (index + 1)
                         .toString()
                         .padStart(2, "0");
-
-                    // Format date
-                    const daysOfWeek = [
-                        "Chủ Nhật",
-                        "Thứ Hai",
-                        "Thứ Ba",
-                        "Thứ Tư",
-                        "Thứ Năm",
-                        "Thứ Sáu",
-                        "Thứ Bảy",
-                    ];
-                    const createdAt = new Date(score.created_at);
-                    const dayOfWeek = daysOfWeek[createdAt.getDay()];
-                    const formattedDate = `${dayOfWeek}<br />${String(
-                        createdAt.getDate()
-                    ).padStart(2, "0")}-${String(
-                        createdAt.getMonth() + 1
-                    ).padStart(2, "0")}-${createdAt.getFullYear()}`;
-
                     // Thêm hàng dữ liệu
                     row.innerHTML = `
                             <td>${formattedIndex}</td>
-                            <td width="100px">${handleLessonName(
-                                score.lesson
-                            )}</td>
-                            <td width="45px">${score.max_score}</td>
-                            <td width="45px">${score.score}</td>
+                            <td>${handleLessonName(score.lesson)}</td>
+                            <td>${score.max_score}</td>
+                            <td>${score.score}</td>
                             <td style="font-style:italic; color:#333; font-size:12px; text-align:left;" ${
                                 score.comment.match(
                                     /Chưa đóng phạt|chưa đóng phạt|Chưa đóng tiền|chưa đóng tiền|Vắng|vắng/
@@ -1374,7 +1353,7 @@ window.addEventListener("load", function () {
                                     ? `class="error"`
                                     : `class=""`
                             }>${score.comment}</td>
-                            <td width="120px">${formattedDate}</td>
+                            <td>${formatShortDateTime(score.created_at)}</td>
                         `;
                     tbody.appendChild(row);
                 });
@@ -1416,42 +1395,142 @@ window.addEventListener("load", function () {
         return students;
     }
 
-    // Hàm render danh sách học sinh vào bảng
-    function renderStudents(students) {
+    let students = []; // Lưu trữ tất cả học sinh đã tải về
+
+    // Hàm để lấy phần tên cuối cùng của họ và tên
+    function getLastName(fullName) {
+        const nameParts = fullName.trim().split(" ");
+        return nameParts[nameParts.length - 1]; // Trả về phần tên cuối cùng
+    }
+
+    // Cập nhật icon sắp xếp cho cột
+    function updateSortIcons(sortType) {
+        const nameSortIcon = document.getElementById("name-sort-icon");
+        const dateSortIcon = document.getElementById("date-sort-icon");
+
+        // Kiểm tra sự tồn tại của các phần tử trước khi thay đổi className
+        if (nameSortIcon && dateSortIcon) {
+            // Reset các icon về trạng thái mặc định
+            nameSortIcon.className = "fa-solid";
+            dateSortIcon.className = "fa-solid";
+
+            // Cập nhật icon theo kiểu sắp xếp hiện tại
+            if (sortType === "name-asc") {
+                nameSortIcon.classList.add("fa-arrow-down-a-z");
+            } else if (sortType === "name-desc") {
+                nameSortIcon.classList.add("fa-arrow-down-z-a");
+            } else if (sortType === "date-asc") {
+                dateSortIcon.classList.add("fa-arrow-down-1-9");
+            } else if (sortType === "date-desc") {
+                dateSortIcon.classList.add("fa-arrow-down-9-1");
+            }
+        } else {
+            console.error("Không tìm thấy các icon sắp xếp trong DOM.");
+        }
+    }
+
+    // Hàm render danh sách học sinh vào bảng sau khi lọc và sắp xếp
+    function renderStudents(studentList) {
+        const sortType = document.getElementById("sort-student-select").value;
+
+        // Kiểm tra xem bảng có tồn tại trong DOM không
         const table = document.querySelector(".list-student-table");
+        if (!table) {
+            console.error(
+                "Không tìm thấy phần tử bảng với class .list-student-table"
+            );
+            return;
+        }
+
+        // Sắp xếp danh sách học sinh theo lựa chọn
+        if (sortType === "name-asc") {
+            studentList.sort((a, b) =>
+                getLastName(a.name).localeCompare(getLastName(b.name))
+            );
+        } else if (sortType === "name-desc") {
+            studentList.sort((a, b) =>
+                getLastName(b.name).localeCompare(getLastName(a.name))
+            );
+        } else if (sortType === "date-asc") {
+            studentList.sort(
+                (a, b) => new Date(a.created_at) - new Date(b.created_at)
+            );
+        } else if (sortType === "date-desc") {
+            studentList.sort(
+                (a, b) => new Date(b.created_at) - new Date(a.created_at)
+            );
+        }
+
         // Xóa các hàng cũ trong bảng (trừ hàng tiêu đề)
         table.innerHTML = `
-            <tr>
-                <th>STT</th>
-                <th>Họ và Tên</th>
-                <th>Lớp Học</th>
-                <th>Ngày Tham Gia</th>
-            </tr>
-        `;
+        <tr>
+            <th>STT</th>
+            <th>Họ và Tên<i id="name-sort-icon" class="fa-solid fa-sort"></i></th>
+            <th>Lớp Học</th>
+            <th>Ngày Tham Gia<i id="date-sort-icon" class="fa-solid fa-sort"></i></th>
+        </tr>
+    `;
 
-        students.forEach((student, index) => {
+        // Render lại danh sách học sinh
+        studentList.forEach((student, index) => {
             const row = document.createElement("tr");
             row.style.animationDelay = `0.${index}s`;
             row.innerHTML = `
-                <td>${index + 1}</td>
-                <td>${student.name}</td>
-                <td>${student.classname}</td>
-                <td>${formatShortDateTime(student.created_at)}</td>
-            `;
+            <td>${index + 1}</td>
+            <td>${student.name}</td>
+            <td>${student.classname}</td>
+            <td>${formatShortDateTime(student.created_at)}</td>
+        `;
             table.appendChild(row);
         });
+
+        // Cập nhật icon sắp xếp sau khi render bảng
+        updateSortIcons(sortType);
     }
 
-    // Hàm chính để gọi API và render danh sách
-    async function loadStudents() {
-        const classIdSelect = elements.listStudentClassDropdown;
-        const classId = classIdSelect.value;
-        const students = await fetchStudents(classId);
-        renderStudents(students);
+    // Hàm lọc học sinh theo lớp đã chọn
+    function filterStudentsByClass(classId) {
+        let filteredStudents = students;
+
+        // Nếu classId tồn tại và khác "all", lọc danh sách học sinh theo class_id
+        if (classId && classId !== "all") {
+            filteredStudents = students.filter(
+                (student) => student.class_id == Number(classId)
+            );
+        }
+
+        // Sau khi lọc, render danh sách học sinh đã lọc và sắp xếp
+        renderStudents(filteredStudents);
     }
 
-    // Lắng nghe sự kiện thay đổi lớp học để lọc học sinh
-    elements.listStudentClassDropdown.addEventListener("change", loadStudents);
+    // Hàm gọi API để tải tất cả học sinh
+    async function fetchAllStudents() {
+        const datas = await fetchStudents(); // Giả sử fetchStudents() trả về tất cả học sinh
+        students = datas; // Lưu lại danh sách học sinh sau khi tải về
+    }
+
+    // Hàm chính để tải danh sách học sinh một lần và lắng nghe sự kiện thay đổi lớp
+    async function initStudentList() {
+        await fetchAllStudents(); // Tải tất cả học sinh khi khởi động
+        filterStudentsByClass(elements.listStudentClassDropdown.value); // Lọc học sinh theo lớp học ban đầu
+
+        // Lắng nghe sự kiện thay đổi lớp học để lọc học sinh
+        elements.listStudentClassDropdown.addEventListener(
+            "change",
+            function () {
+                const classId = this.value;
+                filterStudentsByClass(classId); // Lọc và hiển thị lại danh sách học sinh theo lớp
+            }
+        );
+
+        // Lắng nghe sự kiện thay đổi loại sắp xếp
+        document
+            .getElementById("sort-student-select")
+            .addEventListener("change", function () {
+                const classId = elements.listStudentClassDropdown.value;
+                filterStudentsByClass(classId); // Lọc lại danh sách sau khi thay đổi sắp xếp
+            });
+    }
 
     // NHẬP ĐIỂM
     let insertMaxScore = document.getElementById(
@@ -1609,7 +1688,7 @@ window.addEventListener("load", function () {
         }
     }
 
-    // score form submit
+    // FORM NHẬP ĐIỂM SUBMIT
     document
         .getElementById("score-form")
         .addEventListener("submit", async (event) => {
@@ -2520,9 +2599,9 @@ window.addEventListener("load", function () {
             }
         }
 
-        const rankSelect = document.querySelector(".rank-select");
         const rankContent = document.querySelector(".rank-content");
         rankContent.style.display = "flex"; // Hiển thị bảng
+        const rankSelect = document.querySelector(".rank-select");
         rankSelect.scrollIntoView({ behavior: "smooth" }); // Cuộn xuống
     }
 

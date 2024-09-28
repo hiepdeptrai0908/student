@@ -482,11 +482,10 @@
                                         font-size: 70%;
                                         font-style: italic;
                                     "
-                                    >(※ Lưu ý: Nếu nhập chữ "<span
-                                        style="color: red"
+                                    >(※ Lưu ý: Chữ "<span style="color: red"
                                         >Chưa nộp phạt</span
-                                    >", "<span style="color: red">Vắng</span>"
-                                    sẽ hiện màu đỏ.)</i
+                                    >" và "<span style="color: red">Vắng</span>"
+                                    sẽ có màu đỏ.)</i
                                 ></label
                             >
                             <input
@@ -586,7 +585,7 @@
                         </div>
                         <div class="table-wrapper">
                             <table
-                                class="table border table-wrapper__score-student"
+                                class="table-wrapper__score-student"
                                 style="width: 100%"
                                 id="student-score-table"
                             ></table>
@@ -596,22 +595,58 @@
                         <div class="list-student-table-heading">
                             Danh sách học sinh
                         </div>
-                        <div class="list-student-select">
-                            <label
-                                class="add-item-title"
-                                for="list-student-select-class"
+                        <div class="list-students-filter">
+                            <div
+                                class="list-student-select list-student-select-item"
                             >
-                                <i class="fa-solid fa-filter"></i>
-                                Lọc theo lớp học
-                            </label>
-                            <select
-                                class="add-item-input form-select"
-                                id="list-student-select-class"
-                                name="class_id"
+                                <label
+                                    class="list-student-select-item-lable"
+                                    for="list-student-select-class"
+                                >
+                                    <i class="fa-solid fa-filter"></i>
+                                    <span
+                                        class="list-student-select-item-lable-window"
+                                        >Lọc theo lớp học</span
+                                    >
+                                </label>
+                                <select
+                                    class="list-student-select-item-lable-select"
+                                    id="list-student-select-class"
+                                    name="class_id"
+                                >
+                                    <option value="">
+                                        -- Lọc theo lớp học --
+                                    </option>
+                                    <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                                </select>
+                            </div>
+                            <div
+                                class="list-student-select list-student-select-item"
                             >
-                                <option value="">-- Tất cả --</option>
-                                <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
-                            </select>
+                                <label
+                                    class="list-student-select-item-lable"
+                                    for="list-student-select-class"
+                                >
+                                    <i class="fa-solid fa-filter"></i>
+                                    <span
+                                        class="list-student-select-item-lable-window"
+                                        >Sắp xếp</span
+                                    >
+                                </label>
+                                <select
+                                    id="sort-student-select"
+                                    class="list-student-select-item-lable-select"
+                                >
+                                    <option value="name-asc">Tên A-Z</option>
+                                    <option value="name-desc">Tên Z-A</option>
+                                    <option value="date-asc">
+                                        Ngày Tăng Dần
+                                    </option>
+                                    <option value="date-desc">
+                                        Ngày Giảm Dần
+                                    </option>
+                                </select>
+                            </div>
                         </div>
                         <table class="list-student-table"></table>
                     </div>

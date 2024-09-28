@@ -297,4 +297,34 @@
     .manager-student-options {
         grid-template-columns: repeat(2, 1fr); /* Cũng giữ 2 cột trên di động */
     }
+
+    .list-student-table {
+        line-height: 14px;
+        font-size: 80%;
+    }
+
+    .list-student-table th:nth-child(2),
+    .list-student-table td:nth-child(2) {
+        width: 40%;
+    }
+
+    .date-space-mobile {
+        display: inline !important;
+    }
+    .table-wrapper {
+        padding: 8px;
+        width: 100%;
+        background-color: whitesmoke;
+        border-radius: 10px;
+    }
+    .table-wrapper__score-student {
+        width: 100%;
+        font-size: 90%;
+        line-height: 16px;
+    }
+
+    .table-wrapper__score-student th:nth-child(6),
+    .table-wrapper__score-student td:nth-child(6) {
+        display: none;
+    }
 }

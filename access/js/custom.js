@@ -14,8 +14,9 @@ window.onscroll = function () {
 
 // Hàm để hiển thị/ẩn nút "Lên đầu trang"
 function toggleScrollToTopBtn() {
+    console.log("object");
     if (document.documentElement.scrollTop > window.innerHeight * 0.4) {
-        scrollToTopBtn.style.transform = "translateX(0)"; // Hiển thị nút
+        scrollToTopBtn.style.transform = "translateX(0px)"; // Hiển thị nút
     } else {
         scrollToTopBtn.style.transform = "translateX(120px)"; // Ẩn nút
     }
