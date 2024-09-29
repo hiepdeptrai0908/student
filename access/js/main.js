@@ -1396,6 +1396,8 @@ window.addEventListener("load", function () {
     }
 
     let students = []; // Lưu trữ tất cả học sinh đã tải về
+    let filteredStudents = [];
+    let filterClassName = "";
 
     // Hàm để lấy phần tên cuối cùng của họ và tên
     function getLastName(fullName) {
@@ -1431,6 +1433,7 @@ window.addEventListener("load", function () {
 
     // Hàm render danh sách học sinh vào bảng sau khi lọc và sắp xếp
     function renderStudents(studentList) {
+        filteredStudents = studentList;
         const sortType = document.getElementById("sort-student-select").value;
 
         // Kiểm tra xem bảng có tồn tại trong DOM không
@@ -1494,9 +1497,16 @@ window.addEventListener("load", function () {
 
         // Nếu classId tồn tại và khác "all", lọc danh sách học sinh theo class_id
         if (classId && classId !== "all") {
-            filteredStudents = students.filter(
-                (student) => student.class_id == Number(classId)
-            );
+            filterClassName =
+                elements.listStudentClassDropdown.options[
+                    elements.listStudentClassDropdown.selectedIndex
+                ].textContent;
+
+            filteredStudents = students.filter((student) => {
+                return student.class_id == Number(classId);
+            });
+        } else {
+            filterClassName = "";
         }
 
         // Sau khi lọc, render danh sách học sinh đã lọc và sắp xếp
@@ -1528,6 +1538,7 @@ window.addEventListener("load", function () {
             .getElementById("sort-student-select")
             .addEventListener("change", function () {
                 const classId = elements.listStudentClassDropdown.value;
+
                 filterStudentsByClass(classId); // Lọc lại danh sách sau khi thay đổi sắp xếp
             });
     }
@@ -3112,6 +3123,144 @@ window.addEventListener("load", function () {
             console.error("Có lỗi xảy ra khi khởi tạo log book:", error);
         }
     }
+    function formatDate(dateString) {
+        const daysOfWeek = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
+        const date = new Date(dateString);
+        const day = daysOfWeek[date.getDay()];
+        const dayOfMonth = String(date.getDate()).padStart(2, "0"); // Thêm số 0 ở phía trước nếu nhỏ hơn 10
+        const month = String(date.getMonth() + 1).padStart(2, "0"); // Tháng bắt đầu từ 0, thêm số 0 ở phía trước
+        const year = date.getFullYear();
+
+        return `${day} ngày ${dayOfMonth} - ${month} - ${year}`;
+    }
+    function downloadPDF() {
+        // Tạo nội dung cho bảng
+        const tableBody = [
+            [
+                {
+                    text: "STT",
+                    style: "tableHeader", // Áp dụng kiểu cho tiêu đề
+                    alignment: "center", // Căn giữa nội dung
+                },
+                {
+                    text: "Họ và Tên",
+                    style: "tableHeader", // Áp dụng kiểu cho tiêu đề
+                    alignment: "left",
+                },
+                {
+                    text: "Lớp Học",
+                    style: "tableHeader", // Áp dụng kiểu cho tiêu đề
+                    alignment: "center",
+                },
+                {
+                    text: "Ngày Tham Gia",
+                    style: "tableHeader", // Áp dụng kiểu cho tiêu đề
+                    alignment: "left",
+                },
+                {
+                    text: "Check",
+                    fontSize: 9,
+                    style: "tableHeader", // Áp dụng kiểu cho tiêu đề
+                    alignment: "center",
+                },
+            ],
+        ];
+
+        // Lặp qua danh sách học sinh để thêm dữ liệu vào bảng
+        filteredStudents.forEach((student, index) => {
+            const row = [
+                {
+                    text: index + 1,
+                    style: "tableHeader",
+                    alignment: "center",
+                }, // STT
+                {
+                    text: student.name,
+                    style: "tableBody",
+                    alignment: "left",
+                }, // Họ và Tên
+                {
+                    text: student.classname,
+                    style: "tableBody",
+                    alignment: "center",
+                }, // Lớp Học
+                {
+                    text: formatDate(student.created_at),
+                    style: "tableBody",
+                    alignment: "left",
+                }, // Ngày Tham Gia
+                {
+                    text: "",
+                    alignment: "left",
+                }, // Ô check
+            ];
+            tableBody.push(row);
+        });
+
+        var docDefinition = {
+            content: [
+                {
+                    text: `DANH SÁCH HỌC SINH${
+                        filterClassName ? " LỚP " + filterClassName + " " : ""
+                    }`,
+                    style: "header",
+                },
+                {
+                    table: {
+                        headerRows: 1, // Số lượng hàng tiêu đề
+                        body: tableBody,
+                        widths: ["auto", "*", "*", "*", "auto"], // Đặt chiều rộng cột
+                    },
+                },
+            ],
+            styles: {
+                header: {
+                    fontSize: 16,
+                    bold: true,
+                    color: "green",
+                    margin: [10, 10], // Lề cho phần tiêu đề
+                    alignment: "center", // Căn giữa cho tiêu đề
+                    fillColor: "green",
+                },
+                tableHeader: {
+                    bold: true,
+                    fontSize: 11,
+                    color: "black",
+                    margin: [0, 5], // Lề cho hàng tiêu đề
+                    fillColor: "#e9e9e9",
+                },
+                tableBody: {
+                    fontSize: 10,
+                    bold: false,
+                    margin: [0, 4], // Lề cho các hàng khác
+                    fillColor: "whitesmoke",
+                },
+            },
+            pageSize: "A4", // Kích thước trang
+            pageMargins: [50, 50], // Lề trang
+            // Thêm footer để hiển thị số trang
+            footer: function (currentPage, pageCount) {
+                return {
+                    text: `Trang ${currentPage} / ${pageCount}`,
+                    alignment: "center",
+                    fontSize: 10,
+                    margin: [0, 8, 0, 0], // Khoảng cách của footer
+                };
+            },
+        };
+
+        pdfMake
+            .createPdf(docDefinition)
+            .download(
+                `${
+                    filterClassName ? filterClassName + " " : ""
+                }danh sách học sinh.pdf`
+            );
+    }
+
+    document
+        .querySelector(".download-pdf-btn__list-students")
+        .addEventListener("click", downloadPDF);
 
     // Gọi hàm khởi tạo
     initLogBook();

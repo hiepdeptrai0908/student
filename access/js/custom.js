@@ -14,7 +14,6 @@ window.onscroll = function () {
 
 // Hàm để hiển thị/ẩn nút "Lên đầu trang"
 function toggleScrollToTopBtn() {
-    console.log("object");
     if (document.documentElement.scrollTop > window.innerHeight * 0.4) {
         scrollToTopBtn.style.transform = "translateX(0px)"; // Hiển thị nút
     } else {
@@ -28,3 +27,20 @@ function scrollToTop() {
     document.body.scrollTop = 0; // Dành cho Safari
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
+
+// // Vô hiệu hóa chuột phải
+// document.addEventListener("contextmenu", function (event) {
+//     event.preventDefault();
+// });
+
+// // Vô hiệu hóa F12 (và một số phím khác)
+// document.addEventListener("keydown", function (event) {
+//     if (
+//         event.key === "F12" ||
+//         (event.ctrlKey && event.shiftKey && event.key === "I") ||
+//         (event.ctrlKey && event.shiftKey && event.key === "J") ||
+//         (event.ctrlKey && event.key === "U")
+//     ) {
+//         event.preventDefault();
+//     }
+// });

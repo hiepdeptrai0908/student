@@ -254,10 +254,10 @@ button {
     position: fixed;
     bottom: 20px;
     right: 30px;
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     transform: translateX(120px);
-    background-color: #ff9d0017;
+    background-color: #ff9d0037;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1616,4 +1616,23 @@ input[type="radio"] {
 .score-detail {
     display: none;
     animation-name: slideInLeft;
+}
+
+.download-pdf-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 999px;
+    background-color: rgb(189, 211, 255);
+    box-shadow: 0 1px 3px #666666;
+}
+
+.download-pdf-btn i {
+    margin-left: 0;
 }

@@ -650,6 +650,11 @@
                         </div>
                         <table class="list-student-table"></table>
                     </div>
+                    <button
+                        class="download-pdf-btn download-pdf-btn__list-students"
+                    >
+                        <i class="fa-solid fa-download"></i> Download PDF
+                    </button>
                 </div>
 
                 <!-- NHẬP ĐIỂM -->
@@ -1760,8 +1765,16 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"
         ></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/vfs_fonts.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
         <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/vi.js"></script>
+
         <script>
             // Hàm hiện modal loading
             function showLoadingModal() {
@@ -1807,6 +1820,7 @@
                     });
             }
         </script>
+
         <script type="module" src="/access/js/custom.js"></script>
         <script type="module" src="/access/js/main.js"></script>
     </body>
