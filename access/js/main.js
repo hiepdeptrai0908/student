@@ -76,10 +76,12 @@ window.addEventListener("load", function () {
         // RANK //////////////////////////////////////////////////////////////////
         rankSelectClass: document.querySelector("#rank-select-class"),
     };
+    let students = []; // Lưu trữ tất cả học sinh đã tải về
+    let listFilteredStudentsByClassId = [];
 
     const tableWrapper = document.querySelector("table");
 
-    const timeOut = 100;
+    const timeOut = 0;
     const doneTypingInterval = 400;
     // Hàm hiện modal loading
     function showLoadingModal() {
@@ -187,9 +189,6 @@ window.addEventListener("load", function () {
     function optionScreen(
         optionValue = localStorage.getItem("manager-option-value") || "1"
     ) {
-        if (optionValue == "3") {
-            initStudentList();
-        }
         if (optionValue === "7") {
             getAllStatistics();
         }
@@ -569,120 +568,32 @@ window.addEventListener("load", function () {
             const response = await fetch(url + "class");
             const data = await response.json();
 
-            // CLASS dropdown
-            elements.oldClassDropdown.innerHTML =
-                '<option value="">-- Chọn Lớp Học --</option>' +
-                data
-                    .map(
-                        (item) =>
-                            `<option value="${item.id}">${item.classname}</option>`
-                    )
-                    .join("");
-            elements.deleteClassDropdown.innerHTML =
-                '<option value="">-- Chọn Lớp Học --</option>' +
-                data
-                    .map(
-                        (item) =>
-                            `<option value="${item.id}">${item.classname}</option>`
-                    )
-                    .join("");
-            // Student dropdown
-            elements.oldStudentDropdown.innerHTML =
-                '<option value="">-- Chọn Lớp Học --</option>' +
-                data
-                    .map(
-                        (item) =>
-                            `<option value="${item.id}">${item.classname}</option>`
-                    )
-                    .join("");
-            elements.updateStudentDropdown.innerHTML =
-                '<option value="">-- Chọn Lớp Học --</option>' +
-                data
-                    .map(
-                        (item) =>
-                            `<option value="${item.id}">${item.classname}</option>`
-                    )
-                    .join("");
-            elements.deleteStudentDropdown.innerHTML =
-                '<option value="">-- Chọn Lớp Học --</option>' +
-                data
-                    .map(
-                        (item) =>
-                            `<option value="${item.id}">${item.classname}</option>`
-                    )
-                    .join("");
-            // Table student dropdown
-            elements.tableStudentDropdown.innerHTML =
-                '<option value="">-- Chọn Lớp Học --</option>' +
-                data
-                    .map(
-                        (item) =>
-                            `<option value="${item.id}">${item.classname}</option>`
-                    )
-                    .join("");
-            // Insert score - class dropdown
-            elements.insertScoreClassDropdown.innerHTML =
-                '<option value="">-- Chọn Lớp Học --</option>' +
-                data
-                    .map(
-                        (item) =>
-                            `<option value="${item.id}">${item.classname}</option>`
-                    )
-                    .join("");
-            // Delete score - class dropdown
-            elements.deleteScoreClassDropdown.innerHTML =
-                '<option value="">-- Chọn Lớp Học --</option>' +
-                data
-                    .map(
-                        (item) =>
-                            `<option value="${item.id}">${item.classname}</option>`
-                    )
-                    .join("");
-            // Screen score - class dropdown
-            elements.screenScoreClassDropdown.innerHTML =
-                '<option value="">-- Chọn Lớp Học --</option>' +
-                data
-                    .map(
-                        (item) =>
-                            `<option value="${item.id}">${item.classname}</option>`
-                    )
-                    .join("");
-            // Log book write - class dropdown
-            elements.logBookWriteDropdown.innerHTML =
-                '<option value="">-- Chọn Lớp Học --</option>' +
-                data
-                    .map(
-                        (item) =>
-                            `<option value="${item.id}">${item.classname}</option>`
-                    )
-                    .join("");
-            // Log book search - class dropdown
-            elements.logBookSearchClassDropdown.innerHTML =
-                '<option value="">-- Tất cả --</option>' +
-                data
-                    .map(
-                        (item) =>
-                            `<option value="${item.id}">${item.classname}</option>`
-                    )
-                    .join("");
-            // Rank select - class dropdown
-            elements.rankSelectClass.innerHTML =
-                '<option value="">-- Tất cả --</option>' +
-                data
-                    .map(
-                        (item) =>
-                            `<option value="${item.id}">${item.classname}</option>`
-                    )
-                    .join("");
-            // List students select - class dropdown
-            elements.listStudentClassDropdown.innerHTML =
-                '<option value="">-- Tất cả --</option>' +
-                data
-                    .map(
-                        (item) =>
-                            `<option value="${item.id}">${item.classname}</option>`
-                    )
-                    .join("");
+            // Hàm chung để cập nhật các dropdown
+            const classDropdown = (element, defaultOption) => {
+                element.innerHTML =
+                    `<option value="">-- ${defaultOption} --</option>` +
+                    data
+                        .map(
+                            (item) =>
+                                `<option value="${item.id}">${item.classname}</option>`
+                        )
+                        .join("");
+            };
+
+            // Cập nhật các dropdown
+            classDropdown(elements.oldClassDropdown, "Chọn Lớp Học");
+            classDropdown(elements.deleteClassDropdown, "Chọn Lớp Học");
+            classDropdown(elements.oldStudentDropdown, "Chọn Lớp Học");
+            classDropdown(elements.updateStudentDropdown, "Chọn Lớp Học");
+            classDropdown(elements.deleteStudentDropdown, "Chọn Lớp Học");
+            classDropdown(elements.tableStudentDropdown, "Chọn Lớp Học");
+            classDropdown(elements.insertScoreClassDropdown, "Chọn Lớp Học");
+            classDropdown(elements.deleteScoreClassDropdown, "Chọn Lớp Học");
+            classDropdown(elements.screenScoreClassDropdown, "Chọn Lớp Học");
+            classDropdown(elements.logBookWriteDropdown, "Chọn Lớp Học");
+            classDropdown(elements.logBookSearchClassDropdown, "Tất cả");
+            classDropdown(elements.rankSelectClass, "Tất cả");
+            classDropdown(elements.listStudentClassDropdown, "Tất cả");
 
             // Cập nhật bảng thông tin class
             const tbody = document.querySelector("#class-table tbody");
@@ -695,17 +606,13 @@ window.addEventListener("load", function () {
                         createdAt.getMonth() + 1
                     ).padStart(2, "0")}-${createdAt.getFullYear()}`;
                     return `
-                                    <tr>
-                                        <td>${String(index + 1).padStart(
-                                            2,
-                                            "0"
-                                        )}</td>
-                                        <td>${item.classname}</td>
-                                        <td>${item.student_count}</td>
-                                        <td>${item.lesson_count} bài</td>
-                                        <td>${formattedDate}</td>
-                                    </tr>
-                                `;
+                        <tr>
+                            <td>${String(index + 1).padStart(2, "0")}</td>
+                            <td>${item.classname}</td>
+                            <td>${item.student_count}</td>
+                            <td>${item.lesson_count} bài</td>
+                            <td>${formattedDate}</td>
+                        </tr>`;
                 })
                 .join("");
         } catch (error) {
@@ -925,41 +832,22 @@ window.addEventListener("load", function () {
         });
 
     // SỬA ĐIỂM HỌC SINH
-    // Hàm để lấy danh sách học sinh của lớp học từ API và cập nhật vào dropdown
-    async function fetchStudentsByClass(classId) {
-        try {
-            showLoadingModal();
-            const response = await fetch(`${url}students?classId=${classId}`);
-            const students = await response.json();
-            setTimeout(() => {
-                hideLoadingModal();
-                const studentSelect = document.getElementById("student-select");
-                const tableStudentSelect = document.getElementById(
-                    "table-student-select"
-                );
+    // Hàm render cho options
+    // Hàm render cho options và cập nhật danh sách học sinh theo classId
+    function renderStudentOptions(classId, selectElement) {
+        listFilteredStudentsByClassId = students.filter(
+            (student) => student.class_id === Number(classId)
+        );
 
-                // Hàm cập nhật tùy chọn học sinh cho dropdown
-                function updateStudentOptions(selectElement, students) {
-                    let optionsHtml =
-                        '<option value="">-- Chọn Học Sinh --</option>';
-
-                    students.forEach((student) => {
-                        optionsHtml += `
-                                <option value="${student.id}">${student.name}</option>
-                            `;
-                    });
-                    selectElement.innerHTML = optionsHtml;
-                }
-
-                renderLesson(classId);
-
-                updateStudentOptions(studentSelect, students);
-                updateStudentOptions(tableStudentSelect, students);
-
-                // Cập nhật tùy chọn cho cả hai dropdown
-            }, timeOut);
-        } catch (error) {
-            console.error("Có lỗi xảy ra khi lấy danh sách học sinh:", error);
+        const optionsHtml = listFilteredStudentsByClassId
+            .map(
+                (student) =>
+                    `<option value="${student.id}">${student.name}</option>`
+            )
+            .join("");
+        if (selectElement) {
+            selectElement.innerHTML =
+                `<option value="">-- Chọn Học Sinh --</option>` + optionsHtml;
         }
     }
 
@@ -967,8 +855,11 @@ window.addEventListener("load", function () {
     async function fetchScoreData(class_id, student_id, lesson) {
         try {
             showLoadingModal();
+            // Reset giá trị input trước khi gửi yêu cầu
             document.getElementById("new-score").value = "";
             document.getElementById("comment").value = "";
+
+            // Gửi yêu cầu POST tới API
             const response = await fetch(url + "score-student", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -980,22 +871,28 @@ window.addEventListener("load", function () {
                 }),
             });
 
+            // Kiểm tra phản hồi từ server
             if (!response.ok) {
                 throw new Error("Network response was not ok");
             }
 
             const data = await response.json();
+
             setTimeout(() => {
                 hideLoadingModal();
-                elements.showMaxScoreUpdate.textContent = `${data[0].max_score} đ`;
-                document.getElementById("new-score").max =
-                    data[0].max_score || "50";
-                document.getElementById("new-score").value =
-                    data[0].score || "";
-                document.getElementById("comment").value =
-                    data[0].comment || "";
+                // Kiểm tra nếu data không rỗng và có phần tử đầu tiên
+                if (data) {
+                    elements.showMaxScoreUpdate.textContent = `${data[0].max_score} đ`;
+                    document.getElementById("new-score").max =
+                        data[0].max_score || "50"; // Đặt giá trị mặc định là 50 nếu max_score rỗng
+                    document.getElementById("new-score").value =
+                        data[0].score || ""; // Nếu không có điểm thì để trống
+                    document.getElementById("comment").value =
+                        data[0].comment || ""; // Nếu không có bình luận thì để trống
+                }
             }, timeOut);
         } catch (error) {
+            hideLoadingModal();
             console.error("Error fetching score data:", error);
         }
     }
@@ -1126,17 +1023,15 @@ window.addEventListener("load", function () {
             }
         });
 
-    // Xử lý khi chọn lớp học để cập nhật danh sách học sinh ở update
+    // Xử lý khi chọn lớp học để cập nhật danh sách học sinh
     document
         .getElementById("update-student-dropdown")
         .addEventListener("change", function () {
             const classId = this.value;
+            const studentSelect = document.getElementById("student-select");
             if (classId) {
-                fetchStudentsByClass(classId);
-            } else {
-                const studentSelect = document.getElementById("student-select");
-                studentSelect.innerHTML =
-                    '<option value="">-- Chọn Học Sinh --</option>'; // Xóa các tùy chọn hiện tại
+                renderLesson(classId);
+                renderStudentOptions(classId, studentSelect);
             }
         });
 
@@ -1145,59 +1040,35 @@ window.addEventListener("load", function () {
         .getElementById("table-student-dropdown")
         .addEventListener("change", function () {
             const classId = this.value;
+            const tableStudentSelect = document.getElementById(
+                "table-student-select"
+            );
             if (classId) {
-                fetchStudentsByClass(classId);
-            } else {
-                const studentSelect = document.getElementById(
-                    "table-student-select"
-                );
-                studentSelect.innerHTML =
-                    '<option value="">-- Chọn Học Sinh --</option>'; // Xóa các tùy chọn hiện tại
+                renderStudentOptions(classId, tableStudentSelect);
             }
         });
 
     let selectedStudents = new Set();
-    let studentDataInClass = []; // Danh sách sinh viên trong lớp
-    // Xử lý khi chọn lớp học để viết sổ đầu bài
     elements.logBookWriteDropdown.addEventListener("change", async function () {
         const classId = this.value;
         if (classId) {
-            showLoadingModal();
-            await fetch(url + `students?classId=${classId}`)
-                .then((response) => response.json())
-                .then((data) => {
-                    hideLoadingModal();
-                    studentDataInClass = data;
-                });
-        } else {
-            studentDataInClass = [];
+            renderStudentOptions(classId);
         }
     });
+
     // DELETE Student
-    // Hàm để lấy danh sách học sinh của lớp học từ API và cập nhật vào dropdown
-    async function fetchStudentsForDeletion(classId) {
-        try {
-            showLoadingModal();
-            const response = await fetch(url + `students?classId=${classId}`);
-            const students = await response.json();
-            hideLoadingModal();
-
-            const studentSelect = document.getElementById(
-                "delete-student-select"
+    // Xử lý khi chọn lớp học để cập nhật danh sách học sinh cho việc xóa
+    document
+        .getElementById("table-student-dropdown")
+        .addEventListener("change", function () {
+            const classId = this.value;
+            const tableStudentSelect = document.getElementById(
+                "table-student-select"
             );
-            studentSelect.innerHTML =
-                '<option value="">-- Chọn Học Sinh --</option>'; // Xóa các tùy chọn hiện tại
-
-            students.forEach((student) => {
-                const option = document.createElement("option");
-                option.value = student.id; // ID học sinh
-                option.textContent = student.name; // Tên học sinh
-                studentSelect.appendChild(option);
-            });
-        } catch (error) {
-            console.error("Có lỗi xảy ra khi lấy danh sách học sinh:", error);
-        }
-    }
+            if (classId) {
+                renderStudentOptions(classId, tableStudentSelect);
+            }
+        });
 
     document.addEventListener("click", function (e) {
         if (
@@ -1271,26 +1142,23 @@ window.addEventListener("load", function () {
             }
         });
 
-    // Xử lý khi chọn lớp học để cập nhật danh sách học sinh
+    // Xử lý khi chọn lớp học để cập nhật danh sách học sinh cho việc xóa
     document
         .getElementById("delete-student-dropdown")
         .addEventListener("change", function () {
             const classId = this.value;
+            const studentSelect = document.getElementById(
+                "delete-student-select"
+            );
             if (classId) {
-                fetchStudentsForDeletion(classId);
-            } else {
-                const studentSelect = document.getElementById(
-                    "delete-student-select"
-                );
-                studentSelect.innerHTML =
-                    '<option value="">-- Chọn Học Sinh --</option>'; // Xóa các tùy chọn hiện tại
+                renderStudentOptions(classId, studentSelect);
             }
         });
+
     async function renderTableScoreStudent(
         classId = elements.tableStudentDropdown.value,
         studentId = elements.tableStudentDropdown.value
     ) {
-        // Gửi yêu cầu API để lấy dữ liệu bảng điểm
         showLoadingModal();
         const response = await fetch(`${url}class/student`, {
             method: "POST",
@@ -1395,7 +1263,6 @@ window.addEventListener("load", function () {
         return students;
     }
 
-    let students = []; // Lưu trữ tất cả học sinh đã tải về
     let filteredStudents = [];
     let filterClassName = "";
 
@@ -2165,7 +2032,10 @@ window.addEventListener("load", function () {
             const suggestionsList = document.getElementById("suggestions-list");
             suggestionsList.innerHTML = "";
 
-            if (!studentDataInClass || studentDataInClass.length === 0) {
+            if (
+                !listFilteredStudentsByClassId ||
+                listFilteredStudentsByClassId.length === 0
+            ) {
                 const messageItem = document.createElement("li");
                 messageItem.textContent =
                     "Không tìm thấy học sinh vì bạn chưa chọn lớp học !";
@@ -2186,10 +2056,11 @@ window.addEventListener("load", function () {
                 const normalizedQuery = removeVietnameseTones(
                     query.toLowerCase()
                 );
-                const filteredStudents = studentDataInClass.filter((student) =>
-                    removeVietnameseTones(student.name.toLowerCase()).includes(
-                        normalizedQuery
-                    )
+                const filteredStudents = listFilteredStudentsByClassId.filter(
+                    (student) =>
+                        removeVietnameseTones(
+                            student.name.toLowerCase()
+                        ).includes(normalizedQuery)
                 );
 
                 filteredStudents.forEach((student) => {
@@ -2214,20 +2085,9 @@ window.addEventListener("load", function () {
     // Thêm sinh viên vào danh sách đã chọn
     let absentCount = 0;
     function addStudentToSelected(name, id, absent, reason) {
-        absentCount = absentCount + 1;
         if (!selectedStudents.has(id)) {
+            absentCount = absentCount + 1;
             selectedStudents.add(id);
-
-            // // Lưu thông tin học sinh trước khi xóa
-            // const student = studentDataInClass.find(
-            //     (student) => student.id === parseInt(id)
-            // );
-            // if (student) {
-            //     studentToRemoved.push(student); // Thêm học sinh vào mảng
-            //     studentDataInClass = studentDataInClass.filter(
-            //         (student) => student.id !== parseInt(id)
-            //     );
-            // }
 
             const selectedList = document.getElementById("selected-list");
             const listItem = document.createElement("li");
@@ -2274,6 +2134,8 @@ window.addEventListener("load", function () {
                 });
             selectedList.appendChild(listItem);
             updateAbsentCount(absentCount);
+        } else {
+            alert("Đã có " + name + " trong danh sách vắng !");
         }
     }
 
@@ -2281,16 +2143,6 @@ window.addEventListener("load", function () {
         // Xóa sinh viên khỏi Set
         selectedStudents.delete(id);
         absentCount = absentCount - 1;
-
-        // // Xóa sinh viên khỏi studentDataInClass
-        // studentDataInClass = studentDataInClass.filter(
-        //     (student) => student.id !== id
-        // );
-
-        // // Xóa sinh viên khỏi studentToRemoved
-        // studentToRemoved = studentToRemoved.filter(
-        //     (student) => student.id !== id
-        // );
 
         // Cập nhật lại số lượng học sinh vắng
         updateAbsentCount(absentCount);
@@ -3106,19 +2958,14 @@ window.addEventListener("load", function () {
     }
 
     // Hàm khởi tạo dữ liệu
-    async function initLogBook() {
+    async function initWindow() {
         try {
             await fetchClasses(); // Gọi hàm lấy các lớp
-            const logClassData = await fetchLogClassData({
-                date: getTodayDate(),
-                classId: null,
-                part: null,
-                teacher: null,
-            }); // Gọi hàm lấy dữ liệu log class
-            renderLogBook(elements.logBookToday, logClassData); // Hiển thị bảng log class
+            const logToday = await fetchLogClassData({ date: getTodayDate() }); // Gọi hàm lấy dữ liệu log class
+            renderLogBook(elements.logBookToday, logToday); // Hiển thị bảng log class
+            initStudentList(); // Khởi tạo danh sách học sinh
 
-            // Khởi tạo: Ẩn bảng điểm số và chỉ hiển thị bảng vắng học
-            scoreTable.classList.add("hidden");
+            scoreTable.classList.add("hidden"); // Ẩn bảng điểm số
         } catch (error) {
             console.error("Có lỗi xảy ra khi khởi tạo log book:", error);
         }
@@ -3137,31 +2984,20 @@ window.addEventListener("load", function () {
         // Tạo nội dung cho bảng
         const tableBody = [
             [
-                {
-                    text: "STT",
-                    style: "tableHeader", // Áp dụng kiểu cho tiêu đề
-                    alignment: "center", // Căn giữa nội dung
-                },
-                {
-                    text: "Họ và Tên",
-                    style: "tableHeader", // Áp dụng kiểu cho tiêu đề
-                    alignment: "left",
-                },
-                {
-                    text: "Lớp Học",
-                    style: "tableHeader", // Áp dụng kiểu cho tiêu đề
-                    alignment: "center",
-                },
+                { text: "STT", style: "tableHeader", alignment: "center" },
+                { text: "Họ và Tên", style: "tableHeader", alignment: "left" },
+                { text: "Lớp Học", style: "tableHeader", alignment: "center" },
                 {
                     text: "Ngày Tham Gia",
-                    style: "tableHeader", // Áp dụng kiểu cho tiêu đề
+                    style: "tableHeader",
                     alignment: "left",
                 },
                 {
                     text: "Check",
                     fontSize: 9,
-                    style: "tableHeader", // Áp dụng kiểu cho tiêu đề
+                    style: "tableHeader",
                     alignment: "center",
+                    margin: [0, 6],
                 },
             ],
         ];
@@ -3169,86 +3005,96 @@ window.addEventListener("load", function () {
         // Lặp qua danh sách học sinh để thêm dữ liệu vào bảng
         filteredStudents.forEach((student, index) => {
             const row = [
-                {
-                    text: index + 1,
-                    style: "tableHeader",
-                    alignment: "center",
-                }, // STT
-                {
-                    text: student.name,
-                    style: "tableBody",
-                    alignment: "left",
-                }, // Họ và Tên
+                { text: index + 1, style: "tableHeader", alignment: "center" },
+                { text: student.name, style: "tableBody", alignment: "left" },
                 {
                     text: student.classname,
                     style: "tableBody",
                     alignment: "center",
-                }, // Lớp Học
+                },
                 {
                     text: formatDate(student.created_at),
                     style: "tableBody",
                     alignment: "left",
-                }, // Ngày Tham Gia
-                {
-                    text: "",
-                    alignment: "left",
-                }, // Ô check
+                },
+                { text: "", alignment: "left" },
             ];
             tableBody.push(row);
         });
 
         var docDefinition = {
-            content: [
-                {
+            header: function (currentPage, pageCount) {
+                return {
                     text: `DANH SÁCH HỌC SINH${
                         filterClassName ? " LỚP " + filterClassName + " " : ""
                     }`,
                     style: "header",
-                },
+                    alignment: "center",
+                    margin: [0, 35, 0, 0], // Điều chỉnh margin cho phù hợp
+                };
+            },
+            content: [
                 {
                     table: {
-                        headerRows: 1, // Số lượng hàng tiêu đề
+                        headerRows: 1,
                         body: tableBody,
-                        widths: ["auto", "*", "*", "*", "auto"], // Đặt chiều rộng cột
+                        widths: ["auto", "*", "*", "*", "auto"],
+                        layout: {
+                            hLineColor: function () {
+                                return "#ddd";
+                            },
+                            vLineColor: function () {
+                                return "#ddd";
+                            },
+                            hLineWidth: function () {
+                                return 1;
+                            },
+                            vLineWidth: function () {
+                                return 1;
+                            },
+                        },
                     },
                 },
             ],
             styles: {
                 header: {
-                    fontSize: 16,
+                    fontSize: 15,
                     bold: true,
                     color: "green",
-                    margin: [10, 10], // Lề cho phần tiêu đề
-                    alignment: "center", // Căn giữa cho tiêu đề
+                    margin: [0, 0, 0, 10],
+                    alignment: "center",
                     fillColor: "green",
                 },
                 tableHeader: {
                     bold: true,
                     fontSize: 11,
                     color: "black",
-                    margin: [0, 5], // Lề cho hàng tiêu đề
+                    margin: [2, 5],
                     fillColor: "#e9e9e9",
                 },
                 tableBody: {
                     fontSize: 10,
                     bold: false,
-                    margin: [0, 4], // Lề cho các hàng khác
+                    margin: [2, 5],
                     fillColor: "whitesmoke",
                 },
             },
-            pageSize: "A4", // Kích thước trang
-            pageMargins: [50, 50], // Lề trang
-            // Thêm footer để hiển thị số trang
+            defaultStyle: {
+                font: "Roboto",
+            },
+            pageSize: "A4",
+            pageMargins: [50, 60],
             footer: function (currentPage, pageCount) {
                 return {
                     text: `Trang ${currentPage} / ${pageCount}`,
                     alignment: "center",
                     fontSize: 10,
-                    margin: [0, 8, 0, 0], // Khoảng cách của footer
+                    margin: [0, 30, 0, 0],
                 };
             },
         };
 
+        // Tạo file PDF và tải xuống
         pdfMake
             .createPdf(docDefinition)
             .download(
@@ -3263,5 +3109,5 @@ window.addEventListener("load", function () {
         .addEventListener("click", downloadPDF);
 
     // Gọi hàm khởi tạo
-    initLogBook();
+    initWindow();
 });
