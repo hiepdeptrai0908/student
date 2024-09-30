@@ -1875,7 +1875,7 @@ window.addEventListener("load", function () {
                                 <div class="log-book-date-item">
                                     <i class="fa-solid fa-clock"></i>
                                     ${part}: 
-                                    ${formatShortDateTime(dateInfo)}
+                                    ${formatDate(dateInfo)}
                                 </div>
                                 <div class="log-book-date-item log-book-date-item__absent">
                                     <span>Vắng: ${absentees.length}</span>
