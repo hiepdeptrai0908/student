@@ -149,17 +149,13 @@ button {
 }
 
 .table-wrapper {
-    padding: 14px;
     width: 100%;
-    background-color: rgb(255, 246, 239) !important;
-    border-radius: 10px;
     line-height: 20px;
 }
 
 .table-wrapper__score-student th:nth-child(1),
 .table-wrapper__score-student td:nth-child(1) {
     background-color: transparent;
-    background-color: rgb(255, 226, 204) !important;
 }
 
 .table-wrapper__score-student th:nth-child(3),
@@ -171,7 +167,8 @@ button {
 
 .table-wrapper__score-student th {
     font-weight: 700;
-    background-color: rgb(255, 226, 204) !important;
+    background-color: rgb(207, 204, 255) !important;
+    font-size: 90%;
 }
 
 .table-wrapper__score-student {

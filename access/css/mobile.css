@@ -312,9 +312,9 @@
         display: inline !important;
     }
     .table-wrapper {
-        padding: 8px;
         width: 100%;
-        background-color: whitesmoke;
+        background-color: #fcd8d8 !important;
+
         border-radius: 10px;
     }
     .table-wrapper__score-student {
