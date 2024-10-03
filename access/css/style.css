@@ -141,6 +141,11 @@ button {
     margin-bottom: 20px;
 }
 
+#student-table th {
+    color: #000000;
+    font-weight: 700;
+}
+
 .table-class-wrapper-heading,
 .list-student-table-heading {
     text-transform: uppercase;
@@ -219,8 +224,8 @@ button {
 
 /* Điều chỉnh style của các icon */
 .fa-solid {
-    margin-left: 14px;
-    margin-right: 2px;
+    /* margin-left: 4px;
+    margin-right: 2px; */
     transition: transform 0.3s ease;
 }
 
@@ -591,10 +596,6 @@ button {
     margin-bottom: 0;
     font-size: 14px;
     line-height: 22px;
-}
-
-.table-light {
-    --bs-table-color: #880808;
 }
 
 th,
