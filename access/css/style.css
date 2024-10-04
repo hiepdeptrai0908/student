@@ -559,6 +559,22 @@ button {
     outline: none;
 }
 
+.add-student-items {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.add-student-name {
+    flex: 2;
+}
+
+.add-student-sex {
+    flex: 1;
+}
+
 .btn {
     width: 100%;
 }

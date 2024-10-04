@@ -785,7 +785,7 @@ window.addEventListener("load", function () {
             .join(" "); // Kết hợp các từ lại thành chuỗi
     }
     // Hàm để gửi yêu cầu POST thêm học sinh mới
-    async function addStudent(classId, name) {
+    async function addStudent(classId, name, sex) {
         try {
             showLoadingModal();
             const response = await fetch(url + "student", {
@@ -793,7 +793,7 @@ window.addEventListener("load", function () {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ class_id: classId, name }),
+                body: JSON.stringify({ class_id: classId, name, sex }),
             });
 
             if (!response.ok) {
@@ -806,6 +806,7 @@ window.addEventListener("load", function () {
                 alert(result);
                 elements.oldStudentDropdown.value = classId;
                 document.querySelector(".add-student-input").value = "";
+                document.querySelector("#sex").value = "Nam";
             }, timeOut);
             initStudentList();
         } catch (error) {
@@ -822,10 +823,11 @@ window.addEventListener("load", function () {
 
             const classId = elements.oldStudentDropdown.value;
             const name = document.getElementById("name").value.trim();
+            const sex = document.getElementById("sex").value;
 
-            if (classId && name) {
+            if (classId && name && sex) {
                 // Gọi hàm thêm học sinh mới
-                addStudent(classId, name);
+                addStudent(classId, name, sex);
             } else {
                 alert("Vui lòng chọn lớp học và nhập họ tên học sinh.");
             }
@@ -1275,6 +1277,8 @@ window.addEventListener("load", function () {
     // Cập nhật icon sắp xếp cho cột
     function updateSortIcons(sortType) {
         const nameSortIcon = document.getElementById("name-sort-icon");
+        const sexSortIcon = document.getElementById("sex-sort-icon");
+        const classSortIcon = document.getElementById("class-sort-icon");
         const dateSortIcon = document.getElementById("date-sort-icon");
 
         // Kiểm tra sự tồn tại của các phần tử trước khi thay đổi className
@@ -1292,6 +1296,14 @@ window.addEventListener("load", function () {
                 dateSortIcon.classList.add("fa-arrow-down-1-9");
             } else if (sortType === "date-desc") {
                 dateSortIcon.classList.add("fa-arrow-down-9-1");
+            } else if (sortType === "class-asc") {
+                classSortIcon.classList.add("fa-arrow-down-a-z");
+            } else if (sortType === "class-desc") {
+                classSortIcon.classList.add("fa-arrow-down-z-a");
+            } else if (sortType === "sex-asc") {
+                sexSortIcon.classList.add("fa-mars-and-venus");
+            } else if (sortType === "sex-desc") {
+                sexSortIcon.classList.add("fa-mars-and-venus");
             }
         } else {
             console.error("Không tìm thấy các icon sắp xếp trong DOM.");
@@ -1329,6 +1341,14 @@ window.addEventListener("load", function () {
             studentList.sort(
                 (a, b) => new Date(b.created_at) - new Date(a.created_at)
             );
+        } else if (sortType === "class-asc") {
+            studentList.sort((a, b) => a.classname.localeCompare(b.classname));
+        } else if (sortType === "class-desc") {
+            studentList.sort((a, b) => b.classname.localeCompare(a.classname));
+        } else if (sortType === "sex-asc") {
+            studentList.sort((a, b) => a.sex.localeCompare(b.sex));
+        } else if (sortType === "sex-desc") {
+            studentList.sort((a, b) => b.sex.localeCompare(a.sex));
         }
 
         // Xóa các hàng cũ trong bảng (trừ hàng tiêu đề)
@@ -1336,7 +1356,8 @@ window.addEventListener("load", function () {
         <tr>
             <th>STT</th>
             <th>Họ và Tên<i id="name-sort-icon" class="fa-solid fa-sort"></i></th>
-            <th>Lớp Học</th>
+            <th>Giới Tính<i id="sex-sort-icon" class="fa-solid"></i></th>
+            <th>Lớp Học<i id="class-sort-icon" class="fa-solid"></i></th>
             <th>Ngày Tham Gia<i id="date-sort-icon" class="fa-solid fa-sort"></i></th>
         </tr>
     `;
@@ -1348,6 +1369,7 @@ window.addEventListener("load", function () {
             row.innerHTML = `
             <td>${index + 1}</td>
             <td>${student.name}</td>
+            <td>${student.sex}</td>
             <td>${student.classname}</td>
             <td>${formatShortDateTime(student.created_at)}</td>
         `;
@@ -2986,6 +3008,11 @@ window.addEventListener("load", function () {
             [
                 { text: "STT", style: "tableHeader", alignment: "center" },
                 { text: "Họ và Tên", style: "tableHeader", alignment: "left" },
+                {
+                    text: "Giới Tính",
+                    style: "tableHeader",
+                    alignment: "center",
+                },
                 { text: "Lớp Học", style: "tableHeader", alignment: "center" },
                 {
                     text: "Ngày Tham Gia",
@@ -3007,6 +3034,7 @@ window.addEventListener("load", function () {
             const row = [
                 { text: index + 1, style: "tableHeader", alignment: "center" },
                 { text: student.name, style: "tableBody", alignment: "left" },
+                { text: student.sex, style: "tableBody", alignment: "center" },
                 {
                     text: student.classname,
                     style: "tableBody",
@@ -3038,7 +3066,7 @@ window.addEventListener("load", function () {
                     table: {
                         headerRows: 1,
                         body: tableBody,
-                        widths: ["auto", "*", "*", "*", "auto"],
+                        widths: ["auto", "*", "auto", "*", "*", "auto"],
                         layout: {
                             hLineColor: function () {
                                 return "#ddd";

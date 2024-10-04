@@ -380,19 +380,38 @@
                             </select>
                         </div>
 
-                        <div>
-                            <label class="add-item-title" for="name">
-                                <i class="fa-solid fa-user-graduate"></i>
-                                Họ & Tên:</label
-                            >
-                            <input
-                                class="add-item-input add-student-input"
-                                type="text"
-                                id="name"
-                                name="name"
-                                autocomplete="off"
-                                required
-                            />
+                        <div class="add-student-items">
+                            <div class="add-student-item add-student-name">
+                                <label class="add-item-title" for="name">
+                                    <i class="fa-solid fa-user-graduate"></i>
+                                    Họ & Tên:</label
+                                >
+                                <input
+                                    class="add-item-input add-student-input"
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    autocomplete="off"
+                                    required
+                                />
+                            </div>
+
+                            <div class="add-student-item add-student-sex">
+                                <label class="add-item-title" for="sex">
+                                    <i class="fa-solid fa-venus-mars"></i>
+                                    Giới Tính:</label
+                                >
+                                <select
+                                    class="add-item-input form-select"
+                                    id="sex"
+                                    name="sex"
+                                    required
+                                >
+                                    <option value="Nam">Nam</option>
+                                    <option value="Nữ">Nữ</option>
+                                    <!-- Các tùy chọn lớp học sẽ được thêm vào đây bằng JavaScript -->
+                                </select>
+                            </div>
                         </div>
 
                         <button class="btn btn-success" type="submit">
@@ -645,6 +664,14 @@
                                     <option value="date-desc">
                                         Ngày Giảm Dần
                                     </option>
+                                    <option value="class-asc">
+                                        Lớp Tăng Dần
+                                    </option>
+                                    <option value="class-desc">
+                                        Lớp Giảm Dần
+                                    </option>
+                                    <option value="sex-asc">Nam → Nữ</option>
+                                    <option value="sex-desc">Nữ → Nam</option>
                                 </select>
                             </div>
                         </div>
