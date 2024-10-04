@@ -305,8 +305,28 @@
 
     .list-student-table th:nth-child(2),
     .list-student-table td:nth-child(2) {
-        width: 40%;
+        width: 35%;
     }
+
+    .list-student-table th:nth-child(3),
+    .list-student-table td:nth-child(3) {
+        width: auto;
+    }
+
+    .list-student-table th:nth-child(4),
+    .list-student-table td:nth-child(4) {
+        min-width: 60px;
+    }
+
+    .list-student-table th:last-child,
+    .list-student-table td:last-child {
+        min-width: 90px;
+    }
+
+    /* .list-student-table th:nth-child(2),
+    .list-student-table td:nth-child(2) {
+        text-align: left;
+    } */
 
     .date-space-mobile {
         display: inline !important;
