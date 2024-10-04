@@ -3003,6 +3003,7 @@ window.addEventListener("load", function () {
         return `${day} ngày ${dayOfMonth} - ${month} - ${year}`;
     }
     function downloadPDF() {
+        showLoadingModal();
         // Tạo nội dung cho bảng
         const tableBody = [
             [
@@ -3121,15 +3122,29 @@ window.addEventListener("load", function () {
                 };
             },
         };
+        hideLoadingModal();
 
-        // Tạo file PDF và tải xuống
-        pdfMake
-            .createPdf(docDefinition)
-            .download(
-                `${
-                    filterClassName ? filterClassName + " " : ""
-                }danh sách học sinh.pdf`
-            );
+        // Tạo PDF và mở trong tab mới
+        pdfMake.createPdf(docDefinition).getBlob(function (blob) {
+            const blobURL = URL.createObjectURL(blob);
+            const fileName = `${
+                filterClassName ? filterClassName + " " : ""
+            }danh sách học sinh.pdf`;
+
+            // Mở trong tab mới
+            const newTab = window.open(blobURL, "_blank");
+
+            // Tạo một nút "Download" trong trang mới để tải file với tên file mong muốn
+            newTab.onload = function () {
+                const downloadButton = newTab.document.createElement("a");
+                downloadButton.href = blobURL;
+                downloadButton.download = fileName;
+                downloadButton.innerText = "Tải xuống PDF";
+                downloadButton.style =
+                    "font-size: 18px; position: absolute; top: 10px;border-radius:999px; right: 20px; padding: 10px 15px; background-color: green; color: white; text-decoration: none;";
+                newTab.document.body.appendChild(downloadButton);
+            };
+        });
     }
 
     document
