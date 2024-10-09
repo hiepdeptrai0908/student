@@ -2114,8 +2114,12 @@ window.addEventListener("load", function () {
             const selectedList = document.getElementById("selected-list");
             const listItem = document.createElement("li");
             const classes = "slide-in-right";
+
+            // Escape dấu ngoặc kép trong chuỗi lý do (reason)
+            const escapedReason = reason ? reason.replace(/"/g, "&quot;") : "";
+
             listItem.innerHTML = `
-                <div class="absent-wrapper ${"slide-in-right"}">
+                <div class="absent-wrapper ${classes}">
                     <div class="absent-wrapper-item absent-wrapper-item__name">
                         <i class="fa-solid fa-user-graduate"></i> ${name}
                     </div>
@@ -2145,7 +2149,7 @@ window.addEventListener("load", function () {
                     class="add-item-input form-select"
                     placeholder="Nhập lý do vắng học ..."
                     data-student-id="${id}"
-                    value="${reason ? reason : ""}"
+                    value="${escapedReason}"
                 />
                 `;
 
@@ -2271,6 +2275,10 @@ window.addEventListener("load", function () {
                     updateAbsentCount(absentCount);
                     // Hiển thị danh sách học sinh vắng
                     logClass?.absentees?.forEach((absentStudent) => {
+                        let reason = absentStudent.reason;
+                        if (reason.includes('\\"')) {
+                            reason = reason.replace(/\\"/g, '"');
+                        }
                         addStudentToSelected(
                             absentStudent.student_name, // tên học sinh từ API
                             absentStudent.student_id, // id học sinh
