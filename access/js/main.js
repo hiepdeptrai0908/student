@@ -186,11 +186,24 @@ window.addEventListener("load", function () {
     });
 
     // Xử lý màn hình tùy chọn quản lý
-    function optionScreen(
+    async function optionScreen(
         optionValue = localStorage.getItem("manager-option-value") || "1"
     ) {
         if (optionValue === "7") {
             getAllStatistics();
+        }
+
+        if (optionValue === "6") {
+            elements.logBookToday.style.display = "block";
+            renderLogBook(
+                elements.logBookToday,
+                await fetchLogClassData({
+                    date: getTodayDate(),
+                    classId: null,
+                    part: null,
+                    teacher: null,
+                })
+            );
         }
         const optionMap = {
             1: [elements.managerCoreTable],
