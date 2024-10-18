@@ -194,7 +194,6 @@ window.addEventListener("load", function () {
         }
 
         if (optionValue === "6") {
-            elements.logBookToday.style.display = "block";
             renderLogBook(
                 elements.logBookToday,
                 await fetchLogClassData({
