@@ -1664,6 +1664,9 @@ window.addEventListener("load", function () {
                     alert(result.title);
                     if (result.status == "success") {
                         document.getElementById("score-form").reset();
+                        elements.screenScoreClassDropdown.value = "";
+                        elements.screenScoreLessonDropdown.value = "";
+                        handleClearTable();
                     }
                 }, timeOut);
             } catch (error) {
