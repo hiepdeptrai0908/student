@@ -1539,15 +1539,26 @@ window.addEventListener("load", function () {
         });
 
     // Lấy thang điểm đưa vào max-score
-    // Chọn nội dung kiểm tra
     function handleInputMaxScore() {
-        insertMaxScore = this.value;
-        const insertScoreElement =
+        const insertMaxScore = this.value;
+        const insertScoreElements =
             document.querySelectorAll(".max-score_input");
-        for (let i = 0; i < insertScoreElement.length; i++) {
-            insertScoreElement[i].max = insertMaxScore;
+        for (let i = 0; i < insertScoreElements.length; i++) {
+            insertScoreElements[i].max = insertMaxScore;
         }
     }
+
+    // Hàm để reset lại max-score về giá trị mặc định 50 sau khi form được reset
+    function resetMaxScoreInputs() {
+        const insertScoreElements =
+            document.querySelectorAll(".max-score_input");
+        for (let i = 0; i < insertScoreElements.length; i++) {
+            insertScoreElements[i].max = document.getElementById(
+                "insert-score__max-score"
+            ).value;
+        }
+    }
+
     document
         .getElementById("insert-score__max-score")
         .addEventListener("input", handleInputMaxScore);
@@ -1676,6 +1687,7 @@ window.addEventListener("load", function () {
                     alert(result.title);
                     if (result.status == "success") {
                         document.getElementById("score-form").reset();
+                        resetMaxScoreInputs();
                         elements.screenScoreClassDropdown.value = "";
                         elements.screenScoreLessonDropdown.value = "";
                         handleClearTable();
@@ -2436,6 +2448,7 @@ window.addEventListener("load", function () {
                 `${url}log-class?${params.toString()}`
             );
             const logClassData = await response.json();
+
             hideLoadingModal();
 
             // Kiểm tra kiểu dữ liệu
@@ -2985,7 +2998,6 @@ window.addEventListener("load", function () {
 
         // Hiển thị phần tử tương ứng với nút được nhấn
         if (name === "today") {
-            elements.logBookToday.style.display = "block";
             renderLogBook(
                 elements.logBookToday,
                 await fetchLogClassData({
@@ -2995,6 +3007,7 @@ window.addEventListener("load", function () {
                     teacher: null,
                 })
             );
+            elements.logBookToday.style.display = "block";
         } else if (name === "search") {
             elements.logBookSearch.style.display = "block";
         } else if (name === "write") {
