@@ -2145,6 +2145,7 @@ window.addEventListener("load", function () {
             // Escape dấu ngoặc kép trong chuỗi lý do (reason)
             const escapedReason = reason ? reason.replace(/"/g, "&quot;") : "";
 
+            // Tạo phần tử HTML cho sinh viên
             listItem.innerHTML = `
                 <div class="absent-wrapper ${classes}">
                     <div class="absent-wrapper-item absent-wrapper-item__name">
@@ -2156,7 +2157,7 @@ window.addEventListener("load", function () {
                         </label>
                         <input type="radio" name="absent-${id}" id="absent-permit-${id}" value="true" data-student-id="${id}" ${
                 absent == true ? "checked" : ""
-            }>
+            }required>
                     </div>
                     <div class="absent-wrapper-item">
                         <label class="no-permit-label" for="absent-no-permit-${id}">
@@ -2164,7 +2165,7 @@ window.addEventListener("load", function () {
                         </label>
                         <input type="radio" name="absent-${id}" id="absent-no-permit-${id}" value="false" data-student-id="${id}" ${
                 absent == false ? "checked" : ""
-            } required>
+            }required>
                     </div>
                     <button class="remove-btn" data-id="${id}">
                         <i class="fa-regular fa-trash-can error"></i>
@@ -2179,6 +2180,26 @@ window.addEventListener("load", function () {
                     value="${escapedReason}"
                 />
                 `;
+
+            // Lấy các phần tử input radio và ô input lý do
+            const permitRadio = listItem.querySelector(`#absent-permit-${id}`);
+            const reasonInput = listItem.querySelector(
+                `#log-book-write__reason-${id}`
+            );
+
+            // Thêm sự kiện lắng nghe thay đổi cho radio "CP"
+            permitRadio.addEventListener("change", function () {
+                if (permitRadio.checked) {
+                    reasonInput.setAttribute("required", "required");
+                } else {
+                    reasonInput.removeAttribute("required");
+                }
+            });
+
+            // Đặt trạng thái ban đầu cho input lý do nếu radio "CP" đang được chọn
+            if (permitRadio.checked) {
+                reasonInput.setAttribute("required", "required");
+            }
 
             listItem
                 .querySelector(".remove-btn")
