@@ -2156,7 +2156,7 @@ window.addEventListener("load", function () {
                         </label>
                         <input type="radio" name="absent-${id}" id="absent-permit-${id}" value="true" data-student-id="${id}" ${
                 absent == true ? "checked" : ""
-            } required>
+            }>
                     </div>
                     <div class="absent-wrapper-item">
                         <label class="no-permit-label" for="absent-no-permit-${id}">
