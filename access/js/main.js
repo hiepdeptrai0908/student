@@ -1658,13 +1658,16 @@ window.addEventListener("load", function () {
                 const comment = row.querySelector(
                     `input[name="comment-${studentId}"]`
                 ).value;
+                const maxScore = row.querySelector(
+                    `input[name="score-${studentId}"]`
+                ).max;
 
                 scoresData.push({
                     student_id: Number(studentId),
                     class_id: Number(classId),
                     lesson: Number(lesson),
                     lesson_name: handleLessonName(lesson),
-                    max_score: insertMaxScore,
+                    max_score: Number(maxScore),
                     score: Number(score),
                     comment: comment,
                 });
