@@ -2184,20 +2184,30 @@ window.addEventListener("load", function () {
                 />
                 `;
 
-            // Lấy các phần tử input radio và ô input lý do
+            // Lấy các phần tử radio button và ô input lý do
             const permitRadio = listItem.querySelector(`#absent-permit-${id}`);
+            const noPermitRadio = listItem.querySelector(
+                `#absent-no-permit-${id}`
+            );
             const reasonInput = listItem.querySelector(
                 `#log-book-write__reason-${id}`
             );
 
-            // Thêm sự kiện lắng nghe thay đổi cho radio "CP"
-            permitRadio.addEventListener("change", function () {
+            // Hàm cập nhật thuộc tính required của reasonInput
+            function updateReasonRequired() {
                 if (permitRadio.checked) {
                     reasonInput.setAttribute("required", "required");
                 } else {
                     reasonInput.removeAttribute("required");
                 }
-            });
+            }
+
+            // Thêm sự kiện lắng nghe thay đổi cho cả hai radio button
+            permitRadio.addEventListener("change", updateReasonRequired);
+            noPermitRadio.addEventListener("change", updateReasonRequired);
+
+            // Gọi hàm cập nhật ban đầu để đảm bảo trạng thái required đúng
+            updateReasonRequired();
 
             listItem
                 .querySelector(".remove-btn")
