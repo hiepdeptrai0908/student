@@ -312,15 +312,15 @@ window.addEventListener("load", function () {
         } else if (lessonNumber >= 200 && lessonNumber < 300) {
             return `Hán Tự Bài ${lessonNumber - 200}`;
         } else if (lessonNumber >= 300 && lessonNumber < 400) {
-            return `Minano Nihongo: Bài ${lessonNumber - 300 - 1} → Bài ${
+            return `2 Bài Minano Nihongo: Bài ${lessonNumber - 300 - 1} → Bài ${
                 lessonNumber - 300
             }`;
         } else if (lessonNumber >= 400 && lessonNumber < 500) {
-            return `2 bài Minano Nihongo: Bài ${lessonNumber - 400 - 4} → Bài ${
+            return `5 Bài Minano Nihongo: Bài ${lessonNumber - 400 - 4} → Bài ${
                 lessonNumber - 400
             }`;
         } else if (lessonNumber >= 500 && lessonNumber < 600) {
-            return `5 bài Look And Learn: Bài ${lessonNumber - 500 - 4} → Bài ${
+            return `5 Bài Look And Learn: Bài ${lessonNumber - 500 - 4} → Bài ${
                 lessonNumber - 500
             }`;
         } else if (lessonNumber >= 600 && lessonNumber < 700) {
