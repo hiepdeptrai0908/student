@@ -1518,7 +1518,7 @@ window.addEventListener("load", function () {
                 }
                 lessonDropdown.innerHTML += options;
             } else if (selectedValue === 6) {
-                for (let i = 1; i <= 5; i++) {
+                for (let i = 1; i <= 10; i++) {
                     options += `<option value="${i + 600}">${handleLessonName(
                         i + 600
                     )}</option>`;
