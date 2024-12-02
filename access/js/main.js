@@ -316,11 +316,11 @@ window.addEventListener("load", function () {
                 lessonNumber - 300
             }`;
         } else if (lessonNumber >= 400 && lessonNumber < 500) {
-            return `Minano Nihongo: Bài ${lessonNumber - 400 - 4} → Bài ${
+            return `2 bài Minano Nihongo: Bài ${lessonNumber - 400 - 4} → Bài ${
                 lessonNumber - 400
             }`;
         } else if (lessonNumber >= 500 && lessonNumber < 600) {
-            return `Look And Learn: Bài ${lessonNumber - 500 - 4} → Bài ${
+            return `5 bài Look And Learn: Bài ${lessonNumber - 500 - 4} → Bài ${
                 lessonNumber - 500
             }`;
         } else if (lessonNumber >= 600 && lessonNumber < 700) {
