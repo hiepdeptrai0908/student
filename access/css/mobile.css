@@ -348,7 +348,8 @@
         display: none;
     }
 
-    input {
+    input,
+    select {
         font-size: 16px !important;
     }
 }
