@@ -121,7 +121,7 @@ window.addEventListener("load", function () {
                     elements.managerRank,
                 ]
             );
-        } else if (["ADMINN"].includes(loginInputValue)) {
+        } else if (["HIEP"].includes(loginInputValue)) {
             elements.modalOverlay.style.display = "none";
             toggleVisibility(
                 [
